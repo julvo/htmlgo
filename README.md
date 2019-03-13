@@ -10,7 +10,7 @@ This library is inspired by [Haskell's blaze-html](http://hackage.haskell.org/pa
 
 ## Example
 
-```
+```golang
 package main
 
 import (
@@ -26,23 +26,19 @@ func main() {
               h.Head(a.Attr()),
               h.Body(a.Attr(),
                 h.Div(a.Attr(a.Class("columns")),
-                    h.Div(a.Attr(a.Class("column", "is-narrow"), a.Data_("url", "https://hello.world")),
-                        h.Text("Hello World"),
-                    ),
+                  h.Div(a.Attr(a.Class("column", "is-narrow"), a.Data_("url", "https://hello.world")),
+                        h.Text("Hello World")),
                   h.Div(a.Attr(a.Class("column")),
-                        h.Text(`<script>alert("Text is escaped")</script>`),
-                    ),
-                  h.Div(a.Attr(a.Class("column"))),
-                ),
-              ),
-           )
+                        h.Text(`<script>alert("Text is escaped")</script>`)),
+                  h.Div(a.Attr(a.Class("column"))))))
+
     fmt.Println(doc)
 }
 
 ```
 will output:
 
-```
+```html
 <!DOCTYPE HTML>
 <html>
   <head>
