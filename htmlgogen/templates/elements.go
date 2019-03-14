@@ -41,8 +41,19 @@ func VoidElement(tag string, attrs []a.Attribute) HTML {
         "\n<" + tag + insertAttributes(attrs) + ">")
 }
 
+// Produce HTML from plain text by escaping
 func Text(v interface{}) HTML {
     return HTML("\n" + html.EscapeString(fmt.Sprint(v)))
+}
+
+// Begin of manually defined elements
+
+func Html5(attrs []a.Attribute, children ...HTML) HTML {
+    return DoctypeHtml5 + Html(attrs, children...)
+}
+
+func Html5_(children ...HTML) HTML {
+    return Html5(a.Attr(), children...)
 }
 
 func Doctype(t string) HTML {
@@ -50,14 +61,25 @@ func Doctype(t string) HTML {
 }
 const DoctypeHtml5 HTML = "<!DOCTYPE HTML>"
 
+// Begin of generated elements
+
 {{ range .ElementFuncs }}
 func {{.FuncName}}(attrs []a.Attribute, children ...HTML) HTML {
     return Element("{{.TagName}}", attrs, children...)
 }
+
+func {{.FuncName}}_(children ...HTML) HTML {
+    return {{.FuncName}}(a.Attr(), children...)
+}
 {{ end }}
+
+// Begin of generated void elements
 
 {{ range .VoidElementFuncs }}
 func {{.FuncName}}(attrs []a.Attribute) HTML {
     return VoidElement("{{.TagName}}", attrs)
+}
+func {{.FuncName}}_() HTML {
+    return {{.FuncName}}(a.Attr())
 }
 {{ end }}
