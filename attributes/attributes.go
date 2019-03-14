@@ -9,9 +9,13 @@ func Attr(attrs ...Attribute) []Attribute {
     return attrs
 }
 
-func Data_(key, value string) Attribute {
+// Begin of manually implemented attributes
+
+func Dataset(key, value string) Attribute {
     return Attribute("data-" + key + `="` + value + `"`)
 }
+
+// Begin of generated attributes
 
 
 func Accept(values ...string) Attribute {
