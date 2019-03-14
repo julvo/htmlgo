@@ -100,7 +100,7 @@ var tags []string = []string{
     "ruby",
     "s",
     "samp",
-    "script",
+    //"script", Implemented manually
     "section",
     "select",
     "small",

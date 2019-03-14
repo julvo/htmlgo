@@ -4,10 +4,16 @@ import (
     "fmt"
     "strings"
     "html"
+    _"html/template"
+
     a "github.com/julvo/htmlgo/attributes"
 )
 
 type HTML string
+type JS struct {
+    templ       string
+    data        interface{}
+}
 
 func insertAttributes(attrs []a.Attribute) string {
     s := ""
@@ -59,27 +65,50 @@ func Html5_(children ...HTML) HTML {
 func Doctype(t string) HTML {
     return HTML("<!DOCTYPE " + t + ">")
 }
+
 const DoctypeHtml5 HTML = "<!DOCTYPE HTML>"
+
+func Script(attrs []a.Attribute, js JS) HTML {
+    return HTML("")
+}
+
+func Script_(js JS) HTML {
+    return Script(a.Attr(), js)
+}
+
+func Javascript(data interface{}, templs ...string) JS {
+    js := JS{ data: data }
+    if len(templs) == 0 {
+        js.templ = "{{.}}"
+    } else {
+        js.templ = strings.Join(templs, "\n")
+    }
+    return js
+}
+
+func Javascript_(templs ...string) JS {
+    return Javascript(nil, templs...)
+}
 
 // Begin of generated elements
 
-{{ range .ElementFuncs }}
-func {{.FuncName}}(attrs []a.Attribute, children ...HTML) HTML {
-    return Element("{{.TagName}}", attrs, children...)
+[[ range .ElementFuncs ]]
+func [[.FuncName]](attrs []a.Attribute, children ...HTML) HTML {
+    return Element("[[.TagName]]", attrs, children...)
 }
 
-func {{.FuncName}}_(children ...HTML) HTML {
-    return {{.FuncName}}(a.Attr(), children...)
+func [[.FuncName]]_(children ...HTML) HTML {
+    return [[.FuncName]](a.Attr(), children...)
 }
-{{ end }}
+[[ end ]]
 
 // Begin of generated void elements
 
-{{ range .VoidElementFuncs }}
-func {{.FuncName}}(attrs []a.Attribute) HTML {
-    return VoidElement("{{.TagName}}", attrs)
+[[ range .VoidElementFuncs ]]
+func [[.FuncName]](attrs []a.Attribute) HTML {
+    return VoidElement("[[.TagName]]", attrs)
 }
-func {{.FuncName}}_() HTML {
-    return {{.FuncName}}(a.Attr())
+func [[.FuncName]]_() HTML {
+    return [[.FuncName]](a.Attr())
 }
-{{ end }}
+[[ end ]]

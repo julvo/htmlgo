@@ -17,8 +17,8 @@ func Dataset(key, value string) Attribute {
 
 // Begin of generated attributes
 
-{{ range .AttributeFuncs }}
-func {{.FuncName}}(values ...string) Attribute {
-    return Attribute(`{{.AttrName}}="` + strings.Join(values, " ") + `"`)
+[[ range .AttributeFuncs ]]
+func [[.FuncName]](values ...string) Attribute {
+    return Attribute(`[[.AttrName]]="` + strings.Join(values, " ") + `"`)
 }
-{{ end }}
+[[ end ]]

@@ -43,7 +43,10 @@ func main() {
 
         fmt.Printf("Generating %s...\n", saveAs)
 
-        templ := template.Must(template.ParseFiles(templPath))
+        templ, err := template.New(filepath.Base(templPath)).
+                        Delims("[[", "]]").
+                        ParseFiles(templPath)
+        check(err)
         err = os.MkdirAll(filepath.Dir(saveAs), 0744)
         check(err)
 
