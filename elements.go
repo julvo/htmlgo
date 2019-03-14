@@ -4,10 +4,17 @@ import (
     "fmt"
     "strings"
     "html"
+    "html/template"
+    "bytes"
+
     a "github.com/julvo/htmlgo/attributes"
 )
 
 type HTML string
+type JS struct {
+    templ       string
+    data        interface{}
+}
 
 func insertAttributes(attrs []a.Attribute) string {
     s := ""
@@ -17,7 +24,7 @@ func insertAttributes(attrs []a.Attribute) string {
     return s
 }
 
-func insertChildren(children []HTML) string {
+func insertChildren(children ...HTML) string {
     s := ""
     for _, c := range children {
         s += string(c)
@@ -32,7 +39,7 @@ func indent(s, indentation string) string {
 func Element(tag string, attrs []a.Attribute, children ...HTML) HTML {
     return HTML(
         "\n<" + tag + insertAttributes(attrs) + ">" +
-        indent(insertChildren(children), "  ") +
+        indent(insertChildren(children...), "  ") +
         "\n</" + tag + ">")
 }
 
@@ -59,7 +66,46 @@ func Html5_(children ...HTML) HTML {
 func Doctype(t string) HTML {
     return HTML("<!DOCTYPE " + t + ">")
 }
+
 const DoctypeHtml5 HTML = "<!DOCTYPE HTML>"
+
+func Script(attrs []a.Attribute, js JS) HTML {
+    if js.data == nil {
+        return Element("script", attrs, HTML("\n" + js.templ))
+    }
+
+    // TODO set verbosity level to enable logging
+    t, err := template.New("_").Parse(
+        "\n<script" + insertAttributes(attrs) + ">" +
+        indent("\n" + js.templ, "  ") + "\n</script>")
+    if err != nil {
+        return Element("script", attrs)
+    }
+    buf := new(bytes.Buffer)
+    err = t.Execute(buf, js.data)
+    if err != nil {
+        return Element("script", attrs)
+    }
+    return HTML(buf.String())
+}
+
+func Script_(js JS) HTML {
+    return Script(a.Attr(), js)
+}
+
+func Javascript(data interface{}, templs ...string) JS {
+    js := JS{ data: data }
+    if len(templs) == 0 {
+        js.templ = "{{.}}"
+    } else {
+        js.templ = strings.Join(templs, "\n")
+    }
+    return js
+}
+
+func Javascript_(templs ...string) JS {
+    return Javascript(nil, templs...)
+}
 
 // Begin of generated elements
 
@@ -758,14 +804,6 @@ func Samp(attrs []a.Attribute, children ...HTML) HTML {
 
 func Samp_(children ...HTML) HTML {
     return Samp(a.Attr(), children...)
-}
-
-func Script(attrs []a.Attribute, children ...HTML) HTML {
-    return Element("script", attrs, children...)
-}
-
-func Script_(children ...HTML) HTML {
-    return Script(a.Attr(), children...)
 }
 
 func Section(attrs []a.Attribute, children ...HTML) HTML {
