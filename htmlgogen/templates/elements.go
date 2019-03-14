@@ -4,7 +4,8 @@ import (
     "fmt"
     "strings"
     "html"
-    _"html/template"
+    "html/template"
+    "bytes"
 
     a "github.com/julvo/htmlgo/attributes"
 )
@@ -23,7 +24,7 @@ func insertAttributes(attrs []a.Attribute) string {
     return s
 }
 
-func insertChildren(children []HTML) string {
+func insertChildren(children ...HTML) string {
     s := ""
     for _, c := range children {
         s += string(c)
@@ -38,7 +39,7 @@ func indent(s, indentation string) string {
 func Element(tag string, attrs []a.Attribute, children ...HTML) HTML {
     return HTML(
         "\n<" + tag + insertAttributes(attrs) + ">" +
-        indent(insertChildren(children), "  ") +
+        indent(insertChildren(children...), "  ") +
         "\n</" + tag + ">")
 }
 
@@ -69,7 +70,23 @@ func Doctype(t string) HTML {
 const DoctypeHtml5 HTML = "<!DOCTYPE HTML>"
 
 func Script(attrs []a.Attribute, js JS) HTML {
-    return HTML("")
+    if js.data == nil {
+        return Element("script", attrs, HTML("\n" + js.templ))
+    }
+
+    // TODO set verbosity level to enable logging
+    t, err := template.New("_").Parse(
+        "\n<script" + insertAttributes(attrs) + ">" +
+        indent("\n" + js.templ, "  ") + "\n</script>")
+    if err != nil {
+        return Element("script", attrs)
+    }
+    buf := new(bytes.Buffer)
+    err = t.Execute(buf, js.data)
+    if err != nil {
+        return Element("script", attrs)
+    }
+    return HTML(buf.String())
 }
 
 func Script_(js JS) HTML {
