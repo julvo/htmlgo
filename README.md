@@ -21,18 +21,23 @@ import (
 )
 
 func main() {
-    doc := h.DoctypeHtml5 +
-           h.Html(a.Attr(),
-              h.Head(a.Attr()),
-              h.Body(a.Attr(),
-                h.Div(a.Attr(a.Class("columns")),
-                  h.Div(a.Attr(a.Class("column", "is-narrow"), a.Data_("url", "https://hello.world")),
-                        h.Text("Hello World")),
-                  h.Div(a.Attr(a.Class("column")),
-                        h.Text(`<script>alert("Text is escaped")</script>`)),
-                  h.Div(a.Attr(a.Class("column"))))))
+    var numberDivs h.HTML
+    for i := 0; i < 3; i++ {
+        numberDivs += h.Div(h.Attr(a.StyleRaw("font-family:monospace;")),
+                            h.Text(i))
+    }
 
-    fmt.Println(doc)
+    page :=
+        h.Html5_(
+            h.Head_(),
+            h.Body_(
+                h.H1_(h.Text("Welcome <script>")),
+                numberDivs,
+                h.Div(h.Attr(a.Dataset("hello", "htmlgo"))),
+                h.Script_(h.JavaScript("alert('This is escaped');")),
+                h.Script_(h.JavaScript("This is escaped", "alert({{.}});"))))
+
+    fmt.Println(page)
 }
 
 ```
@@ -44,16 +49,26 @@ will output:
   <head>
   </head>
   <body>
-    <div class="columns">
-      <div class="column is-narrow" data-url="https://hello.world">
-        Hello World
-      </div>
-      <div class="column">
-        &lt;script&gt;alert(&#34;Text is escaped&#34;)&lt;/script&gt;
-      </div>
-      <div class="column">
-      </div>
+    <h1>
+      Welcome &lt;script&gt;
+    </h1>
+    <div style="font-family:monospace;">
+      0
     </div>
+    <div style="font-family:monospace;">
+      1
+    </div>
+    <div style="font-family:monospace;">
+      2
+    </div>
+    <div data-hello="htmlgo">
+    </div>
+    <script>
+      "alert('This is escaped');"
+    </script>
+    <script>
+      alert("This is escaped");
+    </script>
   </body>
 </html>
 ```
