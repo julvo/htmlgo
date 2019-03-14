@@ -2,687 +2,2537 @@ package attributes
 
 import "strings"
 
-type Attribute string
-
-// Build a slice of type []Attribute for cosmetic purposes
-func Attr(attrs ...Attribute) []Attribute {
-    return attrs
+type Attribute struct {
+    Templ       string
+    Data        interface{}
+    Name        string
 }
 
 // Begin of manually implemented attributes
 
 func Dataset(key, value string) Attribute {
-    return Attribute("data-" + key + `="` + value + `"`)
+    return Attribute{
+        Data: map[string]string{
+            "key":      key,
+            "value":    value,
+        },
+        Templ: `{{define "Dataset"}}data-{{.key}}="{{.value}}"{{end}}`,
+        Name: "Dataset",
+    }
+}
+
+func DatasetRaw(key, value string) Attribute {
+    return Attribute{
+        Data: map[string]string{},
+        Templ: `{{define "Dataset"}}data-`+key+`="`+value+`"{{end}}`,
+        Name: "Dataset",
+    }
 }
 
 // Begin of generated attributes
 
 
-func Accept(values ...string) Attribute {
-    return Attribute(`accept="` + strings.Join(values, " ") + `"`)
+func Accept(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Accept" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Accept"}}accept="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Accept"}}accept="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func AcceptCharset(values ...string) Attribute {
-    return Attribute(`accept-charset="` + strings.Join(values, " ") + `"`)
+func AcceptRaw(values ...string) Attribute {
+    return Accept(nil, values...)
 }
 
-func Accesskey(values ...string) Attribute {
-    return Attribute(`accesskey="` + strings.Join(values, " ") + `"`)
+
+func AcceptCharset(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "AcceptCharset" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "AcceptCharset"}}accept-charset="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "AcceptCharset"}}accept-charset="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func AcceptCharsetRaw(values ...string) Attribute {
+    return AcceptCharset(nil, values...)
+}
+
+
+func Accesskey(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Accesskey" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Accesskey"}}accesskey="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Accesskey"}}accesskey="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func AccesskeyRaw(values ...string) Attribute {
+    return Accesskey(nil, values...)
+}
+
+
+func Action(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Action" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Action"}}action="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Action"}}action="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func ActionRaw(values ...string) Attribute {
+    return Action(nil, values...)
+}
+
+
+func Align(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Align" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Align"}}align="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Align"}}align="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func AlignRaw(values ...string) Attribute {
+    return Align(nil, values...)
+}
+
+
+func Alt(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Alt" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Alt"}}alt="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Alt"}}alt="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func AltRaw(values ...string) Attribute {
+    return Alt(nil, values...)
+}
+
+
+func Async(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Async" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Async"}}async="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Async"}}async="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func AsyncRaw(values ...string) Attribute {
+    return Async(nil, values...)
+}
+
+
+func Autocomplete(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Autocomplete" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Autocomplete"}}autocomplete="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Autocomplete"}}autocomplete="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func AutocompleteRaw(values ...string) Attribute {
+    return Autocomplete(nil, values...)
+}
+
+
+func Autofocus(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Autofocus" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Autofocus"}}autofocus="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Autofocus"}}autofocus="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func AutofocusRaw(values ...string) Attribute {
+    return Autofocus(nil, values...)
+}
+
+
+func Autoplay(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Autoplay" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Autoplay"}}autoplay="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Autoplay"}}autoplay="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func AutoplayRaw(values ...string) Attribute {
+    return Autoplay(nil, values...)
+}
+
+
+func Bgcolor(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Bgcolor" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Bgcolor"}}bgcolor="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Bgcolor"}}bgcolor="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func BgcolorRaw(values ...string) Attribute {
+    return Bgcolor(nil, values...)
+}
+
+
+func Border(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Border" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Border"}}border="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Border"}}border="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func BorderRaw(values ...string) Attribute {
+    return Border(nil, values...)
+}
+
+
+func Charset(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Charset" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Charset"}}charset="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Charset"}}charset="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func CharsetRaw(values ...string) Attribute {
+    return Charset(nil, values...)
+}
+
+
+func Checked(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Checked" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Checked"}}checked="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Checked"}}checked="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func CheckedRaw(values ...string) Attribute {
+    return Checked(nil, values...)
+}
+
+
+func Cite(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Cite" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Cite"}}cite="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Cite"}}cite="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func CiteRaw(values ...string) Attribute {
+    return Cite(nil, values...)
+}
+
+
+func Class(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Class" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Class"}}class="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Class"}}class="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func ClassRaw(values ...string) Attribute {
+    return Class(nil, values...)
+}
+
+
+func Color(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Color" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Color"}}color="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Color"}}color="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func ColorRaw(values ...string) Attribute {
+    return Color(nil, values...)
+}
+
+
+func Cols(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Cols" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Cols"}}cols="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Cols"}}cols="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func ColsRaw(values ...string) Attribute {
+    return Cols(nil, values...)
+}
+
+
+func Colspan(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Colspan" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Colspan"}}colspan="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Colspan"}}colspan="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func ColspanRaw(values ...string) Attribute {
+    return Colspan(nil, values...)
+}
+
+
+func Content(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Content" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Content"}}content="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Content"}}content="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func ContentRaw(values ...string) Attribute {
+    return Content(nil, values...)
+}
+
+
+func Contenteditable(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Contenteditable" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Contenteditable"}}contenteditable="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Contenteditable"}}contenteditable="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func ContenteditableRaw(values ...string) Attribute {
+    return Contenteditable(nil, values...)
+}
+
+
+func Controls(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Controls" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Controls"}}controls="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Controls"}}controls="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func ControlsRaw(values ...string) Attribute {
+    return Controls(nil, values...)
+}
+
+
+func Coords(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Coords" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Coords"}}coords="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Coords"}}coords="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func CoordsRaw(values ...string) Attribute {
+    return Coords(nil, values...)
+}
+
+
+func Data(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Data" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Data"}}data="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Data"}}data="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func DataRaw(values ...string) Attribute {
+    return Data(nil, values...)
+}
+
+
+func Datetime(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Datetime" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Datetime"}}datetime="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Datetime"}}datetime="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func DatetimeRaw(values ...string) Attribute {
+    return Datetime(nil, values...)
+}
+
+
+func Default(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Default" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Default"}}default="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Default"}}default="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func DefaultRaw(values ...string) Attribute {
+    return Default(nil, values...)
+}
+
+
+func Defer(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Defer" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Defer"}}defer="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Defer"}}defer="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func DeferRaw(values ...string) Attribute {
+    return Defer(nil, values...)
+}
+
+
+func Dir(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Dir" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Dir"}}dir="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Dir"}}dir="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func DirRaw(values ...string) Attribute {
+    return Dir(nil, values...)
+}
+
+
+func Dirname(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Dirname" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Dirname"}}dirname="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Dirname"}}dirname="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func DirnameRaw(values ...string) Attribute {
+    return Dirname(nil, values...)
+}
+
+
+func Disabled(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Disabled" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Disabled"}}disabled="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Disabled"}}disabled="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func DisabledRaw(values ...string) Attribute {
+    return Disabled(nil, values...)
+}
+
+
+func Download(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Download" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Download"}}download="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Download"}}download="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func DownloadRaw(values ...string) Attribute {
+    return Download(nil, values...)
+}
+
+
+func Draggable(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Draggable" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Draggable"}}draggable="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Draggable"}}draggable="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func DraggableRaw(values ...string) Attribute {
+    return Draggable(nil, values...)
+}
+
+
+func Dropzone(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Dropzone" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Dropzone"}}dropzone="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Dropzone"}}dropzone="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func DropzoneRaw(values ...string) Attribute {
+    return Dropzone(nil, values...)
+}
+
+
+func Enctype(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Enctype" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Enctype"}}enctype="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Enctype"}}enctype="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func EnctypeRaw(values ...string) Attribute {
+    return Enctype(nil, values...)
+}
+
+
+func For(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "For" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "For"}}for="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "For"}}for="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func ForRaw(values ...string) Attribute {
+    return For(nil, values...)
+}
+
+
+func Form(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Form" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Form"}}form="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Form"}}form="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func FormRaw(values ...string) Attribute {
+    return Form(nil, values...)
+}
+
+
+func Formaction(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Formaction" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Formaction"}}formaction="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Formaction"}}formaction="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func FormactionRaw(values ...string) Attribute {
+    return Formaction(nil, values...)
+}
+
+
+func Headers(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Headers" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Headers"}}headers="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Headers"}}headers="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func HeadersRaw(values ...string) Attribute {
+    return Headers(nil, values...)
+}
+
+
+func Height(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Height" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Height"}}height="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Height"}}height="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func HeightRaw(values ...string) Attribute {
+    return Height(nil, values...)
+}
+
+
+func Hidden(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Hidden" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Hidden"}}hidden="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Hidden"}}hidden="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func HiddenRaw(values ...string) Attribute {
+    return Hidden(nil, values...)
+}
+
+
+func High(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "High" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "High"}}high="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "High"}}high="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func HighRaw(values ...string) Attribute {
+    return High(nil, values...)
+}
+
+
+func Href(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Href" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Href"}}href="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Href"}}href="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func HrefRaw(values ...string) Attribute {
+    return Href(nil, values...)
+}
+
+
+func Hreflang(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Hreflang" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Hreflang"}}hreflang="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Hreflang"}}hreflang="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func HreflangRaw(values ...string) Attribute {
+    return Hreflang(nil, values...)
+}
+
+
+func HttpEquiv(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "HttpEquiv" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "HttpEquiv"}}http-equiv="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "HttpEquiv"}}http-equiv="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func HttpEquivRaw(values ...string) Attribute {
+    return HttpEquiv(nil, values...)
+}
+
+
+func Id(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Id" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Id"}}id="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Id"}}id="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func IdRaw(values ...string) Attribute {
+    return Id(nil, values...)
+}
+
+
+func Ismap(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Ismap" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Ismap"}}ismap="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Ismap"}}ismap="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func IsmapRaw(values ...string) Attribute {
+    return Ismap(nil, values...)
+}
+
+
+func Kind(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Kind" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Kind"}}kind="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Kind"}}kind="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func KindRaw(values ...string) Attribute {
+    return Kind(nil, values...)
+}
+
+
+func Label(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Label" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Label"}}label="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Label"}}label="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func LabelRaw(values ...string) Attribute {
+    return Label(nil, values...)
+}
+
+
+func Lang(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Lang" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Lang"}}lang="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Lang"}}lang="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func LangRaw(values ...string) Attribute {
+    return Lang(nil, values...)
+}
+
+
+func List(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "List" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "List"}}list="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "List"}}list="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func ListRaw(values ...string) Attribute {
+    return List(nil, values...)
+}
+
+
+func Loop(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Loop" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Loop"}}loop="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Loop"}}loop="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func LoopRaw(values ...string) Attribute {
+    return Loop(nil, values...)
+}
+
+
+func Low(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Low" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Low"}}low="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Low"}}low="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func LowRaw(values ...string) Attribute {
+    return Low(nil, values...)
+}
+
+
+func Max(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Max" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Max"}}max="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Max"}}max="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func MaxRaw(values ...string) Attribute {
+    return Max(nil, values...)
+}
+
+
+func Maxlength(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Maxlength" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Maxlength"}}maxlength="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Maxlength"}}maxlength="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func MaxlengthRaw(values ...string) Attribute {
+    return Maxlength(nil, values...)
+}
+
+
+func Media(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Media" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Media"}}media="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Media"}}media="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func MediaRaw(values ...string) Attribute {
+    return Media(nil, values...)
+}
+
+
+func Method(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Method" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Method"}}method="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Method"}}method="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func MethodRaw(values ...string) Attribute {
+    return Method(nil, values...)
+}
+
+
+func Min(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Min" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Min"}}min="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Min"}}min="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func MinRaw(values ...string) Attribute {
+    return Min(nil, values...)
+}
+
+
+func Multiple(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Multiple" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Multiple"}}multiple="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Multiple"}}multiple="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func MultipleRaw(values ...string) Attribute {
+    return Multiple(nil, values...)
+}
+
+
+func Muted(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Muted" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Muted"}}muted="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Muted"}}muted="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func MutedRaw(values ...string) Attribute {
+    return Muted(nil, values...)
+}
+
+
+func Name(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Name" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Name"}}name="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Name"}}name="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func NameRaw(values ...string) Attribute {
+    return Name(nil, values...)
+}
+
+
+func Novalidate(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Novalidate" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Novalidate"}}novalidate="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Novalidate"}}novalidate="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func NovalidateRaw(values ...string) Attribute {
+    return Novalidate(nil, values...)
+}
+
+
+func Onabort(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onabort" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onabort"}}onabort="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onabort"}}onabort="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func OnabortRaw(values ...string) Attribute {
+    return Onabort(nil, values...)
+}
+
+
+func Onafterprint(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onafterprint" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onafterprint"}}onafterprint="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onafterprint"}}onafterprint="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func OnafterprintRaw(values ...string) Attribute {
+    return Onafterprint(nil, values...)
+}
+
+
+func Onbeforeprint(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onbeforeprint" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onbeforeprint"}}onbeforeprint="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onbeforeprint"}}onbeforeprint="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func OnbeforeprintRaw(values ...string) Attribute {
+    return Onbeforeprint(nil, values...)
+}
+
+
+func Onbeforeunload(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onbeforeunload" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onbeforeunload"}}onbeforeunload="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onbeforeunload"}}onbeforeunload="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func OnbeforeunloadRaw(values ...string) Attribute {
+    return Onbeforeunload(nil, values...)
+}
+
+
+func Onblur(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onblur" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onblur"}}onblur="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onblur"}}onblur="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func OnblurRaw(values ...string) Attribute {
+    return Onblur(nil, values...)
+}
+
+
+func Oncanplay(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Oncanplay" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Oncanplay"}}oncanplay="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Oncanplay"}}oncanplay="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func OncanplayRaw(values ...string) Attribute {
+    return Oncanplay(nil, values...)
+}
+
+
+func Oncanplaythrough(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Oncanplaythrough" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Oncanplaythrough"}}oncanplaythrough="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Oncanplaythrough"}}oncanplaythrough="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func OncanplaythroughRaw(values ...string) Attribute {
+    return Oncanplaythrough(nil, values...)
+}
+
+
+func Onchange(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onchange" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onchange"}}onchange="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onchange"}}onchange="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func OnchangeRaw(values ...string) Attribute {
+    return Onchange(nil, values...)
+}
+
+
+func Onclick(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onclick" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onclick"}}onclick="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onclick"}}onclick="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func OnclickRaw(values ...string) Attribute {
+    return Onclick(nil, values...)
+}
+
+
+func Oncontextmenu(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Oncontextmenu" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Oncontextmenu"}}oncontextmenu="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Oncontextmenu"}}oncontextmenu="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func OncontextmenuRaw(values ...string) Attribute {
+    return Oncontextmenu(nil, values...)
+}
+
+
+func Oncopy(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Oncopy" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Oncopy"}}oncopy="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Oncopy"}}oncopy="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func OncopyRaw(values ...string) Attribute {
+    return Oncopy(nil, values...)
+}
+
+
+func Oncuechange(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Oncuechange" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Oncuechange"}}oncuechange="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Oncuechange"}}oncuechange="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func OncuechangeRaw(values ...string) Attribute {
+    return Oncuechange(nil, values...)
+}
+
+
+func Oncut(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Oncut" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Oncut"}}oncut="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Oncut"}}oncut="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func OncutRaw(values ...string) Attribute {
+    return Oncut(nil, values...)
+}
+
+
+func Ondblclick(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Ondblclick" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Ondblclick"}}ondblclick="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Ondblclick"}}ondblclick="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func OndblclickRaw(values ...string) Attribute {
+    return Ondblclick(nil, values...)
+}
+
+
+func Ondrag(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Ondrag" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Ondrag"}}ondrag="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Ondrag"}}ondrag="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func OndragRaw(values ...string) Attribute {
+    return Ondrag(nil, values...)
+}
+
+
+func Ondragend(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Ondragend" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Ondragend"}}ondragend="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Ondragend"}}ondragend="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func OndragendRaw(values ...string) Attribute {
+    return Ondragend(nil, values...)
+}
+
+
+func Ondragenter(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Ondragenter" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Ondragenter"}}ondragenter="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Ondragenter"}}ondragenter="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func OndragenterRaw(values ...string) Attribute {
+    return Ondragenter(nil, values...)
+}
+
+
+func Ondragleave(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Ondragleave" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Ondragleave"}}ondragleave="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Ondragleave"}}ondragleave="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func OndragleaveRaw(values ...string) Attribute {
+    return Ondragleave(nil, values...)
+}
+
+
+func Ondragover(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Ondragover" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Ondragover"}}ondragover="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Ondragover"}}ondragover="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func OndragoverRaw(values ...string) Attribute {
+    return Ondragover(nil, values...)
+}
+
+
+func Ondragstart(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Ondragstart" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Ondragstart"}}ondragstart="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Ondragstart"}}ondragstart="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func OndragstartRaw(values ...string) Attribute {
+    return Ondragstart(nil, values...)
+}
+
+
+func Ondrop(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Ondrop" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Ondrop"}}ondrop="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Ondrop"}}ondrop="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func OndropRaw(values ...string) Attribute {
+    return Ondrop(nil, values...)
+}
+
+
+func Ondurationchange(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Ondurationchange" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Ondurationchange"}}ondurationchange="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Ondurationchange"}}ondurationchange="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Action(values ...string) Attribute {
-    return Attribute(`action="` + strings.Join(values, " ") + `"`)
+func OndurationchangeRaw(values ...string) Attribute {
+    return Ondurationchange(nil, values...)
 }
 
-func Align(values ...string) Attribute {
-    return Attribute(`align="` + strings.Join(values, " ") + `"`)
+
+func Onemptied(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onemptied" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onemptied"}}onemptied="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onemptied"}}onemptied="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func OnemptiedRaw(values ...string) Attribute {
+    return Onemptied(nil, values...)
+}
+
+
+func Onended(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onended" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onended"}}onended="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onended"}}onended="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func OnendedRaw(values ...string) Attribute {
+    return Onended(nil, values...)
+}
+
+
+func Onerror(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onerror" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onerror"}}onerror="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onerror"}}onerror="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Alt(values ...string) Attribute {
-    return Attribute(`alt="` + strings.Join(values, " ") + `"`)
+func OnerrorRaw(values ...string) Attribute {
+    return Onerror(nil, values...)
 }
 
-func Async(values ...string) Attribute {
-    return Attribute(`async="` + strings.Join(values, " ") + `"`)
+
+func Onfocus(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onfocus" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onfocus"}}onfocus="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onfocus"}}onfocus="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func OnfocusRaw(values ...string) Attribute {
+    return Onfocus(nil, values...)
 }
+
 
-func Autocomplete(values ...string) Attribute {
-    return Attribute(`autocomplete="` + strings.Join(values, " ") + `"`)
+func Onhashchange(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onhashchange" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onhashchange"}}onhashchange="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onhashchange"}}onhashchange="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Autofocus(values ...string) Attribute {
-    return Attribute(`autofocus="` + strings.Join(values, " ") + `"`)
+func OnhashchangeRaw(values ...string) Attribute {
+    return Onhashchange(nil, values...)
 }
 
-func Autoplay(values ...string) Attribute {
-    return Attribute(`autoplay="` + strings.Join(values, " ") + `"`)
+
+func Oninput(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Oninput" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Oninput"}}oninput="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Oninput"}}oninput="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Bgcolor(values ...string) Attribute {
-    return Attribute(`bgcolor="` + strings.Join(values, " ") + `"`)
+func OninputRaw(values ...string) Attribute {
+    return Oninput(nil, values...)
 }
+
 
-func Border(values ...string) Attribute {
-    return Attribute(`border="` + strings.Join(values, " ") + `"`)
+func Oninvalid(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Oninvalid" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Oninvalid"}}oninvalid="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Oninvalid"}}oninvalid="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Charset(values ...string) Attribute {
-    return Attribute(`charset="` + strings.Join(values, " ") + `"`)
+func OninvalidRaw(values ...string) Attribute {
+    return Oninvalid(nil, values...)
 }
 
-func Checked(values ...string) Attribute {
-    return Attribute(`checked="` + strings.Join(values, " ") + `"`)
+
+func Onkeydown(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onkeydown" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onkeydown"}}onkeydown="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onkeydown"}}onkeydown="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Cite(values ...string) Attribute {
-    return Attribute(`cite="` + strings.Join(values, " ") + `"`)
+func OnkeydownRaw(values ...string) Attribute {
+    return Onkeydown(nil, values...)
 }
+
 
-func Class(values ...string) Attribute {
-    return Attribute(`class="` + strings.Join(values, " ") + `"`)
+func Onkeypress(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onkeypress" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onkeypress"}}onkeypress="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onkeypress"}}onkeypress="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Color(values ...string) Attribute {
-    return Attribute(`color="` + strings.Join(values, " ") + `"`)
+func OnkeypressRaw(values ...string) Attribute {
+    return Onkeypress(nil, values...)
 }
 
-func Cols(values ...string) Attribute {
-    return Attribute(`cols="` + strings.Join(values, " ") + `"`)
+
+func Onkeyup(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onkeyup" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onkeyup"}}onkeyup="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onkeyup"}}onkeyup="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Colspan(values ...string) Attribute {
-    return Attribute(`colspan="` + strings.Join(values, " ") + `"`)
+func OnkeyupRaw(values ...string) Attribute {
+    return Onkeyup(nil, values...)
 }
+
 
-func Content(values ...string) Attribute {
-    return Attribute(`content="` + strings.Join(values, " ") + `"`)
+func Onload(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onload" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onload"}}onload="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onload"}}onload="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Contenteditable(values ...string) Attribute {
-    return Attribute(`contenteditable="` + strings.Join(values, " ") + `"`)
+func OnloadRaw(values ...string) Attribute {
+    return Onload(nil, values...)
 }
 
-func Controls(values ...string) Attribute {
-    return Attribute(`controls="` + strings.Join(values, " ") + `"`)
+
+func Onloadeddata(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onloadeddata" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onloadeddata"}}onloadeddata="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onloadeddata"}}onloadeddata="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Coords(values ...string) Attribute {
-    return Attribute(`coords="` + strings.Join(values, " ") + `"`)
+func OnloadeddataRaw(values ...string) Attribute {
+    return Onloadeddata(nil, values...)
 }
+
 
-func Data(values ...string) Attribute {
-    return Attribute(`data="` + strings.Join(values, " ") + `"`)
+func Onloadedmetadata(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onloadedmetadata" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onloadedmetadata"}}onloadedmetadata="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onloadedmetadata"}}onloadedmetadata="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Datetime(values ...string) Attribute {
-    return Attribute(`datetime="` + strings.Join(values, " ") + `"`)
+func OnloadedmetadataRaw(values ...string) Attribute {
+    return Onloadedmetadata(nil, values...)
 }
 
-func Default(values ...string) Attribute {
-    return Attribute(`default="` + strings.Join(values, " ") + `"`)
+
+func Onloadstart(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onloadstart" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onloadstart"}}onloadstart="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onloadstart"}}onloadstart="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Defer(values ...string) Attribute {
-    return Attribute(`defer="` + strings.Join(values, " ") + `"`)
+func OnloadstartRaw(values ...string) Attribute {
+    return Onloadstart(nil, values...)
 }
+
 
-func Dir(values ...string) Attribute {
-    return Attribute(`dir="` + strings.Join(values, " ") + `"`)
+func Onmousedown(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onmousedown" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onmousedown"}}onmousedown="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onmousedown"}}onmousedown="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Dirname(values ...string) Attribute {
-    return Attribute(`dirname="` + strings.Join(values, " ") + `"`)
+func OnmousedownRaw(values ...string) Attribute {
+    return Onmousedown(nil, values...)
 }
 
-func Disabled(values ...string) Attribute {
-    return Attribute(`disabled="` + strings.Join(values, " ") + `"`)
+
+func Onmousemove(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onmousemove" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onmousemove"}}onmousemove="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onmousemove"}}onmousemove="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Download(values ...string) Attribute {
-    return Attribute(`download="` + strings.Join(values, " ") + `"`)
+func OnmousemoveRaw(values ...string) Attribute {
+    return Onmousemove(nil, values...)
 }
+
 
-func Draggable(values ...string) Attribute {
-    return Attribute(`draggable="` + strings.Join(values, " ") + `"`)
+func Onmouseout(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onmouseout" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onmouseout"}}onmouseout="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onmouseout"}}onmouseout="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Dropzone(values ...string) Attribute {
-    return Attribute(`dropzone="` + strings.Join(values, " ") + `"`)
+func OnmouseoutRaw(values ...string) Attribute {
+    return Onmouseout(nil, values...)
 }
 
-func Enctype(values ...string) Attribute {
-    return Attribute(`enctype="` + strings.Join(values, " ") + `"`)
+
+func Onmouseover(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onmouseover" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onmouseover"}}onmouseover="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onmouseover"}}onmouseover="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func For(values ...string) Attribute {
-    return Attribute(`for="` + strings.Join(values, " ") + `"`)
+func OnmouseoverRaw(values ...string) Attribute {
+    return Onmouseover(nil, values...)
 }
+
 
-func Form(values ...string) Attribute {
-    return Attribute(`form="` + strings.Join(values, " ") + `"`)
+func Onmouseup(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onmouseup" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onmouseup"}}onmouseup="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onmouseup"}}onmouseup="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Formaction(values ...string) Attribute {
-    return Attribute(`formaction="` + strings.Join(values, " ") + `"`)
+func OnmouseupRaw(values ...string) Attribute {
+    return Onmouseup(nil, values...)
 }
 
-func Headers(values ...string) Attribute {
-    return Attribute(`headers="` + strings.Join(values, " ") + `"`)
+
+func Onmousewheel(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onmousewheel" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onmousewheel"}}onmousewheel="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onmousewheel"}}onmousewheel="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Height(values ...string) Attribute {
-    return Attribute(`height="` + strings.Join(values, " ") + `"`)
+func OnmousewheelRaw(values ...string) Attribute {
+    return Onmousewheel(nil, values...)
 }
+
 
-func Hidden(values ...string) Attribute {
-    return Attribute(`hidden="` + strings.Join(values, " ") + `"`)
+func Onoffline(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onoffline" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onoffline"}}onoffline="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onoffline"}}onoffline="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func High(values ...string) Attribute {
-    return Attribute(`high="` + strings.Join(values, " ") + `"`)
+func OnofflineRaw(values ...string) Attribute {
+    return Onoffline(nil, values...)
 }
 
-func Href(values ...string) Attribute {
-    return Attribute(`href="` + strings.Join(values, " ") + `"`)
+
+func Ononline(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Ononline" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Ononline"}}ononline="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Ononline"}}ononline="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Hreflang(values ...string) Attribute {
-    return Attribute(`hreflang="` + strings.Join(values, " ") + `"`)
+func OnonlineRaw(values ...string) Attribute {
+    return Ononline(nil, values...)
 }
 
-func HttpEquiv(values ...string) Attribute {
-    return Attribute(`http-equiv="` + strings.Join(values, " ") + `"`)
+
+func Onpagehide(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onpagehide" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onpagehide"}}onpagehide="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onpagehide"}}onpagehide="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Id(values ...string) Attribute {
-    return Attribute(`id="` + strings.Join(values, " ") + `"`)
+func OnpagehideRaw(values ...string) Attribute {
+    return Onpagehide(nil, values...)
 }
+
 
-func Ismap(values ...string) Attribute {
-    return Attribute(`ismap="` + strings.Join(values, " ") + `"`)
+func Onpageshow(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onpageshow" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onpageshow"}}onpageshow="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onpageshow"}}onpageshow="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Kind(values ...string) Attribute {
-    return Attribute(`kind="` + strings.Join(values, " ") + `"`)
+func OnpageshowRaw(values ...string) Attribute {
+    return Onpageshow(nil, values...)
 }
 
-func Label(values ...string) Attribute {
-    return Attribute(`label="` + strings.Join(values, " ") + `"`)
+
+func Onpaste(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onpaste" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onpaste"}}onpaste="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onpaste"}}onpaste="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Lang(values ...string) Attribute {
-    return Attribute(`lang="` + strings.Join(values, " ") + `"`)
+func OnpasteRaw(values ...string) Attribute {
+    return Onpaste(nil, values...)
 }
+
 
-func List(values ...string) Attribute {
-    return Attribute(`list="` + strings.Join(values, " ") + `"`)
+func Onpause(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onpause" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onpause"}}onpause="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onpause"}}onpause="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Loop(values ...string) Attribute {
-    return Attribute(`loop="` + strings.Join(values, " ") + `"`)
+func OnpauseRaw(values ...string) Attribute {
+    return Onpause(nil, values...)
 }
 
-func Low(values ...string) Attribute {
-    return Attribute(`low="` + strings.Join(values, " ") + `"`)
+
+func Onplay(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onplay" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onplay"}}onplay="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onplay"}}onplay="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Max(values ...string) Attribute {
-    return Attribute(`max="` + strings.Join(values, " ") + `"`)
+func OnplayRaw(values ...string) Attribute {
+    return Onplay(nil, values...)
 }
+
 
-func Maxlength(values ...string) Attribute {
-    return Attribute(`maxlength="` + strings.Join(values, " ") + `"`)
+func Onplaying(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onplaying" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onplaying"}}onplaying="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onplaying"}}onplaying="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Media(values ...string) Attribute {
-    return Attribute(`media="` + strings.Join(values, " ") + `"`)
+func OnplayingRaw(values ...string) Attribute {
+    return Onplaying(nil, values...)
 }
 
-func Method(values ...string) Attribute {
-    return Attribute(`method="` + strings.Join(values, " ") + `"`)
+
+func Onpopstate(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onpopstate" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onpopstate"}}onpopstate="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onpopstate"}}onpopstate="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Min(values ...string) Attribute {
-    return Attribute(`min="` + strings.Join(values, " ") + `"`)
+func OnpopstateRaw(values ...string) Attribute {
+    return Onpopstate(nil, values...)
 }
+
 
-func Multiple(values ...string) Attribute {
-    return Attribute(`multiple="` + strings.Join(values, " ") + `"`)
+func Onprogress(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onprogress" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onprogress"}}onprogress="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onprogress"}}onprogress="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Muted(values ...string) Attribute {
-    return Attribute(`muted="` + strings.Join(values, " ") + `"`)
+func OnprogressRaw(values ...string) Attribute {
+    return Onprogress(nil, values...)
 }
 
-func Name(values ...string) Attribute {
-    return Attribute(`name="` + strings.Join(values, " ") + `"`)
+
+func Onratechange(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onratechange" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onratechange"}}onratechange="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onratechange"}}onratechange="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Novalidate(values ...string) Attribute {
-    return Attribute(`novalidate="` + strings.Join(values, " ") + `"`)
+func OnratechangeRaw(values ...string) Attribute {
+    return Onratechange(nil, values...)
 }
+
 
-func Onabort(values ...string) Attribute {
-    return Attribute(`onabort="` + strings.Join(values, " ") + `"`)
+func Onreset(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onreset" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onreset"}}onreset="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onreset"}}onreset="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Onafterprint(values ...string) Attribute {
-    return Attribute(`onafterprint="` + strings.Join(values, " ") + `"`)
+func OnresetRaw(values ...string) Attribute {
+    return Onreset(nil, values...)
 }
 
-func Onbeforeprint(values ...string) Attribute {
-    return Attribute(`onbeforeprint="` + strings.Join(values, " ") + `"`)
+
+func Onresize(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onresize" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onresize"}}onresize="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onresize"}}onresize="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Onbeforeunload(values ...string) Attribute {
-    return Attribute(`onbeforeunload="` + strings.Join(values, " ") + `"`)
+func OnresizeRaw(values ...string) Attribute {
+    return Onresize(nil, values...)
 }
+
 
-func Onblur(values ...string) Attribute {
-    return Attribute(`onblur="` + strings.Join(values, " ") + `"`)
+func Onscroll(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onscroll" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onscroll"}}onscroll="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onscroll"}}onscroll="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Oncanplay(values ...string) Attribute {
-    return Attribute(`oncanplay="` + strings.Join(values, " ") + `"`)
+func OnscrollRaw(values ...string) Attribute {
+    return Onscroll(nil, values...)
 }
 
-func Oncanplaythrough(values ...string) Attribute {
-    return Attribute(`oncanplaythrough="` + strings.Join(values, " ") + `"`)
+
+func Onsearch(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onsearch" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onsearch"}}onsearch="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onsearch"}}onsearch="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Onchange(values ...string) Attribute {
-    return Attribute(`onchange="` + strings.Join(values, " ") + `"`)
+func OnsearchRaw(values ...string) Attribute {
+    return Onsearch(nil, values...)
 }
+
 
-func Onclick(values ...string) Attribute {
-    return Attribute(`onclick="` + strings.Join(values, " ") + `"`)
+func Onseeked(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onseeked" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onseeked"}}onseeked="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onseeked"}}onseeked="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Oncontextmenu(values ...string) Attribute {
-    return Attribute(`oncontextmenu="` + strings.Join(values, " ") + `"`)
+func OnseekedRaw(values ...string) Attribute {
+    return Onseeked(nil, values...)
 }
 
-func Oncopy(values ...string) Attribute {
-    return Attribute(`oncopy="` + strings.Join(values, " ") + `"`)
+
+func Onseeking(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onseeking" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onseeking"}}onseeking="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onseeking"}}onseeking="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Oncuechange(values ...string) Attribute {
-    return Attribute(`oncuechange="` + strings.Join(values, " ") + `"`)
+func OnseekingRaw(values ...string) Attribute {
+    return Onseeking(nil, values...)
 }
+
 
-func Oncut(values ...string) Attribute {
-    return Attribute(`oncut="` + strings.Join(values, " ") + `"`)
+func Onselect(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onselect" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onselect"}}onselect="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onselect"}}onselect="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Ondblclick(values ...string) Attribute {
-    return Attribute(`ondblclick="` + strings.Join(values, " ") + `"`)
+func OnselectRaw(values ...string) Attribute {
+    return Onselect(nil, values...)
 }
 
-func Ondrag(values ...string) Attribute {
-    return Attribute(`ondrag="` + strings.Join(values, " ") + `"`)
+
+func Onstalled(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onstalled" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onstalled"}}onstalled="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onstalled"}}onstalled="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Ondragend(values ...string) Attribute {
-    return Attribute(`ondragend="` + strings.Join(values, " ") + `"`)
+func OnstalledRaw(values ...string) Attribute {
+    return Onstalled(nil, values...)
 }
+
 
-func Ondragenter(values ...string) Attribute {
-    return Attribute(`ondragenter="` + strings.Join(values, " ") + `"`)
+func Onstorage(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onstorage" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onstorage"}}onstorage="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onstorage"}}onstorage="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Ondragleave(values ...string) Attribute {
-    return Attribute(`ondragleave="` + strings.Join(values, " ") + `"`)
+func OnstorageRaw(values ...string) Attribute {
+    return Onstorage(nil, values...)
 }
 
-func Ondragover(values ...string) Attribute {
-    return Attribute(`ondragover="` + strings.Join(values, " ") + `"`)
+
+func Onsubmit(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onsubmit" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onsubmit"}}onsubmit="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onsubmit"}}onsubmit="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Ondragstart(values ...string) Attribute {
-    return Attribute(`ondragstart="` + strings.Join(values, " ") + `"`)
+func OnsubmitRaw(values ...string) Attribute {
+    return Onsubmit(nil, values...)
 }
+
 
-func Ondrop(values ...string) Attribute {
-    return Attribute(`ondrop="` + strings.Join(values, " ") + `"`)
+func Onsuspend(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onsuspend" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onsuspend"}}onsuspend="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onsuspend"}}onsuspend="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Ondurationchange(values ...string) Attribute {
-    return Attribute(`ondurationchange="` + strings.Join(values, " ") + `"`)
+func OnsuspendRaw(values ...string) Attribute {
+    return Onsuspend(nil, values...)
 }
 
-func Onemptied(values ...string) Attribute {
-    return Attribute(`onemptied="` + strings.Join(values, " ") + `"`)
+
+func Ontimeupdate(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Ontimeupdate" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Ontimeupdate"}}ontimeupdate="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Ontimeupdate"}}ontimeupdate="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Onended(values ...string) Attribute {
-    return Attribute(`onended="` + strings.Join(values, " ") + `"`)
+func OntimeupdateRaw(values ...string) Attribute {
+    return Ontimeupdate(nil, values...)
 }
+
 
-func Onerror(values ...string) Attribute {
-    return Attribute(`onerror="` + strings.Join(values, " ") + `"`)
+func Ontoggle(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Ontoggle" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Ontoggle"}}ontoggle="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Ontoggle"}}ontoggle="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Onfocus(values ...string) Attribute {
-    return Attribute(`onfocus="` + strings.Join(values, " ") + `"`)
+func OntoggleRaw(values ...string) Attribute {
+    return Ontoggle(nil, values...)
 }
 
-func Onhashchange(values ...string) Attribute {
-    return Attribute(`onhashchange="` + strings.Join(values, " ") + `"`)
+
+func Onunload(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onunload" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onunload"}}onunload="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onunload"}}onunload="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Oninput(values ...string) Attribute {
-    return Attribute(`oninput="` + strings.Join(values, " ") + `"`)
+func OnunloadRaw(values ...string) Attribute {
+    return Onunload(nil, values...)
 }
+
 
-func Oninvalid(values ...string) Attribute {
-    return Attribute(`oninvalid="` + strings.Join(values, " ") + `"`)
+func Onvolumechange(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onvolumechange" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onvolumechange"}}onvolumechange="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onvolumechange"}}onvolumechange="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Onkeydown(values ...string) Attribute {
-    return Attribute(`onkeydown="` + strings.Join(values, " ") + `"`)
+func OnvolumechangeRaw(values ...string) Attribute {
+    return Onvolumechange(nil, values...)
 }
 
-func Onkeypress(values ...string) Attribute {
-    return Attribute(`onkeypress="` + strings.Join(values, " ") + `"`)
+
+func Onwaiting(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onwaiting" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onwaiting"}}onwaiting="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onwaiting"}}onwaiting="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Onkeyup(values ...string) Attribute {
-    return Attribute(`onkeyup="` + strings.Join(values, " ") + `"`)
+func OnwaitingRaw(values ...string) Attribute {
+    return Onwaiting(nil, values...)
 }
+
 
-func Onload(values ...string) Attribute {
-    return Attribute(`onload="` + strings.Join(values, " ") + `"`)
+func Onwheel(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Onwheel" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Onwheel"}}onwheel="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Onwheel"}}onwheel="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Onloadeddata(values ...string) Attribute {
-    return Attribute(`onloadeddata="` + strings.Join(values, " ") + `"`)
+func OnwheelRaw(values ...string) Attribute {
+    return Onwheel(nil, values...)
 }
 
-func Onloadedmetadata(values ...string) Attribute {
-    return Attribute(`onloadedmetadata="` + strings.Join(values, " ") + `"`)
+
+func Open(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Open" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Open"}}open="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Open"}}open="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Onloadstart(values ...string) Attribute {
-    return Attribute(`onloadstart="` + strings.Join(values, " ") + `"`)
+func OpenRaw(values ...string) Attribute {
+    return Open(nil, values...)
 }
+
 
-func Onmousedown(values ...string) Attribute {
-    return Attribute(`onmousedown="` + strings.Join(values, " ") + `"`)
+func Optimum(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Optimum" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Optimum"}}optimum="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Optimum"}}optimum="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Onmousemove(values ...string) Attribute {
-    return Attribute(`onmousemove="` + strings.Join(values, " ") + `"`)
+func OptimumRaw(values ...string) Attribute {
+    return Optimum(nil, values...)
 }
 
-func Onmouseout(values ...string) Attribute {
-    return Attribute(`onmouseout="` + strings.Join(values, " ") + `"`)
+
+func Pattern(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Pattern" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Pattern"}}pattern="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Pattern"}}pattern="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Onmouseover(values ...string) Attribute {
-    return Attribute(`onmouseover="` + strings.Join(values, " ") + `"`)
+func PatternRaw(values ...string) Attribute {
+    return Pattern(nil, values...)
 }
+
 
-func Onmouseup(values ...string) Attribute {
-    return Attribute(`onmouseup="` + strings.Join(values, " ") + `"`)
+func Placeholder(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Placeholder" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Placeholder"}}placeholder="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Placeholder"}}placeholder="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Onmousewheel(values ...string) Attribute {
-    return Attribute(`onmousewheel="` + strings.Join(values, " ") + `"`)
+func PlaceholderRaw(values ...string) Attribute {
+    return Placeholder(nil, values...)
 }
 
-func Onoffline(values ...string) Attribute {
-    return Attribute(`onoffline="` + strings.Join(values, " ") + `"`)
+
+func Poster(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Poster" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Poster"}}poster="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Poster"}}poster="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Ononline(values ...string) Attribute {
-    return Attribute(`ononline="` + strings.Join(values, " ") + `"`)
+func PosterRaw(values ...string) Attribute {
+    return Poster(nil, values...)
 }
+
 
-func Onpagehide(values ...string) Attribute {
-    return Attribute(`onpagehide="` + strings.Join(values, " ") + `"`)
+func Preload(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Preload" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Preload"}}preload="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Preload"}}preload="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Onpageshow(values ...string) Attribute {
-    return Attribute(`onpageshow="` + strings.Join(values, " ") + `"`)
+func PreloadRaw(values ...string) Attribute {
+    return Preload(nil, values...)
 }
 
-func Onpaste(values ...string) Attribute {
-    return Attribute(`onpaste="` + strings.Join(values, " ") + `"`)
+
+func Readonly(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Readonly" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Readonly"}}readonly="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Readonly"}}readonly="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Onpause(values ...string) Attribute {
-    return Attribute(`onpause="` + strings.Join(values, " ") + `"`)
+func ReadonlyRaw(values ...string) Attribute {
+    return Readonly(nil, values...)
 }
+
 
-func Onplay(values ...string) Attribute {
-    return Attribute(`onplay="` + strings.Join(values, " ") + `"`)
+func Rel(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Rel" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Rel"}}rel="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Rel"}}rel="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Onplaying(values ...string) Attribute {
-    return Attribute(`onplaying="` + strings.Join(values, " ") + `"`)
+func RelRaw(values ...string) Attribute {
+    return Rel(nil, values...)
 }
 
-func Onpopstate(values ...string) Attribute {
-    return Attribute(`onpopstate="` + strings.Join(values, " ") + `"`)
+
+func Required(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Required" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Required"}}required="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Required"}}required="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Onprogress(values ...string) Attribute {
-    return Attribute(`onprogress="` + strings.Join(values, " ") + `"`)
+func RequiredRaw(values ...string) Attribute {
+    return Required(nil, values...)
 }
+
 
-func Onratechange(values ...string) Attribute {
-    return Attribute(`onratechange="` + strings.Join(values, " ") + `"`)
+func Reversed(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Reversed" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Reversed"}}reversed="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Reversed"}}reversed="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Onreset(values ...string) Attribute {
-    return Attribute(`onreset="` + strings.Join(values, " ") + `"`)
+func ReversedRaw(values ...string) Attribute {
+    return Reversed(nil, values...)
 }
 
-func Onresize(values ...string) Attribute {
-    return Attribute(`onresize="` + strings.Join(values, " ") + `"`)
+
+func Rows(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Rows" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Rows"}}rows="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Rows"}}rows="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Onscroll(values ...string) Attribute {
-    return Attribute(`onscroll="` + strings.Join(values, " ") + `"`)
+func RowsRaw(values ...string) Attribute {
+    return Rows(nil, values...)
 }
+
 
-func Onsearch(values ...string) Attribute {
-    return Attribute(`onsearch="` + strings.Join(values, " ") + `"`)
+func Rowspan(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Rowspan" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Rowspan"}}rowspan="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Rowspan"}}rowspan="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Onseeked(values ...string) Attribute {
-    return Attribute(`onseeked="` + strings.Join(values, " ") + `"`)
+func RowspanRaw(values ...string) Attribute {
+    return Rowspan(nil, values...)
 }
 
-func Onseeking(values ...string) Attribute {
-    return Attribute(`onseeking="` + strings.Join(values, " ") + `"`)
+
+func Sandbox(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Sandbox" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Sandbox"}}sandbox="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Sandbox"}}sandbox="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Onselect(values ...string) Attribute {
-    return Attribute(`onselect="` + strings.Join(values, " ") + `"`)
+func SandboxRaw(values ...string) Attribute {
+    return Sandbox(nil, values...)
 }
+
 
-func Onstalled(values ...string) Attribute {
-    return Attribute(`onstalled="` + strings.Join(values, " ") + `"`)
+func Scope(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Scope" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Scope"}}scope="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Scope"}}scope="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Onstorage(values ...string) Attribute {
-    return Attribute(`onstorage="` + strings.Join(values, " ") + `"`)
+func ScopeRaw(values ...string) Attribute {
+    return Scope(nil, values...)
 }
 
-func Onsubmit(values ...string) Attribute {
-    return Attribute(`onsubmit="` + strings.Join(values, " ") + `"`)
+
+func Selected(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Selected" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Selected"}}selected="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Selected"}}selected="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Onsuspend(values ...string) Attribute {
-    return Attribute(`onsuspend="` + strings.Join(values, " ") + `"`)
+func SelectedRaw(values ...string) Attribute {
+    return Selected(nil, values...)
 }
+
 
-func Ontimeupdate(values ...string) Attribute {
-    return Attribute(`ontimeupdate="` + strings.Join(values, " ") + `"`)
+func Shape(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Shape" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Shape"}}shape="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Shape"}}shape="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Ontoggle(values ...string) Attribute {
-    return Attribute(`ontoggle="` + strings.Join(values, " ") + `"`)
+func ShapeRaw(values ...string) Attribute {
+    return Shape(nil, values...)
 }
 
-func Onunload(values ...string) Attribute {
-    return Attribute(`onunload="` + strings.Join(values, " ") + `"`)
+
+func Size(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Size" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Size"}}size="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Size"}}size="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Onvolumechange(values ...string) Attribute {
-    return Attribute(`onvolumechange="` + strings.Join(values, " ") + `"`)
+func SizeRaw(values ...string) Attribute {
+    return Size(nil, values...)
 }
+
 
-func Onwaiting(values ...string) Attribute {
-    return Attribute(`onwaiting="` + strings.Join(values, " ") + `"`)
+func Sizes(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Sizes" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Sizes"}}sizes="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Sizes"}}sizes="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Onwheel(values ...string) Attribute {
-    return Attribute(`onwheel="` + strings.Join(values, " ") + `"`)
+func SizesRaw(values ...string) Attribute {
+    return Sizes(nil, values...)
 }
 
-func Open(values ...string) Attribute {
-    return Attribute(`open="` + strings.Join(values, " ") + `"`)
+
+func Span(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Span" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Span"}}span="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Span"}}span="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Optimum(values ...string) Attribute {
-    return Attribute(`optimum="` + strings.Join(values, " ") + `"`)
+func SpanRaw(values ...string) Attribute {
+    return Span(nil, values...)
 }
+
 
-func Pattern(values ...string) Attribute {
-    return Attribute(`pattern="` + strings.Join(values, " ") + `"`)
+func Spellcheck(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Spellcheck" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Spellcheck"}}spellcheck="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Spellcheck"}}spellcheck="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Placeholder(values ...string) Attribute {
-    return Attribute(`placeholder="` + strings.Join(values, " ") + `"`)
+func SpellcheckRaw(values ...string) Attribute {
+    return Spellcheck(nil, values...)
 }
 
-func Poster(values ...string) Attribute {
-    return Attribute(`poster="` + strings.Join(values, " ") + `"`)
+
+func Src(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Src" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Src"}}src="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Src"}}src="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Preload(values ...string) Attribute {
-    return Attribute(`preload="` + strings.Join(values, " ") + `"`)
+func SrcRaw(values ...string) Attribute {
+    return Src(nil, values...)
 }
+
 
-func Readonly(values ...string) Attribute {
-    return Attribute(`readonly="` + strings.Join(values, " ") + `"`)
+func Srcdoc(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Srcdoc" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Srcdoc"}}srcdoc="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Srcdoc"}}srcdoc="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Rel(values ...string) Attribute {
-    return Attribute(`rel="` + strings.Join(values, " ") + `"`)
+func SrcdocRaw(values ...string) Attribute {
+    return Srcdoc(nil, values...)
 }
 
-func Required(values ...string) Attribute {
-    return Attribute(`required="` + strings.Join(values, " ") + `"`)
+
+func Srclang(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Srclang" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Srclang"}}srclang="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Srclang"}}srclang="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Reversed(values ...string) Attribute {
-    return Attribute(`reversed="` + strings.Join(values, " ") + `"`)
+func SrclangRaw(values ...string) Attribute {
+    return Srclang(nil, values...)
 }
+
 
-func Rows(values ...string) Attribute {
-    return Attribute(`rows="` + strings.Join(values, " ") + `"`)
+func Srcset(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Srcset" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Srcset"}}srcset="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Srcset"}}srcset="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Rowspan(values ...string) Attribute {
-    return Attribute(`rowspan="` + strings.Join(values, " ") + `"`)
+func SrcsetRaw(values ...string) Attribute {
+    return Srcset(nil, values...)
 }
 
-func Sandbox(values ...string) Attribute {
-    return Attribute(`sandbox="` + strings.Join(values, " ") + `"`)
+
+func Start(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Start" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Start"}}start="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Start"}}start="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Scope(values ...string) Attribute {
-    return Attribute(`scope="` + strings.Join(values, " ") + `"`)
+func StartRaw(values ...string) Attribute {
+    return Start(nil, values...)
 }
+
 
-func Selected(values ...string) Attribute {
-    return Attribute(`selected="` + strings.Join(values, " ") + `"`)
+func Step(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Step" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Step"}}step="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Step"}}step="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Shape(values ...string) Attribute {
-    return Attribute(`shape="` + strings.Join(values, " ") + `"`)
+func StepRaw(values ...string) Attribute {
+    return Step(nil, values...)
 }
 
-func Size(values ...string) Attribute {
-    return Attribute(`size="` + strings.Join(values, " ") + `"`)
+
+func Style(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Style" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Style"}}style="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Style"}}style="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Sizes(values ...string) Attribute {
-    return Attribute(`sizes="` + strings.Join(values, " ") + `"`)
+func StyleRaw(values ...string) Attribute {
+    return Style(nil, values...)
 }
+
 
-func Span(values ...string) Attribute {
-    return Attribute(`span="` + strings.Join(values, " ") + `"`)
+func Tabindex(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Tabindex" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Tabindex"}}tabindex="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Tabindex"}}tabindex="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Spellcheck(values ...string) Attribute {
-    return Attribute(`spellcheck="` + strings.Join(values, " ") + `"`)
+func TabindexRaw(values ...string) Attribute {
+    return Tabindex(nil, values...)
 }
 
-func Src(values ...string) Attribute {
-    return Attribute(`src="` + strings.Join(values, " ") + `"`)
+
+func Target(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Target" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Target"}}target="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Target"}}target="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Srcdoc(values ...string) Attribute {
-    return Attribute(`srcdoc="` + strings.Join(values, " ") + `"`)
+func TargetRaw(values ...string) Attribute {
+    return Target(nil, values...)
 }
+
 
-func Srclang(values ...string) Attribute {
-    return Attribute(`srclang="` + strings.Join(values, " ") + `"`)
+func Title(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Title" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Title"}}title="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Title"}}title="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Srcset(values ...string) Attribute {
-    return Attribute(`srcset="` + strings.Join(values, " ") + `"`)
+func TitleRaw(values ...string) Attribute {
+    return Title(nil, values...)
 }
 
-func Start(values ...string) Attribute {
-    return Attribute(`start="` + strings.Join(values, " ") + `"`)
+
+func Translate(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Translate" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Translate"}}translate="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Translate"}}translate="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Step(values ...string) Attribute {
-    return Attribute(`step="` + strings.Join(values, " ") + `"`)
+func TranslateRaw(values ...string) Attribute {
+    return Translate(nil, values...)
 }
+
 
-func Style(values ...string) Attribute {
-    return Attribute(`style="` + strings.Join(values, " ") + `"`)
+func Type(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Type" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Type"}}type="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Type"}}type="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Tabindex(values ...string) Attribute {
-    return Attribute(`tabindex="` + strings.Join(values, " ") + `"`)
+func TypeRaw(values ...string) Attribute {
+    return Type(nil, values...)
 }
 
-func Target(values ...string) Attribute {
-    return Attribute(`target="` + strings.Join(values, " ") + `"`)
+
+func Usemap(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Usemap" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Usemap"}}usemap="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Usemap"}}usemap="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Title(values ...string) Attribute {
-    return Attribute(`title="` + strings.Join(values, " ") + `"`)
+func UsemapRaw(values ...string) Attribute {
+    return Usemap(nil, values...)
 }
+
 
-func Translate(values ...string) Attribute {
-    return Attribute(`translate="` + strings.Join(values, " ") + `"`)
+func Value(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Value" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Value"}}value="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Value"}}value="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Type(values ...string) Attribute {
-    return Attribute(`type="` + strings.Join(values, " ") + `"`)
+func ValueRaw(values ...string) Attribute {
+    return Value(nil, values...)
 }
 
-func Usemap(values ...string) Attribute {
-    return Attribute(`usemap="` + strings.Join(values, " ") + `"`)
+
+func Width(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Width" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Width"}}width="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Width"}}width="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Value(values ...string) Attribute {
-    return Attribute(`value="` + strings.Join(values, " ") + `"`)
+func WidthRaw(values ...string) Attribute {
+    return Width(nil, values...)
 }
+
 
-func Width(values ...string) Attribute {
-    return Attribute(`width="` + strings.Join(values, " ") + `"`)
+func Wrap(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Wrap" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Wrap"}}wrap="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Wrap"}}wrap="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
 }
 
-func Wrap(values ...string) Attribute {
-    return Attribute(`wrap="` + strings.Join(values, " ") + `"`)
+func WrapRaw(values ...string) Attribute {
+    return Wrap(nil, values...)
 }
 

@@ -2,6 +2,7 @@ package htmlgo
 
 import (
     "fmt"
+    "io"
     "strings"
     "html"
     "html/template"
@@ -11,17 +12,33 @@ import (
 )
 
 type HTML string
+
 type JS struct {
     templ       string
     data        interface{}
 }
 
-func insertAttributes(attrs []a.Attribute) string {
-    s := ""
-    for _, a := range attrs {
-        s += " " + string(a)
+func WriteTo(w io.Writer, h HTML) {
+    w.Write([]byte(h))
+}
+
+// Build a slice of type []Attribute for cosmetic purposes
+func Attr(attrs ...a.Attribute) []a.Attribute {
+    return attrs
+}
+
+func prepareAttributes(attrs []a.Attribute) (string, string, map[string]interface{}) {
+    data := map[string]interface{}{}
+    templ := ""
+    defs := ""
+
+    for _, attr := range attrs {
+        data[attr.Name] = attr.Data
+        templ += ` {{template "` + attr.Name + `" .` + attr.Name + `}}`
+        defs += attr.Templ
     }
-    return s
+
+    return templ, defs, data
 }
 
 func insertChildren(children ...HTML) string {
@@ -36,21 +53,36 @@ func indent(s, indentation string) string {
     return strings.Replace(s, "\n", "\n" + indentation, -1)
 }
 
+func buildElement(tag string, attrs []a.Attribute, content string, close_ bool) string {
+    templ, defs, data := prepareAttributes(attrs)
+    complTempl := defs + "\n<" + tag + templ + ">" + content
+    if close_ {
+        complTempl += "\n</" + tag +">"
+    }
+
+    t, _ := template.New(tag).Parse(complTempl)
+
+    buf := new(bytes.Buffer)
+    _ = t.Execute(buf, data)
+    return buf.String()
+}
+
 func Element(tag string, attrs []a.Attribute, children ...HTML) HTML {
-    return HTML(
-        "\n<" + tag + insertAttributes(attrs) + ">" +
-        indent(insertChildren(children...), "  ") +
-        "\n</" + tag + ">")
+    return HTML(buildElement(tag, attrs, 
+                indent(insertChildren(children...), "  "), true))
 }
 
 func VoidElement(tag string, attrs []a.Attribute) HTML {
-    return HTML(
-        "\n<" + tag + insertAttributes(attrs) + ">")
+    return HTML(buildElement(tag, attrs, "", false))
 }
 
 // Produce HTML from plain text by escaping
 func Text(v interface{}) HTML {
     return HTML("\n" + html.EscapeString(fmt.Sprint(v)))
+}
+
+func TextRaw(s string) HTML {
+    return HTML(s)
 }
 
 // Begin of manually defined elements
@@ -60,7 +92,7 @@ func Html5(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Html5_(children ...HTML) HTML {
-    return Html5(a.Attr(), children...)
+    return Html5(Attr(), children...)
 }
 
 func Doctype(t string) HTML {
@@ -74,37 +106,44 @@ func Script(attrs []a.Attribute, js JS) HTML {
         return Element("script", attrs, HTML("\n" + js.templ))
     }
 
+    complTempl := buildElement("script", attrs,
+                               indent("\n" + js.templ, "  "), true)
+    
     // TODO set verbosity level to enable logging
-    t, err := template.New("_").Parse(
-        "\n<script" + insertAttributes(attrs) + ">" +
-        indent("\n" + js.templ, "  ") + "\n</script>")
+    t, err := template.New("_").Delims("{%$", "$%}").Parse(complTempl)
     if err != nil {
         return Element("script", attrs)
     }
+
     buf := new(bytes.Buffer)
     err = t.Execute(buf, js.data)
     if err != nil {
         return Element("script", attrs)
     }
+
     return HTML(buf.String())
 }
 
 func Script_(js JS) HTML {
-    return Script(a.Attr(), js)
+    return Script(Attr(), js)
 }
 
-func Javascript(data interface{}, templs ...string) JS {
+func JavaScript(data interface{}, templs ...string) JS {
     js := JS{ data: data }
     if len(templs) == 0 {
-        js.templ = "{{.}}"
+        js.templ = "{%$.$%}"
     } else {
-        js.templ = strings.Join(templs, "\n")
+        js.templ = strings.Replace(
+                     strings.Replace(
+                        strings.Join(templs, "\n"),
+                        "{{", "{%$", -1),
+                     "}}", "$%}", -1)
     }
     return js
 }
 
-func Javascript_(templs ...string) JS {
-    return Javascript(nil, templs...)
+func JavaScriptRaw(templs ...string) JS {
+    return JavaScript(nil, templs...)
 }
 
 // Begin of generated elements
@@ -115,7 +154,7 @@ func A(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func A_(children ...HTML) HTML {
-    return A(a.Attr(), children...)
+    return A(Attr(), children...)
 }
 
 func Abbr(attrs []a.Attribute, children ...HTML) HTML {
@@ -123,7 +162,7 @@ func Abbr(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Abbr_(children ...HTML) HTML {
-    return Abbr(a.Attr(), children...)
+    return Abbr(Attr(), children...)
 }
 
 func Acronym(attrs []a.Attribute, children ...HTML) HTML {
@@ -131,7 +170,7 @@ func Acronym(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Acronym_(children ...HTML) HTML {
-    return Acronym(a.Attr(), children...)
+    return Acronym(Attr(), children...)
 }
 
 func Address(attrs []a.Attribute, children ...HTML) HTML {
@@ -139,7 +178,7 @@ func Address(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Address_(children ...HTML) HTML {
-    return Address(a.Attr(), children...)
+    return Address(Attr(), children...)
 }
 
 func Applet(attrs []a.Attribute, children ...HTML) HTML {
@@ -147,7 +186,7 @@ func Applet(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Applet_(children ...HTML) HTML {
-    return Applet(a.Attr(), children...)
+    return Applet(Attr(), children...)
 }
 
 func Article(attrs []a.Attribute, children ...HTML) HTML {
@@ -155,7 +194,7 @@ func Article(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Article_(children ...HTML) HTML {
-    return Article(a.Attr(), children...)
+    return Article(Attr(), children...)
 }
 
 func Aside(attrs []a.Attribute, children ...HTML) HTML {
@@ -163,7 +202,7 @@ func Aside(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Aside_(children ...HTML) HTML {
-    return Aside(a.Attr(), children...)
+    return Aside(Attr(), children...)
 }
 
 func Audio(attrs []a.Attribute, children ...HTML) HTML {
@@ -171,7 +210,7 @@ func Audio(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Audio_(children ...HTML) HTML {
-    return Audio(a.Attr(), children...)
+    return Audio(Attr(), children...)
 }
 
 func B(attrs []a.Attribute, children ...HTML) HTML {
@@ -179,7 +218,7 @@ func B(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func B_(children ...HTML) HTML {
-    return B(a.Attr(), children...)
+    return B(Attr(), children...)
 }
 
 func Basefont(attrs []a.Attribute, children ...HTML) HTML {
@@ -187,7 +226,7 @@ func Basefont(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Basefont_(children ...HTML) HTML {
-    return Basefont(a.Attr(), children...)
+    return Basefont(Attr(), children...)
 }
 
 func Bdi(attrs []a.Attribute, children ...HTML) HTML {
@@ -195,7 +234,7 @@ func Bdi(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Bdi_(children ...HTML) HTML {
-    return Bdi(a.Attr(), children...)
+    return Bdi(Attr(), children...)
 }
 
 func Bdo(attrs []a.Attribute, children ...HTML) HTML {
@@ -203,7 +242,7 @@ func Bdo(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Bdo_(children ...HTML) HTML {
-    return Bdo(a.Attr(), children...)
+    return Bdo(Attr(), children...)
 }
 
 func Bgsound(attrs []a.Attribute, children ...HTML) HTML {
@@ -211,7 +250,7 @@ func Bgsound(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Bgsound_(children ...HTML) HTML {
-    return Bgsound(a.Attr(), children...)
+    return Bgsound(Attr(), children...)
 }
 
 func Big(attrs []a.Attribute, children ...HTML) HTML {
@@ -219,7 +258,7 @@ func Big(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Big_(children ...HTML) HTML {
-    return Big(a.Attr(), children...)
+    return Big(Attr(), children...)
 }
 
 func Blink(attrs []a.Attribute, children ...HTML) HTML {
@@ -227,7 +266,7 @@ func Blink(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Blink_(children ...HTML) HTML {
-    return Blink(a.Attr(), children...)
+    return Blink(Attr(), children...)
 }
 
 func Blockquote(attrs []a.Attribute, children ...HTML) HTML {
@@ -235,7 +274,7 @@ func Blockquote(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Blockquote_(children ...HTML) HTML {
-    return Blockquote(a.Attr(), children...)
+    return Blockquote(Attr(), children...)
 }
 
 func Body(attrs []a.Attribute, children ...HTML) HTML {
@@ -243,7 +282,7 @@ func Body(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Body_(children ...HTML) HTML {
-    return Body(a.Attr(), children...)
+    return Body(Attr(), children...)
 }
 
 func Button(attrs []a.Attribute, children ...HTML) HTML {
@@ -251,7 +290,7 @@ func Button(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Button_(children ...HTML) HTML {
-    return Button(a.Attr(), children...)
+    return Button(Attr(), children...)
 }
 
 func Canvas(attrs []a.Attribute, children ...HTML) HTML {
@@ -259,7 +298,7 @@ func Canvas(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Canvas_(children ...HTML) HTML {
-    return Canvas(a.Attr(), children...)
+    return Canvas(Attr(), children...)
 }
 
 func Caption(attrs []a.Attribute, children ...HTML) HTML {
@@ -267,7 +306,7 @@ func Caption(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Caption_(children ...HTML) HTML {
-    return Caption(a.Attr(), children...)
+    return Caption(Attr(), children...)
 }
 
 func Center(attrs []a.Attribute, children ...HTML) HTML {
@@ -275,7 +314,7 @@ func Center(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Center_(children ...HTML) HTML {
-    return Center(a.Attr(), children...)
+    return Center(Attr(), children...)
 }
 
 func Cite(attrs []a.Attribute, children ...HTML) HTML {
@@ -283,7 +322,7 @@ func Cite(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Cite_(children ...HTML) HTML {
-    return Cite(a.Attr(), children...)
+    return Cite(Attr(), children...)
 }
 
 func Code(attrs []a.Attribute, children ...HTML) HTML {
@@ -291,7 +330,7 @@ func Code(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Code_(children ...HTML) HTML {
-    return Code(a.Attr(), children...)
+    return Code(Attr(), children...)
 }
 
 func Colgroup(attrs []a.Attribute, children ...HTML) HTML {
@@ -299,7 +338,7 @@ func Colgroup(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Colgroup_(children ...HTML) HTML {
-    return Colgroup(a.Attr(), children...)
+    return Colgroup(Attr(), children...)
 }
 
 func Datalist(attrs []a.Attribute, children ...HTML) HTML {
@@ -307,7 +346,7 @@ func Datalist(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Datalist_(children ...HTML) HTML {
-    return Datalist(a.Attr(), children...)
+    return Datalist(Attr(), children...)
 }
 
 func Dd(attrs []a.Attribute, children ...HTML) HTML {
@@ -315,7 +354,7 @@ func Dd(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Dd_(children ...HTML) HTML {
-    return Dd(a.Attr(), children...)
+    return Dd(Attr(), children...)
 }
 
 func Del(attrs []a.Attribute, children ...HTML) HTML {
@@ -323,7 +362,7 @@ func Del(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Del_(children ...HTML) HTML {
-    return Del(a.Attr(), children...)
+    return Del(Attr(), children...)
 }
 
 func Details(attrs []a.Attribute, children ...HTML) HTML {
@@ -331,7 +370,7 @@ func Details(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Details_(children ...HTML) HTML {
-    return Details(a.Attr(), children...)
+    return Details(Attr(), children...)
 }
 
 func Dfn(attrs []a.Attribute, children ...HTML) HTML {
@@ -339,7 +378,7 @@ func Dfn(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Dfn_(children ...HTML) HTML {
-    return Dfn(a.Attr(), children...)
+    return Dfn(Attr(), children...)
 }
 
 func Dir(attrs []a.Attribute, children ...HTML) HTML {
@@ -347,7 +386,7 @@ func Dir(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Dir_(children ...HTML) HTML {
-    return Dir(a.Attr(), children...)
+    return Dir(Attr(), children...)
 }
 
 func Div(attrs []a.Attribute, children ...HTML) HTML {
@@ -355,7 +394,7 @@ func Div(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Div_(children ...HTML) HTML {
-    return Div(a.Attr(), children...)
+    return Div(Attr(), children...)
 }
 
 func Dl(attrs []a.Attribute, children ...HTML) HTML {
@@ -363,7 +402,7 @@ func Dl(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Dl_(children ...HTML) HTML {
-    return Dl(a.Attr(), children...)
+    return Dl(Attr(), children...)
 }
 
 func Dt(attrs []a.Attribute, children ...HTML) HTML {
@@ -371,7 +410,7 @@ func Dt(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Dt_(children ...HTML) HTML {
-    return Dt(a.Attr(), children...)
+    return Dt(Attr(), children...)
 }
 
 func Em(attrs []a.Attribute, children ...HTML) HTML {
@@ -379,7 +418,7 @@ func Em(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Em_(children ...HTML) HTML {
-    return Em(a.Attr(), children...)
+    return Em(Attr(), children...)
 }
 
 func Fieldset(attrs []a.Attribute, children ...HTML) HTML {
@@ -387,7 +426,7 @@ func Fieldset(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Fieldset_(children ...HTML) HTML {
-    return Fieldset(a.Attr(), children...)
+    return Fieldset(Attr(), children...)
 }
 
 func Figcaption(attrs []a.Attribute, children ...HTML) HTML {
@@ -395,7 +434,7 @@ func Figcaption(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Figcaption_(children ...HTML) HTML {
-    return Figcaption(a.Attr(), children...)
+    return Figcaption(Attr(), children...)
 }
 
 func Figure(attrs []a.Attribute, children ...HTML) HTML {
@@ -403,7 +442,7 @@ func Figure(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Figure_(children ...HTML) HTML {
-    return Figure(a.Attr(), children...)
+    return Figure(Attr(), children...)
 }
 
 func Font(attrs []a.Attribute, children ...HTML) HTML {
@@ -411,7 +450,7 @@ func Font(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Font_(children ...HTML) HTML {
-    return Font(a.Attr(), children...)
+    return Font(Attr(), children...)
 }
 
 func Footer(attrs []a.Attribute, children ...HTML) HTML {
@@ -419,7 +458,7 @@ func Footer(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Footer_(children ...HTML) HTML {
-    return Footer(a.Attr(), children...)
+    return Footer(Attr(), children...)
 }
 
 func Form(attrs []a.Attribute, children ...HTML) HTML {
@@ -427,7 +466,7 @@ func Form(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Form_(children ...HTML) HTML {
-    return Form(a.Attr(), children...)
+    return Form(Attr(), children...)
 }
 
 func Frame(attrs []a.Attribute, children ...HTML) HTML {
@@ -435,7 +474,7 @@ func Frame(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Frame_(children ...HTML) HTML {
-    return Frame(a.Attr(), children...)
+    return Frame(Attr(), children...)
 }
 
 func Frameset(attrs []a.Attribute, children ...HTML) HTML {
@@ -443,7 +482,7 @@ func Frameset(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Frameset_(children ...HTML) HTML {
-    return Frameset(a.Attr(), children...)
+    return Frameset(Attr(), children...)
 }
 
 func H1(attrs []a.Attribute, children ...HTML) HTML {
@@ -451,7 +490,7 @@ func H1(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func H1_(children ...HTML) HTML {
-    return H1(a.Attr(), children...)
+    return H1(Attr(), children...)
 }
 
 func H2(attrs []a.Attribute, children ...HTML) HTML {
@@ -459,7 +498,7 @@ func H2(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func H2_(children ...HTML) HTML {
-    return H2(a.Attr(), children...)
+    return H2(Attr(), children...)
 }
 
 func H3(attrs []a.Attribute, children ...HTML) HTML {
@@ -467,7 +506,7 @@ func H3(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func H3_(children ...HTML) HTML {
-    return H3(a.Attr(), children...)
+    return H3(Attr(), children...)
 }
 
 func H4(attrs []a.Attribute, children ...HTML) HTML {
@@ -475,7 +514,7 @@ func H4(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func H4_(children ...HTML) HTML {
-    return H4(a.Attr(), children...)
+    return H4(Attr(), children...)
 }
 
 func H5(attrs []a.Attribute, children ...HTML) HTML {
@@ -483,7 +522,7 @@ func H5(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func H5_(children ...HTML) HTML {
-    return H5(a.Attr(), children...)
+    return H5(Attr(), children...)
 }
 
 func H6(attrs []a.Attribute, children ...HTML) HTML {
@@ -491,7 +530,7 @@ func H6(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func H6_(children ...HTML) HTML {
-    return H6(a.Attr(), children...)
+    return H6(Attr(), children...)
 }
 
 func Head(attrs []a.Attribute, children ...HTML) HTML {
@@ -499,7 +538,7 @@ func Head(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Head_(children ...HTML) HTML {
-    return Head(a.Attr(), children...)
+    return Head(Attr(), children...)
 }
 
 func Header(attrs []a.Attribute, children ...HTML) HTML {
@@ -507,7 +546,7 @@ func Header(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Header_(children ...HTML) HTML {
-    return Header(a.Attr(), children...)
+    return Header(Attr(), children...)
 }
 
 func Hgroup(attrs []a.Attribute, children ...HTML) HTML {
@@ -515,7 +554,7 @@ func Hgroup(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Hgroup_(children ...HTML) HTML {
-    return Hgroup(a.Attr(), children...)
+    return Hgroup(Attr(), children...)
 }
 
 func Html(attrs []a.Attribute, children ...HTML) HTML {
@@ -523,7 +562,7 @@ func Html(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Html_(children ...HTML) HTML {
-    return Html(a.Attr(), children...)
+    return Html(Attr(), children...)
 }
 
 func I(attrs []a.Attribute, children ...HTML) HTML {
@@ -531,7 +570,7 @@ func I(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func I_(children ...HTML) HTML {
-    return I(a.Attr(), children...)
+    return I(Attr(), children...)
 }
 
 func Iframe(attrs []a.Attribute, children ...HTML) HTML {
@@ -539,7 +578,7 @@ func Iframe(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Iframe_(children ...HTML) HTML {
-    return Iframe(a.Attr(), children...)
+    return Iframe(Attr(), children...)
 }
 
 func Ins(attrs []a.Attribute, children ...HTML) HTML {
@@ -547,7 +586,7 @@ func Ins(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Ins_(children ...HTML) HTML {
-    return Ins(a.Attr(), children...)
+    return Ins(Attr(), children...)
 }
 
 func Isindex(attrs []a.Attribute, children ...HTML) HTML {
@@ -555,7 +594,7 @@ func Isindex(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Isindex_(children ...HTML) HTML {
-    return Isindex(a.Attr(), children...)
+    return Isindex(Attr(), children...)
 }
 
 func Kbd(attrs []a.Attribute, children ...HTML) HTML {
@@ -563,7 +602,7 @@ func Kbd(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Kbd_(children ...HTML) HTML {
-    return Kbd(a.Attr(), children...)
+    return Kbd(Attr(), children...)
 }
 
 func Keygen(attrs []a.Attribute, children ...HTML) HTML {
@@ -571,7 +610,7 @@ func Keygen(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Keygen_(children ...HTML) HTML {
-    return Keygen(a.Attr(), children...)
+    return Keygen(Attr(), children...)
 }
 
 func Label(attrs []a.Attribute, children ...HTML) HTML {
@@ -579,7 +618,7 @@ func Label(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Label_(children ...HTML) HTML {
-    return Label(a.Attr(), children...)
+    return Label(Attr(), children...)
 }
 
 func Legend(attrs []a.Attribute, children ...HTML) HTML {
@@ -587,7 +626,7 @@ func Legend(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Legend_(children ...HTML) HTML {
-    return Legend(a.Attr(), children...)
+    return Legend(Attr(), children...)
 }
 
 func Li(attrs []a.Attribute, children ...HTML) HTML {
@@ -595,7 +634,7 @@ func Li(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Li_(children ...HTML) HTML {
-    return Li(a.Attr(), children...)
+    return Li(Attr(), children...)
 }
 
 func Listing(attrs []a.Attribute, children ...HTML) HTML {
@@ -603,7 +642,7 @@ func Listing(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Listing_(children ...HTML) HTML {
-    return Listing(a.Attr(), children...)
+    return Listing(Attr(), children...)
 }
 
 func Main(attrs []a.Attribute, children ...HTML) HTML {
@@ -611,7 +650,7 @@ func Main(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Main_(children ...HTML) HTML {
-    return Main(a.Attr(), children...)
+    return Main(Attr(), children...)
 }
 
 func Map(attrs []a.Attribute, children ...HTML) HTML {
@@ -619,7 +658,7 @@ func Map(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Map_(children ...HTML) HTML {
-    return Map(a.Attr(), children...)
+    return Map(Attr(), children...)
 }
 
 func Mark(attrs []a.Attribute, children ...HTML) HTML {
@@ -627,7 +666,7 @@ func Mark(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Mark_(children ...HTML) HTML {
-    return Mark(a.Attr(), children...)
+    return Mark(Attr(), children...)
 }
 
 func Marquee(attrs []a.Attribute, children ...HTML) HTML {
@@ -635,7 +674,7 @@ func Marquee(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Marquee_(children ...HTML) HTML {
-    return Marquee(a.Attr(), children...)
+    return Marquee(Attr(), children...)
 }
 
 func Menu(attrs []a.Attribute, children ...HTML) HTML {
@@ -643,7 +682,7 @@ func Menu(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Menu_(children ...HTML) HTML {
-    return Menu(a.Attr(), children...)
+    return Menu(Attr(), children...)
 }
 
 func Meter(attrs []a.Attribute, children ...HTML) HTML {
@@ -651,7 +690,7 @@ func Meter(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Meter_(children ...HTML) HTML {
-    return Meter(a.Attr(), children...)
+    return Meter(Attr(), children...)
 }
 
 func Nav(attrs []a.Attribute, children ...HTML) HTML {
@@ -659,7 +698,7 @@ func Nav(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Nav_(children ...HTML) HTML {
-    return Nav(a.Attr(), children...)
+    return Nav(Attr(), children...)
 }
 
 func Nobr(attrs []a.Attribute, children ...HTML) HTML {
@@ -667,7 +706,7 @@ func Nobr(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Nobr_(children ...HTML) HTML {
-    return Nobr(a.Attr(), children...)
+    return Nobr(Attr(), children...)
 }
 
 func Noframes(attrs []a.Attribute, children ...HTML) HTML {
@@ -675,7 +714,7 @@ func Noframes(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Noframes_(children ...HTML) HTML {
-    return Noframes(a.Attr(), children...)
+    return Noframes(Attr(), children...)
 }
 
 func Noscript(attrs []a.Attribute, children ...HTML) HTML {
@@ -683,7 +722,7 @@ func Noscript(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Noscript_(children ...HTML) HTML {
-    return Noscript(a.Attr(), children...)
+    return Noscript(Attr(), children...)
 }
 
 func Object(attrs []a.Attribute, children ...HTML) HTML {
@@ -691,7 +730,7 @@ func Object(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Object_(children ...HTML) HTML {
-    return Object(a.Attr(), children...)
+    return Object(Attr(), children...)
 }
 
 func Ol(attrs []a.Attribute, children ...HTML) HTML {
@@ -699,7 +738,7 @@ func Ol(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Ol_(children ...HTML) HTML {
-    return Ol(a.Attr(), children...)
+    return Ol(Attr(), children...)
 }
 
 func Optgroup(attrs []a.Attribute, children ...HTML) HTML {
@@ -707,7 +746,7 @@ func Optgroup(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Optgroup_(children ...HTML) HTML {
-    return Optgroup(a.Attr(), children...)
+    return Optgroup(Attr(), children...)
 }
 
 func Option(attrs []a.Attribute, children ...HTML) HTML {
@@ -715,7 +754,7 @@ func Option(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Option_(children ...HTML) HTML {
-    return Option(a.Attr(), children...)
+    return Option(Attr(), children...)
 }
 
 func Output(attrs []a.Attribute, children ...HTML) HTML {
@@ -723,7 +762,7 @@ func Output(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Output_(children ...HTML) HTML {
-    return Output(a.Attr(), children...)
+    return Output(Attr(), children...)
 }
 
 func P(attrs []a.Attribute, children ...HTML) HTML {
@@ -731,7 +770,7 @@ func P(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func P_(children ...HTML) HTML {
-    return P(a.Attr(), children...)
+    return P(Attr(), children...)
 }
 
 func Plaintext(attrs []a.Attribute, children ...HTML) HTML {
@@ -739,7 +778,7 @@ func Plaintext(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Plaintext_(children ...HTML) HTML {
-    return Plaintext(a.Attr(), children...)
+    return Plaintext(Attr(), children...)
 }
 
 func Pre(attrs []a.Attribute, children ...HTML) HTML {
@@ -747,7 +786,7 @@ func Pre(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Pre_(children ...HTML) HTML {
-    return Pre(a.Attr(), children...)
+    return Pre(Attr(), children...)
 }
 
 func Progress(attrs []a.Attribute, children ...HTML) HTML {
@@ -755,7 +794,7 @@ func Progress(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Progress_(children ...HTML) HTML {
-    return Progress(a.Attr(), children...)
+    return Progress(Attr(), children...)
 }
 
 func Q(attrs []a.Attribute, children ...HTML) HTML {
@@ -763,7 +802,7 @@ func Q(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Q_(children ...HTML) HTML {
-    return Q(a.Attr(), children...)
+    return Q(Attr(), children...)
 }
 
 func Rp(attrs []a.Attribute, children ...HTML) HTML {
@@ -771,7 +810,7 @@ func Rp(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Rp_(children ...HTML) HTML {
-    return Rp(a.Attr(), children...)
+    return Rp(Attr(), children...)
 }
 
 func Rt(attrs []a.Attribute, children ...HTML) HTML {
@@ -779,7 +818,7 @@ func Rt(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Rt_(children ...HTML) HTML {
-    return Rt(a.Attr(), children...)
+    return Rt(Attr(), children...)
 }
 
 func Ruby(attrs []a.Attribute, children ...HTML) HTML {
@@ -787,7 +826,7 @@ func Ruby(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Ruby_(children ...HTML) HTML {
-    return Ruby(a.Attr(), children...)
+    return Ruby(Attr(), children...)
 }
 
 func S(attrs []a.Attribute, children ...HTML) HTML {
@@ -795,7 +834,7 @@ func S(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func S_(children ...HTML) HTML {
-    return S(a.Attr(), children...)
+    return S(Attr(), children...)
 }
 
 func Samp(attrs []a.Attribute, children ...HTML) HTML {
@@ -803,7 +842,7 @@ func Samp(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Samp_(children ...HTML) HTML {
-    return Samp(a.Attr(), children...)
+    return Samp(Attr(), children...)
 }
 
 func Section(attrs []a.Attribute, children ...HTML) HTML {
@@ -811,7 +850,7 @@ func Section(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Section_(children ...HTML) HTML {
-    return Section(a.Attr(), children...)
+    return Section(Attr(), children...)
 }
 
 func Select(attrs []a.Attribute, children ...HTML) HTML {
@@ -819,7 +858,7 @@ func Select(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Select_(children ...HTML) HTML {
-    return Select(a.Attr(), children...)
+    return Select(Attr(), children...)
 }
 
 func Small(attrs []a.Attribute, children ...HTML) HTML {
@@ -827,7 +866,7 @@ func Small(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Small_(children ...HTML) HTML {
-    return Small(a.Attr(), children...)
+    return Small(Attr(), children...)
 }
 
 func Spacer(attrs []a.Attribute, children ...HTML) HTML {
@@ -835,7 +874,7 @@ func Spacer(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Spacer_(children ...HTML) HTML {
-    return Spacer(a.Attr(), children...)
+    return Spacer(Attr(), children...)
 }
 
 func Span(attrs []a.Attribute, children ...HTML) HTML {
@@ -843,7 +882,7 @@ func Span(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Span_(children ...HTML) HTML {
-    return Span(a.Attr(), children...)
+    return Span(Attr(), children...)
 }
 
 func Strike(attrs []a.Attribute, children ...HTML) HTML {
@@ -851,7 +890,7 @@ func Strike(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Strike_(children ...HTML) HTML {
-    return Strike(a.Attr(), children...)
+    return Strike(Attr(), children...)
 }
 
 func Strong(attrs []a.Attribute, children ...HTML) HTML {
@@ -859,7 +898,7 @@ func Strong(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Strong_(children ...HTML) HTML {
-    return Strong(a.Attr(), children...)
+    return Strong(Attr(), children...)
 }
 
 func Style(attrs []a.Attribute, children ...HTML) HTML {
@@ -867,7 +906,7 @@ func Style(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Style_(children ...HTML) HTML {
-    return Style(a.Attr(), children...)
+    return Style(Attr(), children...)
 }
 
 func Sub(attrs []a.Attribute, children ...HTML) HTML {
@@ -875,7 +914,7 @@ func Sub(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Sub_(children ...HTML) HTML {
-    return Sub(a.Attr(), children...)
+    return Sub(Attr(), children...)
 }
 
 func Summary(attrs []a.Attribute, children ...HTML) HTML {
@@ -883,7 +922,7 @@ func Summary(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Summary_(children ...HTML) HTML {
-    return Summary(a.Attr(), children...)
+    return Summary(Attr(), children...)
 }
 
 func Sup(attrs []a.Attribute, children ...HTML) HTML {
@@ -891,7 +930,7 @@ func Sup(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Sup_(children ...HTML) HTML {
-    return Sup(a.Attr(), children...)
+    return Sup(Attr(), children...)
 }
 
 func Table(attrs []a.Attribute, children ...HTML) HTML {
@@ -899,7 +938,7 @@ func Table(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Table_(children ...HTML) HTML {
-    return Table(a.Attr(), children...)
+    return Table(Attr(), children...)
 }
 
 func Tbody(attrs []a.Attribute, children ...HTML) HTML {
@@ -907,7 +946,7 @@ func Tbody(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Tbody_(children ...HTML) HTML {
-    return Tbody(a.Attr(), children...)
+    return Tbody(Attr(), children...)
 }
 
 func Td(attrs []a.Attribute, children ...HTML) HTML {
@@ -915,7 +954,7 @@ func Td(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Td_(children ...HTML) HTML {
-    return Td(a.Attr(), children...)
+    return Td(Attr(), children...)
 }
 
 func Textarea(attrs []a.Attribute, children ...HTML) HTML {
@@ -923,7 +962,7 @@ func Textarea(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Textarea_(children ...HTML) HTML {
-    return Textarea(a.Attr(), children...)
+    return Textarea(Attr(), children...)
 }
 
 func Tfoot(attrs []a.Attribute, children ...HTML) HTML {
@@ -931,7 +970,7 @@ func Tfoot(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Tfoot_(children ...HTML) HTML {
-    return Tfoot(a.Attr(), children...)
+    return Tfoot(Attr(), children...)
 }
 
 func Th(attrs []a.Attribute, children ...HTML) HTML {
@@ -939,7 +978,7 @@ func Th(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Th_(children ...HTML) HTML {
-    return Th(a.Attr(), children...)
+    return Th(Attr(), children...)
 }
 
 func Thead(attrs []a.Attribute, children ...HTML) HTML {
@@ -947,7 +986,7 @@ func Thead(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Thead_(children ...HTML) HTML {
-    return Thead(a.Attr(), children...)
+    return Thead(Attr(), children...)
 }
 
 func Time(attrs []a.Attribute, children ...HTML) HTML {
@@ -955,7 +994,7 @@ func Time(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Time_(children ...HTML) HTML {
-    return Time(a.Attr(), children...)
+    return Time(Attr(), children...)
 }
 
 func Title(attrs []a.Attribute, children ...HTML) HTML {
@@ -963,7 +1002,7 @@ func Title(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Title_(children ...HTML) HTML {
-    return Title(a.Attr(), children...)
+    return Title(Attr(), children...)
 }
 
 func Tr(attrs []a.Attribute, children ...HTML) HTML {
@@ -971,7 +1010,7 @@ func Tr(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Tr_(children ...HTML) HTML {
-    return Tr(a.Attr(), children...)
+    return Tr(Attr(), children...)
 }
 
 func Tt(attrs []a.Attribute, children ...HTML) HTML {
@@ -979,7 +1018,7 @@ func Tt(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Tt_(children ...HTML) HTML {
-    return Tt(a.Attr(), children...)
+    return Tt(Attr(), children...)
 }
 
 func U(attrs []a.Attribute, children ...HTML) HTML {
@@ -987,7 +1026,7 @@ func U(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func U_(children ...HTML) HTML {
-    return U(a.Attr(), children...)
+    return U(Attr(), children...)
 }
 
 func Ul(attrs []a.Attribute, children ...HTML) HTML {
@@ -995,7 +1034,7 @@ func Ul(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Ul_(children ...HTML) HTML {
-    return Ul(a.Attr(), children...)
+    return Ul(Attr(), children...)
 }
 
 func Var(attrs []a.Attribute, children ...HTML) HTML {
@@ -1003,7 +1042,7 @@ func Var(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Var_(children ...HTML) HTML {
-    return Var(a.Attr(), children...)
+    return Var(Attr(), children...)
 }
 
 func Video(attrs []a.Attribute, children ...HTML) HTML {
@@ -1011,7 +1050,7 @@ func Video(attrs []a.Attribute, children ...HTML) HTML {
 }
 
 func Video_(children ...HTML) HTML {
-    return Video(a.Attr(), children...)
+    return Video(Attr(), children...)
 }
 
 
@@ -1022,97 +1061,97 @@ func Area(attrs []a.Attribute) HTML {
     return VoidElement("area", attrs)
 }
 func Area_() HTML {
-    return Area(a.Attr())
+    return Area(Attr())
 }
 
 func Base(attrs []a.Attribute) HTML {
     return VoidElement("base", attrs)
 }
 func Base_() HTML {
-    return Base(a.Attr())
+    return Base(Attr())
 }
 
 func Br(attrs []a.Attribute) HTML {
     return VoidElement("br", attrs)
 }
 func Br_() HTML {
-    return Br(a.Attr())
+    return Br(Attr())
 }
 
 func Col(attrs []a.Attribute) HTML {
     return VoidElement("col", attrs)
 }
 func Col_() HTML {
-    return Col(a.Attr())
+    return Col(Attr())
 }
 
 func Embed(attrs []a.Attribute) HTML {
     return VoidElement("embed", attrs)
 }
 func Embed_() HTML {
-    return Embed(a.Attr())
+    return Embed(Attr())
 }
 
 func Hr(attrs []a.Attribute) HTML {
     return VoidElement("hr", attrs)
 }
 func Hr_() HTML {
-    return Hr(a.Attr())
+    return Hr(Attr())
 }
 
 func Img(attrs []a.Attribute) HTML {
     return VoidElement("img", attrs)
 }
 func Img_() HTML {
-    return Img(a.Attr())
+    return Img(Attr())
 }
 
 func Input(attrs []a.Attribute) HTML {
     return VoidElement("input", attrs)
 }
 func Input_() HTML {
-    return Input(a.Attr())
+    return Input(Attr())
 }
 
 func Link(attrs []a.Attribute) HTML {
     return VoidElement("link", attrs)
 }
 func Link_() HTML {
-    return Link(a.Attr())
+    return Link(Attr())
 }
 
 func Meta(attrs []a.Attribute) HTML {
     return VoidElement("meta", attrs)
 }
 func Meta_() HTML {
-    return Meta(a.Attr())
+    return Meta(Attr())
 }
 
 func Param(attrs []a.Attribute) HTML {
     return VoidElement("param", attrs)
 }
 func Param_() HTML {
-    return Param(a.Attr())
+    return Param(Attr())
 }
 
 func Source(attrs []a.Attribute) HTML {
     return VoidElement("source", attrs)
 }
 func Source_() HTML {
-    return Source(a.Attr())
+    return Source(Attr())
 }
 
 func Track(attrs []a.Attribute) HTML {
     return VoidElement("track", attrs)
 }
 func Track_() HTML {
-    return Track(a.Attr())
+    return Track(Attr())
 }
 
 func Wbr(attrs []a.Attribute) HTML {
     return VoidElement("wbr", attrs)
 }
 func Wbr_() HTML {
-    return Wbr(a.Attr())
+    return Wbr(Attr())
 }
 
