@@ -16,26 +16,26 @@ package main
 import (
     "fmt"
 
-    h "github.com/julvo/htmlgo"
+    . "github.com/julvo/htmlgo"
     a "github.com/julvo/htmlgo/attributes"
 )
 
 func main() {
-    var numberDivs h.HTML
+    var numberDivs HTML
     for i := 0; i < 3; i++ {
-        numberDivs += h.Div(h.Attr(a.StyleRaw("font-family:monospace;")),
-                            h.Text(i))
+        numberDivs += Div(Attr(a.StyleRaw("font-family:monospace;")),
+                          Text(i))
     }
 
     page :=
-        h.Html5_(
-            h.Head_(),
-            h.Body_(
-                h.H1_(h.Text("Welcome <script>")),
+        Html5_(
+            Head_(),
+            Body_(
+                H1_(Text("Welcome <script>")),
                 numberDivs,
-                h.Div(h.Attr(a.Dataset("hello", "htmlgo"))),
-                h.Script_(h.JavaScript("alert('This is escaped');")),
-                h.Script_(h.JavaScript("This is escaped", "alert({{.}});"))))
+                Div(Attr(a.Dataset("hello", "htmlgo"))),
+                Script_(JavaScript("alert('This is escaped');")),
+                Script_(JavaScript("This is escaped", "alert({{.}});"))))
 
     fmt.Println(page)
 }
