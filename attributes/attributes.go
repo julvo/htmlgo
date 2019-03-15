@@ -21,7 +21,7 @@ func Dataset(key, value string) Attribute {
     }
 }
 
-func DatasetRaw(key, value string) Attribute {
+func Dataset_(key, value string) Attribute {
     return Attribute{
         Data: map[string]string{},
         Templ: `{{define "Dataset"}}data-`+key+`="`+value+`"{{end}}`,
@@ -42,7 +42,7 @@ func Accept(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func AcceptRaw(values ...string) Attribute {
+func Accept_(values ...string) Attribute {
     return Accept(nil, values...)
 }
 
@@ -57,7 +57,7 @@ func AcceptCharset(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func AcceptCharsetRaw(values ...string) Attribute {
+func AcceptCharset_(values ...string) Attribute {
     return AcceptCharset(nil, values...)
 }
 
@@ -72,7 +72,7 @@ func Accesskey(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func AccesskeyRaw(values ...string) Attribute {
+func Accesskey_(values ...string) Attribute {
     return Accesskey(nil, values...)
 }
 
@@ -87,7 +87,7 @@ func Action(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func ActionRaw(values ...string) Attribute {
+func Action_(values ...string) Attribute {
     return Action(nil, values...)
 }
 
@@ -102,7 +102,7 @@ func Align(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func AlignRaw(values ...string) Attribute {
+func Align_(values ...string) Attribute {
     return Align(nil, values...)
 }
 
@@ -117,7 +117,7 @@ func Alt(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func AltRaw(values ...string) Attribute {
+func Alt_(values ...string) Attribute {
     return Alt(nil, values...)
 }
 
@@ -132,7 +132,7 @@ func AriaLabel(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func AriaLabelRaw(values ...string) Attribute {
+func AriaLabel_(values ...string) Attribute {
     return AriaLabel(nil, values...)
 }
 
@@ -147,7 +147,7 @@ func Async(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func AsyncRaw(values ...string) Attribute {
+func Async_(values ...string) Attribute {
     return Async(nil, values...)
 }
 
@@ -162,7 +162,7 @@ func Autocomplete(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func AutocompleteRaw(values ...string) Attribute {
+func Autocomplete_(values ...string) Attribute {
     return Autocomplete(nil, values...)
 }
 
@@ -177,7 +177,7 @@ func Autofocus(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func AutofocusRaw(values ...string) Attribute {
+func Autofocus_(values ...string) Attribute {
     return Autofocus(nil, values...)
 }
 
@@ -192,7 +192,7 @@ func Autoplay(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func AutoplayRaw(values ...string) Attribute {
+func Autoplay_(values ...string) Attribute {
     return Autoplay(nil, values...)
 }
 
@@ -207,7 +207,7 @@ func Bgcolor(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func BgcolorRaw(values ...string) Attribute {
+func Bgcolor_(values ...string) Attribute {
     return Bgcolor(nil, values...)
 }
 
@@ -222,7 +222,7 @@ func Border(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func BorderRaw(values ...string) Attribute {
+func Border_(values ...string) Attribute {
     return Border(nil, values...)
 }
 
@@ -237,7 +237,7 @@ func Charset(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func CharsetRaw(values ...string) Attribute {
+func Charset_(values ...string) Attribute {
     return Charset(nil, values...)
 }
 
@@ -252,7 +252,7 @@ func Checked(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func CheckedRaw(values ...string) Attribute {
+func Checked_(values ...string) Attribute {
     return Checked(nil, values...)
 }
 
@@ -267,7 +267,7 @@ func Cite(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func CiteRaw(values ...string) Attribute {
+func Cite_(values ...string) Attribute {
     return Cite(nil, values...)
 }
 
@@ -282,7 +282,7 @@ func Class(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func ClassRaw(values ...string) Attribute {
+func Class_(values ...string) Attribute {
     return Class(nil, values...)
 }
 
@@ -297,7 +297,7 @@ func Color(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func ColorRaw(values ...string) Attribute {
+func Color_(values ...string) Attribute {
     return Color(nil, values...)
 }
 
@@ -312,7 +312,7 @@ func Cols(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func ColsRaw(values ...string) Attribute {
+func Cols_(values ...string) Attribute {
     return Cols(nil, values...)
 }
 
@@ -327,7 +327,7 @@ func Colspan(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func ColspanRaw(values ...string) Attribute {
+func Colspan_(values ...string) Attribute {
     return Colspan(nil, values...)
 }
 
@@ -342,7 +342,7 @@ func Content(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func ContentRaw(values ...string) Attribute {
+func Content_(values ...string) Attribute {
     return Content(nil, values...)
 }
 
@@ -357,7 +357,7 @@ func Contenteditable(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func ContenteditableRaw(values ...string) Attribute {
+func Contenteditable_(values ...string) Attribute {
     return Contenteditable(nil, values...)
 }
 
@@ -372,7 +372,7 @@ func Controls(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func ControlsRaw(values ...string) Attribute {
+func Controls_(values ...string) Attribute {
     return Controls(nil, values...)
 }
 
@@ -387,7 +387,7 @@ func Coords(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func CoordsRaw(values ...string) Attribute {
+func Coords_(values ...string) Attribute {
     return Coords(nil, values...)
 }
 
@@ -402,7 +402,7 @@ func Data(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func DataRaw(values ...string) Attribute {
+func Data_(values ...string) Attribute {
     return Data(nil, values...)
 }
 
@@ -417,7 +417,7 @@ func Datetime(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func DatetimeRaw(values ...string) Attribute {
+func Datetime_(values ...string) Attribute {
     return Datetime(nil, values...)
 }
 
@@ -432,7 +432,7 @@ func Default(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func DefaultRaw(values ...string) Attribute {
+func Default_(values ...string) Attribute {
     return Default(nil, values...)
 }
 
@@ -447,7 +447,7 @@ func Defer(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func DeferRaw(values ...string) Attribute {
+func Defer_(values ...string) Attribute {
     return Defer(nil, values...)
 }
 
@@ -462,7 +462,7 @@ func Dir(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func DirRaw(values ...string) Attribute {
+func Dir_(values ...string) Attribute {
     return Dir(nil, values...)
 }
 
@@ -477,7 +477,7 @@ func Dirname(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func DirnameRaw(values ...string) Attribute {
+func Dirname_(values ...string) Attribute {
     return Dirname(nil, values...)
 }
 
@@ -492,7 +492,7 @@ func Disabled(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func DisabledRaw(values ...string) Attribute {
+func Disabled_(values ...string) Attribute {
     return Disabled(nil, values...)
 }
 
@@ -507,7 +507,7 @@ func Download(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func DownloadRaw(values ...string) Attribute {
+func Download_(values ...string) Attribute {
     return Download(nil, values...)
 }
 
@@ -522,7 +522,7 @@ func Draggable(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func DraggableRaw(values ...string) Attribute {
+func Draggable_(values ...string) Attribute {
     return Draggable(nil, values...)
 }
 
@@ -537,7 +537,7 @@ func Dropzone(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func DropzoneRaw(values ...string) Attribute {
+func Dropzone_(values ...string) Attribute {
     return Dropzone(nil, values...)
 }
 
@@ -552,7 +552,7 @@ func Enctype(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func EnctypeRaw(values ...string) Attribute {
+func Enctype_(values ...string) Attribute {
     return Enctype(nil, values...)
 }
 
@@ -567,7 +567,7 @@ func For(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func ForRaw(values ...string) Attribute {
+func For_(values ...string) Attribute {
     return For(nil, values...)
 }
 
@@ -582,7 +582,7 @@ func Form(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func FormRaw(values ...string) Attribute {
+func Form_(values ...string) Attribute {
     return Form(nil, values...)
 }
 
@@ -597,7 +597,7 @@ func Formaction(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func FormactionRaw(values ...string) Attribute {
+func Formaction_(values ...string) Attribute {
     return Formaction(nil, values...)
 }
 
@@ -612,7 +612,7 @@ func Headers(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func HeadersRaw(values ...string) Attribute {
+func Headers_(values ...string) Attribute {
     return Headers(nil, values...)
 }
 
@@ -627,7 +627,7 @@ func Height(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func HeightRaw(values ...string) Attribute {
+func Height_(values ...string) Attribute {
     return Height(nil, values...)
 }
 
@@ -642,7 +642,7 @@ func Hidden(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func HiddenRaw(values ...string) Attribute {
+func Hidden_(values ...string) Attribute {
     return Hidden(nil, values...)
 }
 
@@ -657,7 +657,7 @@ func High(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func HighRaw(values ...string) Attribute {
+func High_(values ...string) Attribute {
     return High(nil, values...)
 }
 
@@ -672,7 +672,7 @@ func Href(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func HrefRaw(values ...string) Attribute {
+func Href_(values ...string) Attribute {
     return Href(nil, values...)
 }
 
@@ -687,7 +687,7 @@ func Hreflang(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func HreflangRaw(values ...string) Attribute {
+func Hreflang_(values ...string) Attribute {
     return Hreflang(nil, values...)
 }
 
@@ -702,7 +702,7 @@ func HttpEquiv(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func HttpEquivRaw(values ...string) Attribute {
+func HttpEquiv_(values ...string) Attribute {
     return HttpEquiv(nil, values...)
 }
 
@@ -717,7 +717,7 @@ func Id(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func IdRaw(values ...string) Attribute {
+func Id_(values ...string) Attribute {
     return Id(nil, values...)
 }
 
@@ -732,7 +732,7 @@ func InitialScale(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func InitialScaleRaw(values ...string) Attribute {
+func InitialScale_(values ...string) Attribute {
     return InitialScale(nil, values...)
 }
 
@@ -747,7 +747,7 @@ func Ismap(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func IsmapRaw(values ...string) Attribute {
+func Ismap_(values ...string) Attribute {
     return Ismap(nil, values...)
 }
 
@@ -762,7 +762,7 @@ func Kind(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func KindRaw(values ...string) Attribute {
+func Kind_(values ...string) Attribute {
     return Kind(nil, values...)
 }
 
@@ -777,7 +777,7 @@ func Label(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func LabelRaw(values ...string) Attribute {
+func Label_(values ...string) Attribute {
     return Label(nil, values...)
 }
 
@@ -792,7 +792,7 @@ func Lang(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func LangRaw(values ...string) Attribute {
+func Lang_(values ...string) Attribute {
     return Lang(nil, values...)
 }
 
@@ -807,7 +807,7 @@ func List(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func ListRaw(values ...string) Attribute {
+func List_(values ...string) Attribute {
     return List(nil, values...)
 }
 
@@ -822,7 +822,7 @@ func Loop(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func LoopRaw(values ...string) Attribute {
+func Loop_(values ...string) Attribute {
     return Loop(nil, values...)
 }
 
@@ -837,7 +837,7 @@ func Low(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func LowRaw(values ...string) Attribute {
+func Low_(values ...string) Attribute {
     return Low(nil, values...)
 }
 
@@ -852,7 +852,7 @@ func Max(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func MaxRaw(values ...string) Attribute {
+func Max_(values ...string) Attribute {
     return Max(nil, values...)
 }
 
@@ -867,7 +867,7 @@ func Maxlength(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func MaxlengthRaw(values ...string) Attribute {
+func Maxlength_(values ...string) Attribute {
     return Maxlength(nil, values...)
 }
 
@@ -882,7 +882,7 @@ func Media(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func MediaRaw(values ...string) Attribute {
+func Media_(values ...string) Attribute {
     return Media(nil, values...)
 }
 
@@ -897,7 +897,7 @@ func Method(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func MethodRaw(values ...string) Attribute {
+func Method_(values ...string) Attribute {
     return Method(nil, values...)
 }
 
@@ -912,7 +912,7 @@ func Min(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func MinRaw(values ...string) Attribute {
+func Min_(values ...string) Attribute {
     return Min(nil, values...)
 }
 
@@ -927,7 +927,7 @@ func Multiple(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func MultipleRaw(values ...string) Attribute {
+func Multiple_(values ...string) Attribute {
     return Multiple(nil, values...)
 }
 
@@ -942,7 +942,7 @@ func Muted(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func MutedRaw(values ...string) Attribute {
+func Muted_(values ...string) Attribute {
     return Muted(nil, values...)
 }
 
@@ -957,7 +957,7 @@ func Name(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func NameRaw(values ...string) Attribute {
+func Name_(values ...string) Attribute {
     return Name(nil, values...)
 }
 
@@ -972,7 +972,7 @@ func Novalidate(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func NovalidateRaw(values ...string) Attribute {
+func Novalidate_(values ...string) Attribute {
     return Novalidate(nil, values...)
 }
 
@@ -987,7 +987,7 @@ func Onabort(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnabortRaw(values ...string) Attribute {
+func Onabort_(values ...string) Attribute {
     return Onabort(nil, values...)
 }
 
@@ -1002,7 +1002,7 @@ func Onafterprint(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnafterprintRaw(values ...string) Attribute {
+func Onafterprint_(values ...string) Attribute {
     return Onafterprint(nil, values...)
 }
 
@@ -1017,7 +1017,7 @@ func Onbeforeprint(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnbeforeprintRaw(values ...string) Attribute {
+func Onbeforeprint_(values ...string) Attribute {
     return Onbeforeprint(nil, values...)
 }
 
@@ -1032,7 +1032,7 @@ func Onbeforeunload(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnbeforeunloadRaw(values ...string) Attribute {
+func Onbeforeunload_(values ...string) Attribute {
     return Onbeforeunload(nil, values...)
 }
 
@@ -1047,7 +1047,7 @@ func Onblur(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnblurRaw(values ...string) Attribute {
+func Onblur_(values ...string) Attribute {
     return Onblur(nil, values...)
 }
 
@@ -1062,7 +1062,7 @@ func Oncanplay(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OncanplayRaw(values ...string) Attribute {
+func Oncanplay_(values ...string) Attribute {
     return Oncanplay(nil, values...)
 }
 
@@ -1077,7 +1077,7 @@ func Oncanplaythrough(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OncanplaythroughRaw(values ...string) Attribute {
+func Oncanplaythrough_(values ...string) Attribute {
     return Oncanplaythrough(nil, values...)
 }
 
@@ -1092,7 +1092,7 @@ func Onchange(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnchangeRaw(values ...string) Attribute {
+func Onchange_(values ...string) Attribute {
     return Onchange(nil, values...)
 }
 
@@ -1107,7 +1107,7 @@ func Onclick(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnclickRaw(values ...string) Attribute {
+func Onclick_(values ...string) Attribute {
     return Onclick(nil, values...)
 }
 
@@ -1122,7 +1122,7 @@ func Oncontextmenu(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OncontextmenuRaw(values ...string) Attribute {
+func Oncontextmenu_(values ...string) Attribute {
     return Oncontextmenu(nil, values...)
 }
 
@@ -1137,7 +1137,7 @@ func Oncopy(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OncopyRaw(values ...string) Attribute {
+func Oncopy_(values ...string) Attribute {
     return Oncopy(nil, values...)
 }
 
@@ -1152,7 +1152,7 @@ func Oncuechange(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OncuechangeRaw(values ...string) Attribute {
+func Oncuechange_(values ...string) Attribute {
     return Oncuechange(nil, values...)
 }
 
@@ -1167,7 +1167,7 @@ func Oncut(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OncutRaw(values ...string) Attribute {
+func Oncut_(values ...string) Attribute {
     return Oncut(nil, values...)
 }
 
@@ -1182,7 +1182,7 @@ func Ondblclick(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OndblclickRaw(values ...string) Attribute {
+func Ondblclick_(values ...string) Attribute {
     return Ondblclick(nil, values...)
 }
 
@@ -1197,7 +1197,7 @@ func Ondrag(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OndragRaw(values ...string) Attribute {
+func Ondrag_(values ...string) Attribute {
     return Ondrag(nil, values...)
 }
 
@@ -1212,7 +1212,7 @@ func Ondragend(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OndragendRaw(values ...string) Attribute {
+func Ondragend_(values ...string) Attribute {
     return Ondragend(nil, values...)
 }
 
@@ -1227,7 +1227,7 @@ func Ondragenter(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OndragenterRaw(values ...string) Attribute {
+func Ondragenter_(values ...string) Attribute {
     return Ondragenter(nil, values...)
 }
 
@@ -1242,7 +1242,7 @@ func Ondragleave(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OndragleaveRaw(values ...string) Attribute {
+func Ondragleave_(values ...string) Attribute {
     return Ondragleave(nil, values...)
 }
 
@@ -1257,7 +1257,7 @@ func Ondragover(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OndragoverRaw(values ...string) Attribute {
+func Ondragover_(values ...string) Attribute {
     return Ondragover(nil, values...)
 }
 
@@ -1272,7 +1272,7 @@ func Ondragstart(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OndragstartRaw(values ...string) Attribute {
+func Ondragstart_(values ...string) Attribute {
     return Ondragstart(nil, values...)
 }
 
@@ -1287,7 +1287,7 @@ func Ondrop(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OndropRaw(values ...string) Attribute {
+func Ondrop_(values ...string) Attribute {
     return Ondrop(nil, values...)
 }
 
@@ -1302,7 +1302,7 @@ func Ondurationchange(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OndurationchangeRaw(values ...string) Attribute {
+func Ondurationchange_(values ...string) Attribute {
     return Ondurationchange(nil, values...)
 }
 
@@ -1317,7 +1317,7 @@ func Onemptied(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnemptiedRaw(values ...string) Attribute {
+func Onemptied_(values ...string) Attribute {
     return Onemptied(nil, values...)
 }
 
@@ -1332,7 +1332,7 @@ func Onended(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnendedRaw(values ...string) Attribute {
+func Onended_(values ...string) Attribute {
     return Onended(nil, values...)
 }
 
@@ -1347,7 +1347,7 @@ func Onerror(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnerrorRaw(values ...string) Attribute {
+func Onerror_(values ...string) Attribute {
     return Onerror(nil, values...)
 }
 
@@ -1362,7 +1362,7 @@ func Onfocus(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnfocusRaw(values ...string) Attribute {
+func Onfocus_(values ...string) Attribute {
     return Onfocus(nil, values...)
 }
 
@@ -1377,7 +1377,7 @@ func Onhashchange(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnhashchangeRaw(values ...string) Attribute {
+func Onhashchange_(values ...string) Attribute {
     return Onhashchange(nil, values...)
 }
 
@@ -1392,7 +1392,7 @@ func Oninput(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OninputRaw(values ...string) Attribute {
+func Oninput_(values ...string) Attribute {
     return Oninput(nil, values...)
 }
 
@@ -1407,7 +1407,7 @@ func Oninvalid(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OninvalidRaw(values ...string) Attribute {
+func Oninvalid_(values ...string) Attribute {
     return Oninvalid(nil, values...)
 }
 
@@ -1422,7 +1422,7 @@ func Onkeydown(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnkeydownRaw(values ...string) Attribute {
+func Onkeydown_(values ...string) Attribute {
     return Onkeydown(nil, values...)
 }
 
@@ -1437,7 +1437,7 @@ func Onkeypress(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnkeypressRaw(values ...string) Attribute {
+func Onkeypress_(values ...string) Attribute {
     return Onkeypress(nil, values...)
 }
 
@@ -1452,7 +1452,7 @@ func Onkeyup(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnkeyupRaw(values ...string) Attribute {
+func Onkeyup_(values ...string) Attribute {
     return Onkeyup(nil, values...)
 }
 
@@ -1467,7 +1467,7 @@ func Onload(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnloadRaw(values ...string) Attribute {
+func Onload_(values ...string) Attribute {
     return Onload(nil, values...)
 }
 
@@ -1482,7 +1482,7 @@ func Onloadeddata(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnloadeddataRaw(values ...string) Attribute {
+func Onloadeddata_(values ...string) Attribute {
     return Onloadeddata(nil, values...)
 }
 
@@ -1497,7 +1497,7 @@ func Onloadedmetadata(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnloadedmetadataRaw(values ...string) Attribute {
+func Onloadedmetadata_(values ...string) Attribute {
     return Onloadedmetadata(nil, values...)
 }
 
@@ -1512,7 +1512,7 @@ func Onloadstart(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnloadstartRaw(values ...string) Attribute {
+func Onloadstart_(values ...string) Attribute {
     return Onloadstart(nil, values...)
 }
 
@@ -1527,7 +1527,7 @@ func Onmousedown(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnmousedownRaw(values ...string) Attribute {
+func Onmousedown_(values ...string) Attribute {
     return Onmousedown(nil, values...)
 }
 
@@ -1542,7 +1542,7 @@ func Onmousemove(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnmousemoveRaw(values ...string) Attribute {
+func Onmousemove_(values ...string) Attribute {
     return Onmousemove(nil, values...)
 }
 
@@ -1557,7 +1557,7 @@ func Onmouseout(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnmouseoutRaw(values ...string) Attribute {
+func Onmouseout_(values ...string) Attribute {
     return Onmouseout(nil, values...)
 }
 
@@ -1572,7 +1572,7 @@ func Onmouseover(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnmouseoverRaw(values ...string) Attribute {
+func Onmouseover_(values ...string) Attribute {
     return Onmouseover(nil, values...)
 }
 
@@ -1587,7 +1587,7 @@ func Onmouseup(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnmouseupRaw(values ...string) Attribute {
+func Onmouseup_(values ...string) Attribute {
     return Onmouseup(nil, values...)
 }
 
@@ -1602,7 +1602,7 @@ func Onmousewheel(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnmousewheelRaw(values ...string) Attribute {
+func Onmousewheel_(values ...string) Attribute {
     return Onmousewheel(nil, values...)
 }
 
@@ -1617,7 +1617,7 @@ func Onoffline(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnofflineRaw(values ...string) Attribute {
+func Onoffline_(values ...string) Attribute {
     return Onoffline(nil, values...)
 }
 
@@ -1632,7 +1632,7 @@ func Ononline(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnonlineRaw(values ...string) Attribute {
+func Ononline_(values ...string) Attribute {
     return Ononline(nil, values...)
 }
 
@@ -1647,7 +1647,7 @@ func Onpagehide(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnpagehideRaw(values ...string) Attribute {
+func Onpagehide_(values ...string) Attribute {
     return Onpagehide(nil, values...)
 }
 
@@ -1662,7 +1662,7 @@ func Onpageshow(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnpageshowRaw(values ...string) Attribute {
+func Onpageshow_(values ...string) Attribute {
     return Onpageshow(nil, values...)
 }
 
@@ -1677,7 +1677,7 @@ func Onpaste(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnpasteRaw(values ...string) Attribute {
+func Onpaste_(values ...string) Attribute {
     return Onpaste(nil, values...)
 }
 
@@ -1692,7 +1692,7 @@ func Onpause(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnpauseRaw(values ...string) Attribute {
+func Onpause_(values ...string) Attribute {
     return Onpause(nil, values...)
 }
 
@@ -1707,7 +1707,7 @@ func Onplay(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnplayRaw(values ...string) Attribute {
+func Onplay_(values ...string) Attribute {
     return Onplay(nil, values...)
 }
 
@@ -1722,7 +1722,7 @@ func Onplaying(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnplayingRaw(values ...string) Attribute {
+func Onplaying_(values ...string) Attribute {
     return Onplaying(nil, values...)
 }
 
@@ -1737,7 +1737,7 @@ func Onpopstate(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnpopstateRaw(values ...string) Attribute {
+func Onpopstate_(values ...string) Attribute {
     return Onpopstate(nil, values...)
 }
 
@@ -1752,7 +1752,7 @@ func Onprogress(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnprogressRaw(values ...string) Attribute {
+func Onprogress_(values ...string) Attribute {
     return Onprogress(nil, values...)
 }
 
@@ -1767,7 +1767,7 @@ func Onratechange(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnratechangeRaw(values ...string) Attribute {
+func Onratechange_(values ...string) Attribute {
     return Onratechange(nil, values...)
 }
 
@@ -1782,7 +1782,7 @@ func Onreset(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnresetRaw(values ...string) Attribute {
+func Onreset_(values ...string) Attribute {
     return Onreset(nil, values...)
 }
 
@@ -1797,7 +1797,7 @@ func Onresize(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnresizeRaw(values ...string) Attribute {
+func Onresize_(values ...string) Attribute {
     return Onresize(nil, values...)
 }
 
@@ -1812,7 +1812,7 @@ func Onscroll(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnscrollRaw(values ...string) Attribute {
+func Onscroll_(values ...string) Attribute {
     return Onscroll(nil, values...)
 }
 
@@ -1827,7 +1827,7 @@ func Onsearch(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnsearchRaw(values ...string) Attribute {
+func Onsearch_(values ...string) Attribute {
     return Onsearch(nil, values...)
 }
 
@@ -1842,7 +1842,7 @@ func Onseeked(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnseekedRaw(values ...string) Attribute {
+func Onseeked_(values ...string) Attribute {
     return Onseeked(nil, values...)
 }
 
@@ -1857,7 +1857,7 @@ func Onseeking(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnseekingRaw(values ...string) Attribute {
+func Onseeking_(values ...string) Attribute {
     return Onseeking(nil, values...)
 }
 
@@ -1872,7 +1872,7 @@ func Onselect(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnselectRaw(values ...string) Attribute {
+func Onselect_(values ...string) Attribute {
     return Onselect(nil, values...)
 }
 
@@ -1887,7 +1887,7 @@ func Onstalled(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnstalledRaw(values ...string) Attribute {
+func Onstalled_(values ...string) Attribute {
     return Onstalled(nil, values...)
 }
 
@@ -1902,7 +1902,7 @@ func Onstorage(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnstorageRaw(values ...string) Attribute {
+func Onstorage_(values ...string) Attribute {
     return Onstorage(nil, values...)
 }
 
@@ -1917,7 +1917,7 @@ func Onsubmit(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnsubmitRaw(values ...string) Attribute {
+func Onsubmit_(values ...string) Attribute {
     return Onsubmit(nil, values...)
 }
 
@@ -1932,7 +1932,7 @@ func Onsuspend(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnsuspendRaw(values ...string) Attribute {
+func Onsuspend_(values ...string) Attribute {
     return Onsuspend(nil, values...)
 }
 
@@ -1947,7 +1947,7 @@ func Ontimeupdate(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OntimeupdateRaw(values ...string) Attribute {
+func Ontimeupdate_(values ...string) Attribute {
     return Ontimeupdate(nil, values...)
 }
 
@@ -1962,7 +1962,7 @@ func Ontoggle(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OntoggleRaw(values ...string) Attribute {
+func Ontoggle_(values ...string) Attribute {
     return Ontoggle(nil, values...)
 }
 
@@ -1977,7 +1977,7 @@ func Onunload(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnunloadRaw(values ...string) Attribute {
+func Onunload_(values ...string) Attribute {
     return Onunload(nil, values...)
 }
 
@@ -1992,7 +1992,7 @@ func Onvolumechange(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnvolumechangeRaw(values ...string) Attribute {
+func Onvolumechange_(values ...string) Attribute {
     return Onvolumechange(nil, values...)
 }
 
@@ -2007,7 +2007,7 @@ func Onwaiting(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnwaitingRaw(values ...string) Attribute {
+func Onwaiting_(values ...string) Attribute {
     return Onwaiting(nil, values...)
 }
 
@@ -2022,7 +2022,7 @@ func Onwheel(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OnwheelRaw(values ...string) Attribute {
+func Onwheel_(values ...string) Attribute {
     return Onwheel(nil, values...)
 }
 
@@ -2037,7 +2037,7 @@ func Open(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OpenRaw(values ...string) Attribute {
+func Open_(values ...string) Attribute {
     return Open(nil, values...)
 }
 
@@ -2052,7 +2052,7 @@ func Optimum(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func OptimumRaw(values ...string) Attribute {
+func Optimum_(values ...string) Attribute {
     return Optimum(nil, values...)
 }
 
@@ -2067,7 +2067,7 @@ func Pattern(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func PatternRaw(values ...string) Attribute {
+func Pattern_(values ...string) Attribute {
     return Pattern(nil, values...)
 }
 
@@ -2082,7 +2082,7 @@ func Placeholder(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func PlaceholderRaw(values ...string) Attribute {
+func Placeholder_(values ...string) Attribute {
     return Placeholder(nil, values...)
 }
 
@@ -2097,7 +2097,7 @@ func Poster(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func PosterRaw(values ...string) Attribute {
+func Poster_(values ...string) Attribute {
     return Poster(nil, values...)
 }
 
@@ -2112,7 +2112,7 @@ func Preload(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func PreloadRaw(values ...string) Attribute {
+func Preload_(values ...string) Attribute {
     return Preload(nil, values...)
 }
 
@@ -2127,7 +2127,7 @@ func Readonly(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func ReadonlyRaw(values ...string) Attribute {
+func Readonly_(values ...string) Attribute {
     return Readonly(nil, values...)
 }
 
@@ -2142,7 +2142,7 @@ func Rel(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func RelRaw(values ...string) Attribute {
+func Rel_(values ...string) Attribute {
     return Rel(nil, values...)
 }
 
@@ -2157,7 +2157,7 @@ func Required(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func RequiredRaw(values ...string) Attribute {
+func Required_(values ...string) Attribute {
     return Required(nil, values...)
 }
 
@@ -2172,7 +2172,7 @@ func Reversed(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func ReversedRaw(values ...string) Attribute {
+func Reversed_(values ...string) Attribute {
     return Reversed(nil, values...)
 }
 
@@ -2187,7 +2187,7 @@ func Role(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func RoleRaw(values ...string) Attribute {
+func Role_(values ...string) Attribute {
     return Role(nil, values...)
 }
 
@@ -2202,7 +2202,7 @@ func Rows(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func RowsRaw(values ...string) Attribute {
+func Rows_(values ...string) Attribute {
     return Rows(nil, values...)
 }
 
@@ -2217,7 +2217,7 @@ func Rowspan(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func RowspanRaw(values ...string) Attribute {
+func Rowspan_(values ...string) Attribute {
     return Rowspan(nil, values...)
 }
 
@@ -2232,7 +2232,7 @@ func Sandbox(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func SandboxRaw(values ...string) Attribute {
+func Sandbox_(values ...string) Attribute {
     return Sandbox(nil, values...)
 }
 
@@ -2247,7 +2247,7 @@ func Scope(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func ScopeRaw(values ...string) Attribute {
+func Scope_(values ...string) Attribute {
     return Scope(nil, values...)
 }
 
@@ -2262,7 +2262,7 @@ func Selected(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func SelectedRaw(values ...string) Attribute {
+func Selected_(values ...string) Attribute {
     return Selected(nil, values...)
 }
 
@@ -2277,7 +2277,7 @@ func Shape(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func ShapeRaw(values ...string) Attribute {
+func Shape_(values ...string) Attribute {
     return Shape(nil, values...)
 }
 
@@ -2292,7 +2292,7 @@ func Size(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func SizeRaw(values ...string) Attribute {
+func Size_(values ...string) Attribute {
     return Size(nil, values...)
 }
 
@@ -2307,7 +2307,7 @@ func Sizes(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func SizesRaw(values ...string) Attribute {
+func Sizes_(values ...string) Attribute {
     return Sizes(nil, values...)
 }
 
@@ -2322,7 +2322,7 @@ func Span(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func SpanRaw(values ...string) Attribute {
+func Span_(values ...string) Attribute {
     return Span(nil, values...)
 }
 
@@ -2337,7 +2337,7 @@ func Spellcheck(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func SpellcheckRaw(values ...string) Attribute {
+func Spellcheck_(values ...string) Attribute {
     return Spellcheck(nil, values...)
 }
 
@@ -2352,7 +2352,7 @@ func Src(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func SrcRaw(values ...string) Attribute {
+func Src_(values ...string) Attribute {
     return Src(nil, values...)
 }
 
@@ -2367,7 +2367,7 @@ func Srcdoc(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func SrcdocRaw(values ...string) Attribute {
+func Srcdoc_(values ...string) Attribute {
     return Srcdoc(nil, values...)
 }
 
@@ -2382,7 +2382,7 @@ func Srclang(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func SrclangRaw(values ...string) Attribute {
+func Srclang_(values ...string) Attribute {
     return Srclang(nil, values...)
 }
 
@@ -2397,7 +2397,7 @@ func Srcset(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func SrcsetRaw(values ...string) Attribute {
+func Srcset_(values ...string) Attribute {
     return Srcset(nil, values...)
 }
 
@@ -2412,7 +2412,7 @@ func Start(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func StartRaw(values ...string) Attribute {
+func Start_(values ...string) Attribute {
     return Start(nil, values...)
 }
 
@@ -2427,7 +2427,7 @@ func Step(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func StepRaw(values ...string) Attribute {
+func Step_(values ...string) Attribute {
     return Step(nil, values...)
 }
 
@@ -2442,7 +2442,7 @@ func Style(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func StyleRaw(values ...string) Attribute {
+func Style_(values ...string) Attribute {
     return Style(nil, values...)
 }
 
@@ -2457,7 +2457,7 @@ func Tabindex(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func TabindexRaw(values ...string) Attribute {
+func Tabindex_(values ...string) Attribute {
     return Tabindex(nil, values...)
 }
 
@@ -2472,7 +2472,7 @@ func Target(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func TargetRaw(values ...string) Attribute {
+func Target_(values ...string) Attribute {
     return Target(nil, values...)
 }
 
@@ -2487,7 +2487,7 @@ func Title(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func TitleRaw(values ...string) Attribute {
+func Title_(values ...string) Attribute {
     return Title(nil, values...)
 }
 
@@ -2502,7 +2502,7 @@ func Translate(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func TranslateRaw(values ...string) Attribute {
+func Translate_(values ...string) Attribute {
     return Translate(nil, values...)
 }
 
@@ -2517,7 +2517,7 @@ func Type(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func TypeRaw(values ...string) Attribute {
+func Type_(values ...string) Attribute {
     return Type(nil, values...)
 }
 
@@ -2532,7 +2532,7 @@ func Usemap(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func UsemapRaw(values ...string) Attribute {
+func Usemap_(values ...string) Attribute {
     return Usemap(nil, values...)
 }
 
@@ -2547,7 +2547,7 @@ func Value(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func ValueRaw(values ...string) Attribute {
+func Value_(values ...string) Attribute {
     return Value(nil, values...)
 }
 
@@ -2562,7 +2562,7 @@ func Width(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func WidthRaw(values ...string) Attribute {
+func Width_(values ...string) Attribute {
     return Width(nil, values...)
 }
 
@@ -2577,7 +2577,7 @@ func Wrap(data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func WrapRaw(values ...string) Attribute {
+func Wrap_(values ...string) Attribute {
     return Wrap(nil, values...)
 }
 

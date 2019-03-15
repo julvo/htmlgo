@@ -21,7 +21,7 @@ func Dataset(key, value string) Attribute {
     }
 }
 
-func DatasetRaw(key, value string) Attribute {
+func Dataset_(key, value string) Attribute {
     return Attribute{
         Data: map[string]string{},
         Templ: `{{define "Dataset"}}data-`+key+`="`+value+`"{{end}}`,
@@ -42,7 +42,7 @@ func [[.FuncName]](data interface{}, templs ...string) Attribute {
     return attr
 }
 
-func [[.FuncName]]Raw(values ...string) Attribute {
+func [[.FuncName]]_(values ...string) Attribute {
     return [[.FuncName]](nil, values...)
 }
 [[ end ]]

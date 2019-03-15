@@ -81,7 +81,7 @@ func Text(v interface{}) HTML {
     return HTML("\n" + html.EscapeString(fmt.Sprint(v)))
 }
 
-func TextRaw(s string) HTML {
+func Text_(s string) HTML {
     return HTML(s)
 }
 
@@ -142,7 +142,7 @@ func JavaScript(data interface{}, templs ...string) JS {
     return js
 }
 
-func JavaScriptRaw(templs ...string) JS {
+func JavaScript_(templs ...string) JS {
     return JavaScript(nil, templs...)
 }
 

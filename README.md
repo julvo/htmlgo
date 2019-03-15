@@ -23,7 +23,7 @@ import (
 func main() {
     var numberDivs HTML
     for i := 0; i < 3; i++ {
-        numberDivs += Div(Attr(a.StyleRaw("font-family:monospace;")),
+        numberDivs += Div(Attr(a.Style_("font-family:monospace;")),
                           Text(i))
     }
 
