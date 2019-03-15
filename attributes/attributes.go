@@ -122,6 +122,21 @@ func AltRaw(values ...string) Attribute {
 }
 
 
+func AriaLabel(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "AriaLabel" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "AriaLabel"}}aria-label="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "AriaLabel"}}aria-label="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func AriaLabelRaw(values ...string) Attribute {
+    return AriaLabel(nil, values...)
+}
+
+
 func Async(data interface{}, templs ...string) Attribute {
     attr := Attribute{ Data: data, Name: "Async" }
     if len(templs) == 0 {
@@ -704,6 +719,21 @@ func Id(data interface{}, templs ...string) Attribute {
 
 func IdRaw(values ...string) Attribute {
     return Id(nil, values...)
+}
+
+
+func InitialScale(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "InitialScale" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "InitialScale"}}initial-scale="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "InitialScale"}}initial-scale="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func InitialScaleRaw(values ...string) Attribute {
+    return InitialScale(nil, values...)
 }
 
 
@@ -2144,6 +2174,21 @@ func Reversed(data interface{}, templs ...string) Attribute {
 
 func ReversedRaw(values ...string) Attribute {
     return Reversed(nil, values...)
+}
+
+
+func Role(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "Role" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "Role"}}role="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "Role"}}role="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func RoleRaw(values ...string) Attribute {
+    return Role(nil, values...)
 }
 
 
