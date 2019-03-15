@@ -7,6 +7,8 @@ var attributes []string = []string{
 	"action",
 	"align",
 	"alt",
+	"aria-expanded",
+	"aria-hidden",
 	"aria-label",
 	"async",
 	"autocomplete",

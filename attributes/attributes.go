@@ -122,6 +122,36 @@ func Alt_(values ...string) Attribute {
 }
 
 
+func AriaExpanded(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "AriaExpanded" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "AriaExpanded"}}aria-expanded="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "AriaExpanded"}}aria-expanded="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func AriaExpanded_(values ...string) Attribute {
+    return AriaExpanded(nil, values...)
+}
+
+
+func AriaHidden(data interface{}, templs ...string) Attribute {
+    attr := Attribute{ Data: data, Name: "AriaHidden" }
+    if len(templs) == 0 {
+        attr.Templ = `{{define "AriaHidden"}}aria-hidden="{{.}}"{{end}}`
+    } else {
+        attr.Templ = `{{define "AriaHidden"}}aria-hidden="` + strings.Join(templs, " ") + `"{{end}}`
+    }
+    return attr
+}
+
+func AriaHidden_(values ...string) Attribute {
+    return AriaHidden(nil, values...)
+}
+
+
 func AriaLabel(data interface{}, templs ...string) Attribute {
     attr := Attribute{ Data: data, Name: "AriaLabel" }
     if len(templs) == 0 {
