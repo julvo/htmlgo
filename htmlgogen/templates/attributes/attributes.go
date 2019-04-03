@@ -22,10 +22,11 @@ func Dataset(key, value string) Attribute {
 }
 
 func Dataset_(key, value string) Attribute {
+		key_ := strings.Replace(key, "-", "_", -1)
     return Attribute{
         Data: map[string]string{},
-        Templ: `{{define "Dataset"}}data-`+key+`="`+value+`"{{end}}`,
-        Name: "Dataset",
+        Templ: `{{define "Dataset_`+key_+`"}}data-`+key+`="`+value+`"{{end}}`,
+        Name: "Dataset_"+key_,
     }
 }
 
