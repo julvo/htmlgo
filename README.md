@@ -1,19 +1,20 @@
 # htmlgo
 A library for writing type-safe HTML in Go
 
+[This blog post](https://julianvossen.de/posts/2019-03-17-htmlgo) provides a short introduction.
+
 ## Why?
-As much as I like the simplicity and the contextual escaping of `html/template`, it doesn't provide any type safety.
-Pipelines (e.g. `{{.DoesNotExist.Values}}`) can produce errors at runtime, which could have been caught during compilation.
-Using nested templates with `html/template` can become hard to maintain, as
-templates don't define which data they expect.
-Moreover, using Go functions to produce HTML elements prevents malformed HTML.
+As much as I like the simplicity and the contextual escaping of `html/template`, it doesn't provide much type safety.
+Pipelines (e.g. `{{.DoesNotExist.Value}}`) can produce errors at runtime, which should be caught during compilation.
+Using nested templates with `html/template` can become hard to maintain, as a template user has to inspect the pipelines within a templates to infer the data format to be passed into the template.
+As a bonus, using Go functions to produce HTML elements prevents malformed HTML.
 
 This library is inspired by [Haskell's blaze-html](http://hackage.haskell.org/package/blaze-html).
 
 ## Status
 * Support for all HTML5 tags and attributes
 * Secure, contextual escaping (based on `html/template`)
-* Not optimised for performance, expect it to be slower than `html/template`
+* Not optimised for performance, expect it to be significantly slower than `html/template`
 
 ## API
 ### Tags
