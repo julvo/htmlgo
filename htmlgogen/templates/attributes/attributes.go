@@ -11,21 +11,24 @@ type Attribute struct {
 // Begin of manually implemented attributes
 
 func Dataset(key, value string) Attribute {
+		key_ := strings.Replace(key, "-", "_", -1)
     return Attribute{
         Data: map[string]string{
             "key":      key,
             "value":    value,
         },
-        Templ: `{{define "Dataset"}}data-{{.key}}="{{.value}}"{{end}}`,
-        Name: "Dataset",
+        Templ: `{{define "Dataset_`+key_+`"}}data-{{.key}}="{{.value}}"{{end}}`,
+        Name: "Dataset_"+key_,
     }
 }
 
 func Dataset_(key, value string) Attribute {
 		key_ := strings.Replace(key, "-", "_", -1)
     return Attribute{
-        Data: map[string]string{},
-        Templ: `{{define "Dataset_`+key_+`"}}data-`+key+`="`+value+`"{{end}}`,
+        Data: map[string]string{
+					"value": value,
+				},
+        Templ: `{{define "Dataset_`+key_+`"}}data-`+key+`="{{.value}}"{{end}}`,
         Name: "Dataset_"+key_,
     }
 }
