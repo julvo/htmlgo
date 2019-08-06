@@ -1,170 +1,282 @@
 package htmlgo
 
 import (
-    "fmt"
+    "html/template"
     "io"
     "strings"
-    "html"
-    "html/template"
-    "bytes"
-
-    a "github.com/julvo/htmlgo/attributes"
+		"strconv"
 )
 
-type HTML string
-
-type JS struct {
-    templ       string
-    data        interface{}
+type Node interface {
+	BuildTemplateTo(templ *strings.Builder, vals Values, indent string)
+	RenderTo(w io.Writer) error
 }
 
-func WriteTo(w io.Writer, h HTML) {
-    w.Write([]byte(h))
+type Values map[string]interface{}
+type Template string
+type Dataset map[string]string
+
+func HTML(html string) template.HTML {
+	return template.HTML(html)
+}
+func HTMLAttr(attr string) template.HTMLAttr {
+	return template.HTMLAttr(attr)
+}
+func JS(js string) template.JS {
+	return template.JS(js)
+}
+func JSStr(js string) template.JSStr {
+	return template.JSStr(js)
+}
+func CSS(css string) template.CSS {
+	return template.CSS(css)
+}
+func URL(url string) template.URL {
+	return template.URL(url)
+}
+func Srcset(srcset string) template.Srcset {
+	return template.Srcset(srcset)
 }
 
-// Build a slice of type []Attribute for cosmetic purposes
-func Attr(attrs ...a.Attribute) []a.Attribute {
-    return attrs
+
+type HTMLNode struct {
+	Attributes Attr
+	Tag        string
+	Children   []Node
 }
 
-func prepareAttributes(attrs []a.Attribute) (string, string, map[string]interface{}) {
-    data := map[string]interface{}{}
-    templ := ""
-    defs := ""
-
-    for _, attr := range attrs {
-        data[attr.Name] = attr.Data
-        templ += ` {{template "` + attr.Name + `" .` + attr.Name + `}}`
-        defs += attr.Templ
-    }
-
-    return templ, defs, data
+func (n *HTMLNode) RenderTo(w io.Writer) error {
+	return RenderNodeTo(n, w)
 }
 
-func insertChildren(children ...HTML) string {
-    s := ""
-    for _, c := range children {
-        s += string(c)
-    }
-    return s
+func (n *HTMLNode) BuildTemplateTo(templ *strings.Builder, vals Values, indent string) {
+	templ.WriteString(indent + "<" + n.Tag)
+	n.Attributes.buildTemplateTo(templ, vals)
+	templ.WriteString(">\n")
+	for _, child := range n.Children {
+		child.BuildTemplateTo(templ, vals, indent+"  ")
+	}
+	templ.WriteString(indent + "</" + n.Tag + ">\n")
 }
 
-func indent(s, indentation string) string {
-    return strings.Replace(s, "\n", "\n" + indentation, -1)
+type VoidHTMLNode struct {
+	Attributes Attr
+	Tag        string
 }
 
-func buildElement(tag string, attrs []a.Attribute, content string, close_ bool) string {
-    templ, defs, data := prepareAttributes(attrs)
-    complTempl := defs + "\n<" + tag + templ + ">" + content
-    if close_ {
-        complTempl += "\n</" + tag +">"
-    }
-
-    t, _ := template.New(tag).Parse(complTempl)
-
-    buf := new(bytes.Buffer)
-    _ = t.Execute(buf, data)
-    return buf.String()
+func (n *VoidHTMLNode) BuildTemplateTo(templ *strings.Builder, vals Values, indent string) {
+	templ.WriteString(indent + "<" + n.Tag)
+	n.Attributes.buildTemplateTo(templ, vals)
+	templ.WriteString("/>\n")
+}
+func (n *VoidHTMLNode) RenderTo(w io.Writer) error {
+	return RenderNodeTo(n, w)
 }
 
-func Element(tag string, attrs []a.Attribute, children ...HTML) HTML {
-    return HTML(buildElement(tag, attrs, 
-                indent(insertChildren(children...), "  "), true))
+func JavaScript(s string) *TextNode {
+	return Text(template.JS(s))
 }
 
-func VoidElement(tag string, attrs []a.Attribute) HTML {
-    return HTML(buildElement(tag, attrs, "", false))
+func Text(chunks ...interface{}) *TextNode {
+	return &TextNode{chunks}
 }
 
-// Produce HTML from plain text by escaping
-func Text(v interface{}) HTML {
-    return HTML("\n" + html.EscapeString(fmt.Sprint(v)))
+type NodeSlice struct {
+	nodes []Node
 }
 
-func Text_(s string) HTML {
-    return HTML(s)
+func (ns *NodeSlice) BuildTemplateTo(templ *strings.Builder, vals Values, indent string) {
+	for _, n := range ns.nodes {
+		n.BuildTemplateTo(templ, vals, indent)
+	}
 }
 
-// Begin of manually defined elements
-
-func Html5(attrs []a.Attribute, children ...HTML) HTML {
-    return DoctypeHtml5 + Html(attrs, children...)
+func (ns *NodeSlice) RenderTo(w io.Writer) error {
+	for _, n := range ns.nodes {
+		if err := n.RenderTo(w); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
-func Html5_(children ...HTML) HTML {
-    return Html5(Attr(), children...)
+func Nodes(nodes ...Node) *NodeSlice {
+	ns := NodeSlice{nodes}
+	return &ns
 }
 
-func Doctype(t string) HTML {
-    return HTML("<!DOCTYPE " + t + ">")
+func (ns *NodeSlice) Append(nodes ...Node) *NodeSlice {
+	ns.nodes = append(ns.nodes, nodes...)
+	return ns
 }
 
-const DoctypeHtml5 HTML = "<!DOCTYPE HTML>"
-
-func Script(attrs []a.Attribute, js JS) HTML {
-    if js.data == nil {
-        return Element("script", attrs, HTML("\n" + js.templ))
-    }
-
-    complTempl := buildElement("script", attrs,
-                               indent("\n" + js.templ, "  "), true)
-    
-    // TODO set verbosity level to enable logging
-    t, err := template.New("_").Delims("{%$", "$%}").Parse(complTempl)
-    if err != nil {
-        return Element("script", attrs)
-    }
-
-    buf := new(bytes.Buffer)
-    err = t.Execute(buf, js.data)
-    if err != nil {
-        return Element("script", attrs)
-    }
-
-    return HTML(buf.String())
+func (ns *NodeSlice) Prepend(nodes ...Node) *NodeSlice {
+	ns.nodes = append(nodes, ns.nodes...)
+	return ns
 }
 
-func Script_(js JS) HTML {
-    return Script(Attr(), js)
+type TextNode struct {
+	Chunks []interface{}
 }
 
-func JavaScript(data interface{}, templs ...string) JS {
-    js := JS{ data: data }
-    if len(templs) == 0 {
-        js.templ = "{%$.$%}"
-    } else {
-        js.templ = strings.Replace(
-                     strings.Replace(
-                        strings.Join(templs, "\n"),
-                        "{{", "{%$", -1),
-                     "}}", "$%}", -1)
-    }
-    return js
+func (n *TextNode) BuildTemplateTo(templ *strings.Builder, vals Values, indent string) {
+	templ.WriteString(indent)
+	for _, chunk := range n.Chunks {
+		placeholder := "P" + strconv.Itoa(len(vals))
+		templ.WriteString("{{." + placeholder + "}}")
+		vals[placeholder] = chunk
+	}
+	templ.WriteString("\n")
 }
 
-func JavaScript_(templs ...string) JS {
-    return JavaScript(nil, templs...)
+func (n *TextNode) RenderTo(w io.Writer) error {
+	return RenderNodeTo(n, w)
+}
+
+func RawText(s string) *RawTextNode {
+	return &RawTextNode{s}
+}
+
+type RawTextNode struct {
+	Text string
+}
+
+func (n *RawTextNode) BuildTemplateTo(templ *strings.Builder, vals Values, indent string) {
+	templ.WriteString(indent + n.Text + "\n")
+}
+
+func (n *RawTextNode) RenderTo(w io.Writer) error {
+	return RenderNodeTo(n, w)
+}
+
+type DeclarationNode struct {
+	Declaration string
+}
+
+func (n *DeclarationNode) BuildTemplateTo(templ *strings.Builder, vals Values, indent string) {
+	templ.WriteString(indent + "<" + n.Declaration + ">\n")
+}
+
+func (n *DeclarationNode) RenderTo(w io.Writer) error {
+	return RenderNodeTo(n, w)
+}
+
+type DocumentNode struct {
+	Children []Node
+}
+
+func (d *DocumentNode) RenderTo(w io.Writer) error {
+	return RenderNodeTo(d, w)
+}
+
+func (d *DocumentNode) BuildTemplateTo(templ *strings.Builder, vals Values, indent string) {
+	for _, child := range d.Children {
+		child.BuildTemplateTo(templ, vals, indent)
+	}
+}
+
+func RenderNodeTo(n Node, w io.Writer) error {
+	templBuilder := strings.Builder{}
+	vals := Values{}
+
+	n.BuildTemplateTo(&templBuilder, vals, "")
+
+	if len(vals) == 0 {
+		_, err := w.Write([]byte(templBuilder.String()))
+		return err
+	}
+
+	templ, err := template.New("node").Parse(templBuilder.String())
+	if err != nil {
+		return err
+	}
+	return templ.Execute(w, vals)
+}
+
+func Document(children ...Node) *DocumentNode {
+	return &DocumentNode{children}
+}
+
+func Doctype(t string) *DeclarationNode {
+	return &DeclarationNode{
+		Declaration: "!DOCTYPE " + t,
+	}
+}
+
+type Attr struct {
+	Dataset   Dataset
+	DisabledBoolean  bool
+	templData map[string]interface{}
+[[range .Attributes]]
+	[[.ToPascalCase]] string
+[[end]]
+}
+
+func (a Attr) Bind(key string, value interface{}) Attr {
+	if a.templData == nil {
+		a.templData = make(map[string]interface{})
+	}
+	a.templData[key] = value
+	return a
+}
+
+func (a Attr) Bind_(value interface{}) Attr {
+	return a.Bind("", value)
+}
+
+func (a *Attr) buildTemplateTo(templ *strings.Builder, vals Values) {
+	if len(a.templData) > 0 {
+		placeholder := "P" + strconv.Itoa(len(vals))
+[[range .Attributes]]
+		a.[[.ToPascalCase]] = strings.Replace(a.[[.ToPascalCase]], "{{.", "{{."+placeholder, -1)
+[[end]]
+
+		for k, v := range a.templData {
+			vals[placeholder+k] = v
+		}
+	}
+
+	switch {
+[[range .Attributes]]
+    case a.[[.ToPascalCase]] != "":
+		templ.WriteString(` [[.Name]]="` + a.[[.ToPascalCase]] + `"`)
+[[end]]
+	case a.DisabledBoolean:
+		templ.WriteString(" disabled")
+	}
+	for k, v := range a.Dataset {
+		templ.WriteString(" data-" + k + `="` + v + `"`)
+	}
+
 }
 
 // Begin of generated elements
 
-[[ range .ElementFuncs ]]
-func [[.FuncName]](attrs []a.Attribute, children ...HTML) HTML {
-    return Element("[[.TagName]]", attrs, children...)
+[[ range .Tags ]]
+[[if .IsSelfClosing]]
+func [[.ToPascalCase]](attributes Attr) *VoidHTMLNode {
+	return &VoidHTMLNode{
+		Attributes: attributes,
+		Tag:        "[[.Name]]",
+	}
 }
 
-func [[.FuncName]]_(children ...HTML) HTML {
-    return [[.FuncName]](Attr(), children...)
+func [[.ToPascalCase]]_() *VoidHTMLNode {
+    return [[.ToPascalCase]](Attr{})
 }
+
+[[else]]
+func [[.ToPascalCase]](attributes Attr, children ...Node) *HTMLNode {
+	return &HTMLNode{
+		Attributes: attributes,
+		Tag:        "[[.Name]]",
+		Children:   children,
+	}
+}
+
+func [[.ToPascalCase]]_(children ...Node) *HTMLNode {
+    return [[.ToPascalCase]](Attr{}, children...)
+}
+
 [[ end ]]
-
-// Begin of generated void elements
-
-[[ range .VoidElementFuncs ]]
-func [[.FuncName]](attrs []a.Attribute) HTML {
-    return VoidElement("[[.TagName]]", attrs)
-}
-func [[.FuncName]]_() HTML {
-    return [[.FuncName]](Attr())
-}
 [[ end ]]

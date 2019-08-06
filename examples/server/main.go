@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	. "github.com/julvo/htmlgo"
-	a "github.com/julvo/htmlgo/attributes"
 )
 
 func main() {
@@ -13,41 +12,43 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
-func indexHandler(w http.ResponseWriter, req *http.Request) {
+func indexHandler(w http.ResponseWriter, r *http.Request) {
 	fruit := []string{"Apple", "Banana", "Orange"}
 
-	fruitListItems := HTML("")
+	fruitListItems := Nodes()
 	for _, f := range fruit {
-		fruitListItems += Li_(Text(f))
+		fruitListItems.Append(Li_(Text(f)))
 	}
 
 	content :=
-		navbar(false) +
-			Ul_(fruitListItems) +
-			footer()
+		Nodes(
+			navbar(false),
+			Ul_(fruitListItems),
+			footer())
 
-	WriteTo(w, page("Home", content))
+	page("home", content).RenderTo(w)
 }
 
-func page(title string, content HTML) HTML {
+func page(title string, content Node) Node {
 	p :=
-		Html5_(
-			Head_(
-				Title_(Text(title)),
-				Meta(Attr(a.Charset_("utf-8"))),
-				Meta(Attr(a.Name_("viewport"), a.Content_("width=device-width"), a.InitialScale_("1"))),
-				Link(Attr(a.Rel_("stylesheet"), a.Href_("/static/css/main.min.css")))),
-			Body_(
-				content,
-				Script(Attr(a.Src_("/static/js/main.min.js")), JS{})))
+		Document(
+			Doctype("html"),
+			Html_(
+				Head_(
+					Title_(Text(title)),
+					Meta(Attr{Charset: "utf-8"}),
+					Meta(Attr{Name: "viewport", Content: "width=device-width", InitialScale: "1"})),
+				Body_(
+					Div(Attr{Style: "background:grey;", Class: "is-size-{{.}}"}.Bind_(6)),
+					content)))
 
 	return p
 }
 
-func navbar(isLoggedIn bool) HTML {
-	var navItems HTML
+func navbar(isLoggedIn bool) Node {
+	navItems := Nodes()
 	if !isLoggedIn {
-		navItems = A(Attr(a.Href_("/login")), Text_("Login"))
+		navItems.Append(A(Attr{Href: "/login"}, Text("Login")))
 	}
 
 	nav :=
@@ -58,8 +59,8 @@ func navbar(isLoggedIn bool) HTML {
 	return nav
 }
 
-func footer() HTML {
+func footer() Node {
 	return Footer_(
 		Hr_(),
-		Text_("&copy Acme Ltd, 2019"))
+		Text(HTML("&copy Acme Ltd, 2019")))
 }
