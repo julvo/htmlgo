@@ -4,7 +4,7 @@ import (
     "html/template"
     "io"
     "strings"
-		"strconv"
+	"strconv"
 )
 
 type Node interface {
@@ -34,13 +34,13 @@ func CSS(css string) template.CSS {
 func URL(url string) template.URL {
 	return template.URL(url)
 }
-func Srcset(srcset string) template.Srcset {
-	return template.Srcset(srcset)
-}
+//func Srcset(srcset string) template.Srcset {
+//	return template.Srcset(srcset)
+//}
 
 
 type HTMLNode struct {
-	Attributes Attr
+	Attributes Attributes
 	Tag        string
 	Children   []Node
 }
@@ -60,7 +60,7 @@ func (n *HTMLNode) BuildTemplateTo(templ *strings.Builder, vals Values, indent s
 }
 
 type VoidHTMLNode struct {
-	Attributes Attr
+	Attributes Attributes
 	Tag        string
 }
 
@@ -203,59 +203,108 @@ func Doctype(t string) *DeclarationNode {
 	}
 }
 
-type Attr struct {
-	Dataset   Dataset
-	DisabledBoolean  bool
-	templData map[string]interface{}
-[[range .Attributes]]
-	[[.ToPascalCase]] string
-[[end]]
+type Attributes struct {
+	Slice []Attribute
 }
 
-func (a Attr) Bind(key string, value interface{}) Attr {
-	if a.templData == nil {
-		a.templData = make(map[string]interface{})
+type Attribute struct {
+	Name string
+	Data interface{}
+	Templ string
+}
+
+// TODO Dataset
+// TODO boolean attributes
+
+[[range .Attributes]]
+func (a Attributes) [[.ToPascalCase]](value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
 	}
-	a.templData[key] = value
+	a.Slice = append(a.Slice, Attribute{
+		Name: "[[.Name]]",
+		Data: value,
+		Templ: templ,
+	})
 	return a
 }
+[[end]]
 
-func (a Attr) Bind_(value interface{}) Attr {
-	return a.Bind("", value)
+[[range .Attributes]]
+func (a Attributes) [[.ToPascalCase]]_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "[[.Name]]",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+[[end]]
+
+[[range .Attributes]]
+[[if .IsUnique]]
+func [[.ToPascalCase]](value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "[[.Name]]",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+[[end]]
+[[end]]
+
+[[range .Attributes]]
+[[if .IsUnique]]
+func [[.ToPascalCase]]_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "[[.Name]]",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+[[end]]
+[[end]]
+
+func Attr() Attributes {
+	return Attributes{
+		Slice: []Attribute{},
+	}
 }
 
-func (a *Attr) buildTemplateTo(templ *strings.Builder, vals Values) {
-	if len(a.templData) > 0 {
+type OldAttr struct {
+	Dataset  Dataset
+	DisabledBoolean  bool
+	templData map[string]interface{}
+}
+
+func (a *Attributes) buildTemplateTo(templ *strings.Builder, vals Values) {
+	for _, attr := range a.Slice {
 		placeholder := "P" + strconv.Itoa(len(vals))
-[[range .Attributes]]
-		a.[[.ToPascalCase]] = strings.Replace(a.[[.ToPascalCase]], "{{.", "{{."+placeholder, -1)
-[[end]]
-
-		for k, v := range a.templData {
-			vals[placeholder+k] = v
-		}
+		templ.WriteString(" " + attr.Name + `="` + strings.Replace(attr.Templ, "{{.", "{{."+placeholder, -1) + `"`)
+		vals[placeholder] = attr.Data
 	}
-
-[[range .Attributes]]
-  if a.[[.ToPascalCase]] != "" {
-		templ.WriteString(` [[.Name]]="` + a.[[.ToPascalCase]] + `"`)
-	}
-[[end]]
-	if a.DisabledBoolean {
-		templ.WriteString(" disabled")
-	}
-
-	for k, v := range a.Dataset {
-		templ.WriteString(" data-" + k + `="` + v + `"`)
-	}
-
 }
 
 // Begin of generated elements
 
 [[ range .Tags ]]
 [[if .IsSelfClosing]]
-func [[.ToPascalCase]](attributes Attr) *VoidHTMLNode {
+func [[.ToPascalCase]](attributes Attributes) *VoidHTMLNode {
 	return &VoidHTMLNode{
 		Attributes: attributes,
 		Tag:        "[[.Name]]",
@@ -263,11 +312,11 @@ func [[.ToPascalCase]](attributes Attr) *VoidHTMLNode {
 }
 
 func [[.ToPascalCase]]_() *VoidHTMLNode {
-    return [[.ToPascalCase]](Attr{})
+    return [[.ToPascalCase]](Attr())
 }
 
 [[else]]
-func [[.ToPascalCase]](attributes Attr, children ...Node) *HTMLNode {
+func [[.ToPascalCase]](attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "[[.Name]]",
@@ -276,7 +325,7 @@ func [[.ToPascalCase]](attributes Attr, children ...Node) *HTMLNode {
 }
 
 func [[.ToPascalCase]]_(children ...Node) *HTMLNode {
-    return [[.ToPascalCase]](Attr{}, children...)
+    return [[.ToPascalCase]](Attr(), children...)
 }
 
 [[ end ]]

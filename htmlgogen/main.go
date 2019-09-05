@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"go/build"
 	"log"
 	"os"
@@ -58,6 +59,18 @@ type Attribute struct {
 
 func (a Attribute) ToPascalCase() string {
 	return toPascalCase(a.Name)
+}
+
+func (a Attribute) IsUnique() bool {
+	for _, tag := range tags {
+		if tag == "srcset" {
+			fmt.Println(tag, a.Name)
+		}
+		if a.Name == tag {
+			return false
+		}
+	}
+	return true
 }
 
 type TemplateData struct {
