@@ -36,10 +36,10 @@ func page(title string, content Node) Node {
 			Html_(
 				Head_(
 					Title_(Text(title)),
-					Meta(Attr{Charset: "utf-8"}),
-					Meta(Attr{Name: "viewport", Content: "width=device-width", InitialScale: "1"})),
+					Meta(Charset("utf-8")),
+					Meta(Name("viewport").Content("width=device-width").InitialScale("1"))),
 				Body_(
-					Div(Attr{Style: "background:grey;", Class: "is-size-{{.}}"}.Bind_(6)),
+					Div(Class("is-size-6").Style_("background:grey;")),
 					content)))
 
 	return p
@@ -48,7 +48,7 @@ func page(title string, content Node) Node {
 func navbar(isLoggedIn bool) Node {
 	navItems := Nodes()
 	if !isLoggedIn {
-		navItems.Append(A(Attr{Href: "/login"}, Text("Login")))
+		navItems.Append(A(Href("/login"), Text("Login")))
 	}
 
 	nav :=
