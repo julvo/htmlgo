@@ -236,14 +236,15 @@ func (a *Attr) buildTemplateTo(templ *strings.Builder, vals Values) {
 		}
 	}
 
-	switch {
 [[range .Attributes]]
-    case a.[[.ToPascalCase]] != "":
+  if a.[[.ToPascalCase]] != "" {
 		templ.WriteString(` [[.Name]]="` + a.[[.ToPascalCase]] + `"`)
+	}
 [[end]]
-	case a.DisabledBoolean:
+	if a.DisabledBoolean {
 		templ.WriteString(" disabled")
 	}
+
 	for k, v := range a.Dataset {
 		templ.WriteString(" data-" + k + `="` + v + `"`)
 	}

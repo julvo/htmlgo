@@ -920,527 +920,699 @@ func (a *Attr) buildTemplateTo(templ *strings.Builder, vals Values) {
 		}
 	}
 
-	switch {
 
-    case a.Accept != "":
+  if a.Accept != "" {
 		templ.WriteString(` accept="` + a.Accept + `"`)
+	}
 
-    case a.AcceptCharset != "":
+  if a.AcceptCharset != "" {
 		templ.WriteString(` accept-charset="` + a.AcceptCharset + `"`)
+	}
 
-    case a.Accesskey != "":
+  if a.Accesskey != "" {
 		templ.WriteString(` accesskey="` + a.Accesskey + `"`)
+	}
 
-    case a.Action != "":
+  if a.Action != "" {
 		templ.WriteString(` action="` + a.Action + `"`)
+	}
 
-    case a.Align != "":
+  if a.Align != "" {
 		templ.WriteString(` align="` + a.Align + `"`)
+	}
 
-    case a.Alt != "":
+  if a.Alt != "" {
 		templ.WriteString(` alt="` + a.Alt + `"`)
+	}
 
-    case a.AriaExpanded != "":
+  if a.AriaExpanded != "" {
 		templ.WriteString(` aria-expanded="` + a.AriaExpanded + `"`)
+	}
 
-    case a.AriaHidden != "":
+  if a.AriaHidden != "" {
 		templ.WriteString(` aria-hidden="` + a.AriaHidden + `"`)
+	}
 
-    case a.AriaLabel != "":
+  if a.AriaLabel != "" {
 		templ.WriteString(` aria-label="` + a.AriaLabel + `"`)
+	}
 
-    case a.Async != "":
+  if a.Async != "" {
 		templ.WriteString(` async="` + a.Async + `"`)
+	}
 
-    case a.Autocomplete != "":
+  if a.Autocomplete != "" {
 		templ.WriteString(` autocomplete="` + a.Autocomplete + `"`)
+	}
 
-    case a.Autofocus != "":
+  if a.Autofocus != "" {
 		templ.WriteString(` autofocus="` + a.Autofocus + `"`)
+	}
 
-    case a.Autoplay != "":
+  if a.Autoplay != "" {
 		templ.WriteString(` autoplay="` + a.Autoplay + `"`)
+	}
 
-    case a.Bgcolor != "":
+  if a.Bgcolor != "" {
 		templ.WriteString(` bgcolor="` + a.Bgcolor + `"`)
+	}
 
-    case a.Border != "":
+  if a.Border != "" {
 		templ.WriteString(` border="` + a.Border + `"`)
+	}
 
-    case a.Charset != "":
+  if a.Charset != "" {
 		templ.WriteString(` charset="` + a.Charset + `"`)
+	}
 
-    case a.Checked != "":
+  if a.Checked != "" {
 		templ.WriteString(` checked="` + a.Checked + `"`)
+	}
 
-    case a.Cite != "":
+  if a.Cite != "" {
 		templ.WriteString(` cite="` + a.Cite + `"`)
+	}
 
-    case a.Class != "":
+  if a.Class != "" {
 		templ.WriteString(` class="` + a.Class + `"`)
+	}
 
-    case a.Color != "":
+  if a.Color != "" {
 		templ.WriteString(` color="` + a.Color + `"`)
+	}
 
-    case a.Cols != "":
+  if a.Cols != "" {
 		templ.WriteString(` cols="` + a.Cols + `"`)
+	}
 
-    case a.Colspan != "":
+  if a.Colspan != "" {
 		templ.WriteString(` colspan="` + a.Colspan + `"`)
+	}
 
-    case a.Content != "":
+  if a.Content != "" {
 		templ.WriteString(` content="` + a.Content + `"`)
+	}
 
-    case a.Contenteditable != "":
+  if a.Contenteditable != "" {
 		templ.WriteString(` contenteditable="` + a.Contenteditable + `"`)
+	}
 
-    case a.Controls != "":
+  if a.Controls != "" {
 		templ.WriteString(` controls="` + a.Controls + `"`)
+	}
 
-    case a.Coords != "":
+  if a.Coords != "" {
 		templ.WriteString(` coords="` + a.Coords + `"`)
+	}
 
-    case a.Data != "":
+  if a.Data != "" {
 		templ.WriteString(` data="` + a.Data + `"`)
+	}
 
-    case a.Datetime != "":
+  if a.Datetime != "" {
 		templ.WriteString(` datetime="` + a.Datetime + `"`)
+	}
 
-    case a.Default != "":
+  if a.Default != "" {
 		templ.WriteString(` default="` + a.Default + `"`)
+	}
 
-    case a.Defer != "":
+  if a.Defer != "" {
 		templ.WriteString(` defer="` + a.Defer + `"`)
+	}
 
-    case a.Dir != "":
+  if a.Dir != "" {
 		templ.WriteString(` dir="` + a.Dir + `"`)
+	}
 
-    case a.Dirname != "":
+  if a.Dirname != "" {
 		templ.WriteString(` dirname="` + a.Dirname + `"`)
+	}
 
-    case a.Disabled != "":
+  if a.Disabled != "" {
 		templ.WriteString(` disabled="` + a.Disabled + `"`)
+	}
 
-    case a.Download != "":
+  if a.Download != "" {
 		templ.WriteString(` download="` + a.Download + `"`)
+	}
 
-    case a.Draggable != "":
+  if a.Draggable != "" {
 		templ.WriteString(` draggable="` + a.Draggable + `"`)
+	}
 
-    case a.Dropzone != "":
+  if a.Dropzone != "" {
 		templ.WriteString(` dropzone="` + a.Dropzone + `"`)
+	}
 
-    case a.Enctype != "":
+  if a.Enctype != "" {
 		templ.WriteString(` enctype="` + a.Enctype + `"`)
+	}
 
-    case a.For != "":
+  if a.For != "" {
 		templ.WriteString(` for="` + a.For + `"`)
+	}
 
-    case a.Form != "":
+  if a.Form != "" {
 		templ.WriteString(` form="` + a.Form + `"`)
+	}
 
-    case a.Formaction != "":
+  if a.Formaction != "" {
 		templ.WriteString(` formaction="` + a.Formaction + `"`)
+	}
 
-    case a.Headers != "":
+  if a.Headers != "" {
 		templ.WriteString(` headers="` + a.Headers + `"`)
+	}
 
-    case a.Height != "":
+  if a.Height != "" {
 		templ.WriteString(` height="` + a.Height + `"`)
+	}
 
-    case a.Hidden != "":
+  if a.Hidden != "" {
 		templ.WriteString(` hidden="` + a.Hidden + `"`)
+	}
 
-    case a.High != "":
+  if a.High != "" {
 		templ.WriteString(` high="` + a.High + `"`)
+	}
 
-    case a.Href != "":
+  if a.Href != "" {
 		templ.WriteString(` href="` + a.Href + `"`)
+	}
 
-    case a.Hreflang != "":
+  if a.Hreflang != "" {
 		templ.WriteString(` hreflang="` + a.Hreflang + `"`)
+	}
 
-    case a.HttpEquiv != "":
+  if a.HttpEquiv != "" {
 		templ.WriteString(` http-equiv="` + a.HttpEquiv + `"`)
+	}
 
-    case a.Id != "":
+  if a.Id != "" {
 		templ.WriteString(` id="` + a.Id + `"`)
+	}
 
-    case a.InitialScale != "":
+  if a.InitialScale != "" {
 		templ.WriteString(` initial-scale="` + a.InitialScale + `"`)
+	}
 
-    case a.Ismap != "":
+  if a.Ismap != "" {
 		templ.WriteString(` ismap="` + a.Ismap + `"`)
+	}
 
-    case a.Kind != "":
+  if a.Kind != "" {
 		templ.WriteString(` kind="` + a.Kind + `"`)
+	}
 
-    case a.Label != "":
+  if a.Label != "" {
 		templ.WriteString(` label="` + a.Label + `"`)
+	}
 
-    case a.Lang != "":
+  if a.Lang != "" {
 		templ.WriteString(` lang="` + a.Lang + `"`)
+	}
 
-    case a.List != "":
+  if a.List != "" {
 		templ.WriteString(` list="` + a.List + `"`)
+	}
 
-    case a.Loop != "":
+  if a.Loop != "" {
 		templ.WriteString(` loop="` + a.Loop + `"`)
+	}
 
-    case a.Low != "":
+  if a.Low != "" {
 		templ.WriteString(` low="` + a.Low + `"`)
+	}
 
-    case a.Max != "":
+  if a.Max != "" {
 		templ.WriteString(` max="` + a.Max + `"`)
+	}
 
-    case a.Maxlength != "":
+  if a.Maxlength != "" {
 		templ.WriteString(` maxlength="` + a.Maxlength + `"`)
+	}
 
-    case a.Media != "":
+  if a.Media != "" {
 		templ.WriteString(` media="` + a.Media + `"`)
+	}
 
-    case a.Method != "":
+  if a.Method != "" {
 		templ.WriteString(` method="` + a.Method + `"`)
+	}
 
-    case a.Min != "":
+  if a.Min != "" {
 		templ.WriteString(` min="` + a.Min + `"`)
+	}
 
-    case a.Multiple != "":
+  if a.Multiple != "" {
 		templ.WriteString(` multiple="` + a.Multiple + `"`)
+	}
 
-    case a.Muted != "":
+  if a.Muted != "" {
 		templ.WriteString(` muted="` + a.Muted + `"`)
+	}
 
-    case a.Name != "":
+  if a.Name != "" {
 		templ.WriteString(` name="` + a.Name + `"`)
+	}
 
-    case a.Novalidate != "":
+  if a.Novalidate != "" {
 		templ.WriteString(` novalidate="` + a.Novalidate + `"`)
+	}
 
-    case a.Onabort != "":
+  if a.Onabort != "" {
 		templ.WriteString(` onabort="` + a.Onabort + `"`)
+	}
 
-    case a.Onafterprint != "":
+  if a.Onafterprint != "" {
 		templ.WriteString(` onafterprint="` + a.Onafterprint + `"`)
+	}
 
-    case a.Onbeforeprint != "":
+  if a.Onbeforeprint != "" {
 		templ.WriteString(` onbeforeprint="` + a.Onbeforeprint + `"`)
+	}
 
-    case a.Onbeforeunload != "":
+  if a.Onbeforeunload != "" {
 		templ.WriteString(` onbeforeunload="` + a.Onbeforeunload + `"`)
+	}
 
-    case a.Onblur != "":
+  if a.Onblur != "" {
 		templ.WriteString(` onblur="` + a.Onblur + `"`)
+	}
 
-    case a.Oncanplay != "":
+  if a.Oncanplay != "" {
 		templ.WriteString(` oncanplay="` + a.Oncanplay + `"`)
+	}
 
-    case a.Oncanplaythrough != "":
+  if a.Oncanplaythrough != "" {
 		templ.WriteString(` oncanplaythrough="` + a.Oncanplaythrough + `"`)
+	}
 
-    case a.Onchange != "":
+  if a.Onchange != "" {
 		templ.WriteString(` onchange="` + a.Onchange + `"`)
+	}
 
-    case a.Onclick != "":
+  if a.Onclick != "" {
 		templ.WriteString(` onclick="` + a.Onclick + `"`)
+	}
 
-    case a.Oncontextmenu != "":
+  if a.Oncontextmenu != "" {
 		templ.WriteString(` oncontextmenu="` + a.Oncontextmenu + `"`)
+	}
 
-    case a.Oncopy != "":
+  if a.Oncopy != "" {
 		templ.WriteString(` oncopy="` + a.Oncopy + `"`)
+	}
 
-    case a.Oncuechange != "":
+  if a.Oncuechange != "" {
 		templ.WriteString(` oncuechange="` + a.Oncuechange + `"`)
+	}
 
-    case a.Oncut != "":
+  if a.Oncut != "" {
 		templ.WriteString(` oncut="` + a.Oncut + `"`)
+	}
 
-    case a.Ondblclick != "":
+  if a.Ondblclick != "" {
 		templ.WriteString(` ondblclick="` + a.Ondblclick + `"`)
+	}
 
-    case a.Ondrag != "":
+  if a.Ondrag != "" {
 		templ.WriteString(` ondrag="` + a.Ondrag + `"`)
+	}
 
-    case a.Ondragend != "":
+  if a.Ondragend != "" {
 		templ.WriteString(` ondragend="` + a.Ondragend + `"`)
+	}
 
-    case a.Ondragenter != "":
+  if a.Ondragenter != "" {
 		templ.WriteString(` ondragenter="` + a.Ondragenter + `"`)
+	}
 
-    case a.Ondragleave != "":
+  if a.Ondragleave != "" {
 		templ.WriteString(` ondragleave="` + a.Ondragleave + `"`)
+	}
 
-    case a.Ondragover != "":
+  if a.Ondragover != "" {
 		templ.WriteString(` ondragover="` + a.Ondragover + `"`)
+	}
 
-    case a.Ondragstart != "":
+  if a.Ondragstart != "" {
 		templ.WriteString(` ondragstart="` + a.Ondragstart + `"`)
+	}
 
-    case a.Ondrop != "":
+  if a.Ondrop != "" {
 		templ.WriteString(` ondrop="` + a.Ondrop + `"`)
+	}
 
-    case a.Ondurationchange != "":
+  if a.Ondurationchange != "" {
 		templ.WriteString(` ondurationchange="` + a.Ondurationchange + `"`)
+	}
 
-    case a.Onemptied != "":
+  if a.Onemptied != "" {
 		templ.WriteString(` onemptied="` + a.Onemptied + `"`)
+	}
 
-    case a.Onended != "":
+  if a.Onended != "" {
 		templ.WriteString(` onended="` + a.Onended + `"`)
+	}
 
-    case a.Onerror != "":
+  if a.Onerror != "" {
 		templ.WriteString(` onerror="` + a.Onerror + `"`)
+	}
 
-    case a.Onfocus != "":
+  if a.Onfocus != "" {
 		templ.WriteString(` onfocus="` + a.Onfocus + `"`)
+	}
 
-    case a.Onhashchange != "":
+  if a.Onhashchange != "" {
 		templ.WriteString(` onhashchange="` + a.Onhashchange + `"`)
+	}
 
-    case a.Oninput != "":
+  if a.Oninput != "" {
 		templ.WriteString(` oninput="` + a.Oninput + `"`)
+	}
 
-    case a.Oninvalid != "":
+  if a.Oninvalid != "" {
 		templ.WriteString(` oninvalid="` + a.Oninvalid + `"`)
+	}
 
-    case a.Onkeydown != "":
+  if a.Onkeydown != "" {
 		templ.WriteString(` onkeydown="` + a.Onkeydown + `"`)
+	}
 
-    case a.Onkeypress != "":
+  if a.Onkeypress != "" {
 		templ.WriteString(` onkeypress="` + a.Onkeypress + `"`)
+	}
 
-    case a.Onkeyup != "":
+  if a.Onkeyup != "" {
 		templ.WriteString(` onkeyup="` + a.Onkeyup + `"`)
+	}
 
-    case a.Onload != "":
+  if a.Onload != "" {
 		templ.WriteString(` onload="` + a.Onload + `"`)
+	}
 
-    case a.Onloadeddata != "":
+  if a.Onloadeddata != "" {
 		templ.WriteString(` onloadeddata="` + a.Onloadeddata + `"`)
+	}
 
-    case a.Onloadedmetadata != "":
+  if a.Onloadedmetadata != "" {
 		templ.WriteString(` onloadedmetadata="` + a.Onloadedmetadata + `"`)
+	}
 
-    case a.Onloadstart != "":
+  if a.Onloadstart != "" {
 		templ.WriteString(` onloadstart="` + a.Onloadstart + `"`)
+	}
 
-    case a.Onmousedown != "":
+  if a.Onmousedown != "" {
 		templ.WriteString(` onmousedown="` + a.Onmousedown + `"`)
+	}
 
-    case a.Onmousemove != "":
+  if a.Onmousemove != "" {
 		templ.WriteString(` onmousemove="` + a.Onmousemove + `"`)
+	}
 
-    case a.Onmouseout != "":
+  if a.Onmouseout != "" {
 		templ.WriteString(` onmouseout="` + a.Onmouseout + `"`)
+	}
 
-    case a.Onmouseover != "":
+  if a.Onmouseover != "" {
 		templ.WriteString(` onmouseover="` + a.Onmouseover + `"`)
+	}
 
-    case a.Onmouseup != "":
+  if a.Onmouseup != "" {
 		templ.WriteString(` onmouseup="` + a.Onmouseup + `"`)
+	}
 
-    case a.Onmousewheel != "":
+  if a.Onmousewheel != "" {
 		templ.WriteString(` onmousewheel="` + a.Onmousewheel + `"`)
+	}
 
-    case a.Onoffline != "":
+  if a.Onoffline != "" {
 		templ.WriteString(` onoffline="` + a.Onoffline + `"`)
+	}
 
-    case a.Ononline != "":
+  if a.Ononline != "" {
 		templ.WriteString(` ononline="` + a.Ononline + `"`)
+	}
 
-    case a.Onpagehide != "":
+  if a.Onpagehide != "" {
 		templ.WriteString(` onpagehide="` + a.Onpagehide + `"`)
+	}
 
-    case a.Onpageshow != "":
+  if a.Onpageshow != "" {
 		templ.WriteString(` onpageshow="` + a.Onpageshow + `"`)
+	}
 
-    case a.Onpaste != "":
+  if a.Onpaste != "" {
 		templ.WriteString(` onpaste="` + a.Onpaste + `"`)
+	}
 
-    case a.Onpause != "":
+  if a.Onpause != "" {
 		templ.WriteString(` onpause="` + a.Onpause + `"`)
+	}
 
-    case a.Onplay != "":
+  if a.Onplay != "" {
 		templ.WriteString(` onplay="` + a.Onplay + `"`)
+	}
 
-    case a.Onplaying != "":
+  if a.Onplaying != "" {
 		templ.WriteString(` onplaying="` + a.Onplaying + `"`)
+	}
 
-    case a.Onpopstate != "":
+  if a.Onpopstate != "" {
 		templ.WriteString(` onpopstate="` + a.Onpopstate + `"`)
+	}
 
-    case a.Onprogress != "":
+  if a.Onprogress != "" {
 		templ.WriteString(` onprogress="` + a.Onprogress + `"`)
+	}
 
-    case a.Onratechange != "":
+  if a.Onratechange != "" {
 		templ.WriteString(` onratechange="` + a.Onratechange + `"`)
+	}
 
-    case a.Onreset != "":
+  if a.Onreset != "" {
 		templ.WriteString(` onreset="` + a.Onreset + `"`)
+	}
 
-    case a.Onresize != "":
+  if a.Onresize != "" {
 		templ.WriteString(` onresize="` + a.Onresize + `"`)
+	}
 
-    case a.Onscroll != "":
+  if a.Onscroll != "" {
 		templ.WriteString(` onscroll="` + a.Onscroll + `"`)
+	}
 
-    case a.Onsearch != "":
+  if a.Onsearch != "" {
 		templ.WriteString(` onsearch="` + a.Onsearch + `"`)
+	}
 
-    case a.Onseeked != "":
+  if a.Onseeked != "" {
 		templ.WriteString(` onseeked="` + a.Onseeked + `"`)
+	}
 
-    case a.Onseeking != "":
+  if a.Onseeking != "" {
 		templ.WriteString(` onseeking="` + a.Onseeking + `"`)
+	}
 
-    case a.Onselect != "":
+  if a.Onselect != "" {
 		templ.WriteString(` onselect="` + a.Onselect + `"`)
+	}
 
-    case a.Onstalled != "":
+  if a.Onstalled != "" {
 		templ.WriteString(` onstalled="` + a.Onstalled + `"`)
+	}
 
-    case a.Onstorage != "":
+  if a.Onstorage != "" {
 		templ.WriteString(` onstorage="` + a.Onstorage + `"`)
+	}
 
-    case a.Onsubmit != "":
+  if a.Onsubmit != "" {
 		templ.WriteString(` onsubmit="` + a.Onsubmit + `"`)
+	}
 
-    case a.Onsuspend != "":
+  if a.Onsuspend != "" {
 		templ.WriteString(` onsuspend="` + a.Onsuspend + `"`)
+	}
 
-    case a.Ontimeupdate != "":
+  if a.Ontimeupdate != "" {
 		templ.WriteString(` ontimeupdate="` + a.Ontimeupdate + `"`)
+	}
 
-    case a.Ontoggle != "":
+  if a.Ontoggle != "" {
 		templ.WriteString(` ontoggle="` + a.Ontoggle + `"`)
+	}
 
-    case a.Onunload != "":
+  if a.Onunload != "" {
 		templ.WriteString(` onunload="` + a.Onunload + `"`)
+	}
 
-    case a.Onvolumechange != "":
+  if a.Onvolumechange != "" {
 		templ.WriteString(` onvolumechange="` + a.Onvolumechange + `"`)
+	}
 
-    case a.Onwaiting != "":
+  if a.Onwaiting != "" {
 		templ.WriteString(` onwaiting="` + a.Onwaiting + `"`)
+	}
 
-    case a.Onwheel != "":
+  if a.Onwheel != "" {
 		templ.WriteString(` onwheel="` + a.Onwheel + `"`)
+	}
 
-    case a.Open != "":
+  if a.Open != "" {
 		templ.WriteString(` open="` + a.Open + `"`)
+	}
 
-    case a.Optimum != "":
+  if a.Optimum != "" {
 		templ.WriteString(` optimum="` + a.Optimum + `"`)
+	}
 
-    case a.Pattern != "":
+  if a.Pattern != "" {
 		templ.WriteString(` pattern="` + a.Pattern + `"`)
+	}
 
-    case a.Placeholder != "":
+  if a.Placeholder != "" {
 		templ.WriteString(` placeholder="` + a.Placeholder + `"`)
+	}
 
-    case a.Poster != "":
+  if a.Poster != "" {
 		templ.WriteString(` poster="` + a.Poster + `"`)
+	}
 
-    case a.Preload != "":
+  if a.Preload != "" {
 		templ.WriteString(` preload="` + a.Preload + `"`)
+	}
 
-    case a.Readonly != "":
+  if a.Readonly != "" {
 		templ.WriteString(` readonly="` + a.Readonly + `"`)
+	}
 
-    case a.Rel != "":
+  if a.Rel != "" {
 		templ.WriteString(` rel="` + a.Rel + `"`)
+	}
 
-    case a.Required != "":
+  if a.Required != "" {
 		templ.WriteString(` required="` + a.Required + `"`)
+	}
 
-    case a.Reversed != "":
+  if a.Reversed != "" {
 		templ.WriteString(` reversed="` + a.Reversed + `"`)
+	}
 
-    case a.Role != "":
+  if a.Role != "" {
 		templ.WriteString(` role="` + a.Role + `"`)
+	}
 
-    case a.Rows != "":
+  if a.Rows != "" {
 		templ.WriteString(` rows="` + a.Rows + `"`)
+	}
 
-    case a.Rowspan != "":
+  if a.Rowspan != "" {
 		templ.WriteString(` rowspan="` + a.Rowspan + `"`)
+	}
 
-    case a.Sandbox != "":
+  if a.Sandbox != "" {
 		templ.WriteString(` sandbox="` + a.Sandbox + `"`)
+	}
 
-    case a.Scope != "":
+  if a.Scope != "" {
 		templ.WriteString(` scope="` + a.Scope + `"`)
+	}
 
-    case a.Selected != "":
+  if a.Selected != "" {
 		templ.WriteString(` selected="` + a.Selected + `"`)
+	}
 
-    case a.Shape != "":
+  if a.Shape != "" {
 		templ.WriteString(` shape="` + a.Shape + `"`)
+	}
 
-    case a.Size != "":
+  if a.Size != "" {
 		templ.WriteString(` size="` + a.Size + `"`)
+	}
 
-    case a.Sizes != "":
+  if a.Sizes != "" {
 		templ.WriteString(` sizes="` + a.Sizes + `"`)
+	}
 
-    case a.Span != "":
+  if a.Span != "" {
 		templ.WriteString(` span="` + a.Span + `"`)
+	}
 
-    case a.Spellcheck != "":
+  if a.Spellcheck != "" {
 		templ.WriteString(` spellcheck="` + a.Spellcheck + `"`)
+	}
 
-    case a.Src != "":
+  if a.Src != "" {
 		templ.WriteString(` src="` + a.Src + `"`)
+	}
 
-    case a.Srcdoc != "":
+  if a.Srcdoc != "" {
 		templ.WriteString(` srcdoc="` + a.Srcdoc + `"`)
+	}
 
-    case a.Srclang != "":
+  if a.Srclang != "" {
 		templ.WriteString(` srclang="` + a.Srclang + `"`)
+	}
 
-    case a.Srcset != "":
+  if a.Srcset != "" {
 		templ.WriteString(` srcset="` + a.Srcset + `"`)
+	}
 
-    case a.Start != "":
+  if a.Start != "" {
 		templ.WriteString(` start="` + a.Start + `"`)
+	}
 
-    case a.Step != "":
+  if a.Step != "" {
 		templ.WriteString(` step="` + a.Step + `"`)
+	}
 
-    case a.Style != "":
+  if a.Style != "" {
 		templ.WriteString(` style="` + a.Style + `"`)
+	}
 
-    case a.Tabindex != "":
+  if a.Tabindex != "" {
 		templ.WriteString(` tabindex="` + a.Tabindex + `"`)
+	}
 
-    case a.Target != "":
+  if a.Target != "" {
 		templ.WriteString(` target="` + a.Target + `"`)
+	}
 
-    case a.Title != "":
+  if a.Title != "" {
 		templ.WriteString(` title="` + a.Title + `"`)
+	}
 
-    case a.Translate != "":
+  if a.Translate != "" {
 		templ.WriteString(` translate="` + a.Translate + `"`)
+	}
 
-    case a.Type != "":
+  if a.Type != "" {
 		templ.WriteString(` type="` + a.Type + `"`)
+	}
 
-    case a.Usemap != "":
+  if a.Usemap != "" {
 		templ.WriteString(` usemap="` + a.Usemap + `"`)
+	}
 
-    case a.Value != "":
+  if a.Value != "" {
 		templ.WriteString(` value="` + a.Value + `"`)
+	}
 
-    case a.Width != "":
+  if a.Width != "" {
 		templ.WriteString(` width="` + a.Width + `"`)
+	}
 
-    case a.Wrap != "":
+  if a.Wrap != "" {
 		templ.WriteString(` wrap="` + a.Wrap + `"`)
+	}
 
-	case a.DisabledBoolean:
+	if a.DisabledBoolean {
 		templ.WriteString(" disabled")
 	}
+
 	for k, v := range a.Dataset {
 		templ.WriteString(" data-" + k + `="` + v + `"`)
 	}
@@ -2910,6 +3082,21 @@ func Samp_(children ...Node) *HTMLNode {
 
 
 
+func Script(attributes Attr, children ...Node) *HTMLNode {
+	return &HTMLNode{
+		Attributes: attributes,
+		Tag:        "script",
+		Children:   children,
+	}
+}
+
+func Script_(children ...Node) *HTMLNode {
+    return Script(Attr{}, children...)
+}
+
+
+
+
 func Section(attributes Attr, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
@@ -3338,5 +3525,6 @@ func Wbr(attributes Attr) *VoidHTMLNode {
 func Wbr_() *VoidHTMLNode {
     return Wbr(Attr{})
 }
+
 
 
