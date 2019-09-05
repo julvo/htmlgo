@@ -4,7 +4,7 @@ import (
     "html/template"
     "io"
     "strings"
-		"strconv"
+	"strconv"
 )
 
 type Node interface {
@@ -34,13 +34,13 @@ func CSS(css string) template.CSS {
 func URL(url string) template.URL {
 	return template.URL(url)
 }
-func Srcset(srcset string) template.Srcset {
-	return template.Srcset(srcset)
-}
+//func Srcset(srcset string) template.Srcset {
+//	return template.Srcset(srcset)
+//}
 
 
 type HTMLNode struct {
-	Attributes Attr
+	Attributes Attributes
 	Tag        string
 	Children   []Node
 }
@@ -60,7 +60,7 @@ func (n *HTMLNode) BuildTemplateTo(templ *strings.Builder, vals Values, indent s
 }
 
 type VoidHTMLNode struct {
-	Attributes Attr
+	Attributes Attributes
 	Tag        string
 }
 
@@ -203,1427 +203,9474 @@ func Doctype(t string) *DeclarationNode {
 	}
 }
 
-type Attr struct {
-	Dataset   Dataset
-	DisabledBoolean  bool
-	templData map[string]interface{}
-
-	Accept string
-
-	AcceptCharset string
-
-	Accesskey string
-
-	Action string
-
-	Align string
-
-	Alt string
-
-	AriaExpanded string
-
-	AriaHidden string
-
-	AriaLabel string
-
-	Async string
-
-	Autocomplete string
-
-	Autofocus string
-
-	Autoplay string
-
-	Bgcolor string
-
-	Border string
-
-	Charset string
-
-	Checked string
-
-	Cite string
-
-	Class string
-
-	Color string
-
-	Cols string
-
-	Colspan string
-
-	Content string
-
-	Contenteditable string
-
-	Controls string
-
-	Coords string
-
-	Data string
-
-	Datetime string
-
-	Default string
-
-	Defer string
-
-	Dir string
-
-	Dirname string
-
-	Disabled string
-
-	Download string
-
-	Draggable string
-
-	Dropzone string
-
-	Enctype string
-
-	For string
-
-	Form string
-
-	Formaction string
-
-	Headers string
-
-	Height string
-
-	Hidden string
-
-	High string
-
-	Href string
-
-	Hreflang string
-
-	HttpEquiv string
-
-	Id string
-
-	InitialScale string
-
-	Ismap string
-
-	Kind string
-
-	Label string
-
-	Lang string
-
-	List string
-
-	Loop string
-
-	Low string
-
-	Max string
-
-	Maxlength string
-
-	Media string
-
-	Method string
-
-	Min string
-
-	Multiple string
-
-	Muted string
-
-	Name string
-
-	Novalidate string
-
-	Onabort string
-
-	Onafterprint string
-
-	Onbeforeprint string
-
-	Onbeforeunload string
-
-	Onblur string
-
-	Oncanplay string
-
-	Oncanplaythrough string
-
-	Onchange string
-
-	Onclick string
-
-	Oncontextmenu string
-
-	Oncopy string
-
-	Oncuechange string
-
-	Oncut string
-
-	Ondblclick string
-
-	Ondrag string
-
-	Ondragend string
-
-	Ondragenter string
-
-	Ondragleave string
-
-	Ondragover string
-
-	Ondragstart string
-
-	Ondrop string
-
-	Ondurationchange string
-
-	Onemptied string
-
-	Onended string
-
-	Onerror string
-
-	Onfocus string
-
-	Onhashchange string
-
-	Oninput string
-
-	Oninvalid string
-
-	Onkeydown string
-
-	Onkeypress string
-
-	Onkeyup string
-
-	Onload string
-
-	Onloadeddata string
-
-	Onloadedmetadata string
-
-	Onloadstart string
-
-	Onmousedown string
-
-	Onmousemove string
-
-	Onmouseout string
-
-	Onmouseover string
-
-	Onmouseup string
-
-	Onmousewheel string
-
-	Onoffline string
-
-	Ononline string
-
-	Onpagehide string
-
-	Onpageshow string
-
-	Onpaste string
-
-	Onpause string
-
-	Onplay string
-
-	Onplaying string
-
-	Onpopstate string
-
-	Onprogress string
-
-	Onratechange string
-
-	Onreset string
-
-	Onresize string
-
-	Onscroll string
-
-	Onsearch string
-
-	Onseeked string
-
-	Onseeking string
-
-	Onselect string
-
-	Onstalled string
-
-	Onstorage string
-
-	Onsubmit string
-
-	Onsuspend string
-
-	Ontimeupdate string
-
-	Ontoggle string
-
-	Onunload string
-
-	Onvolumechange string
-
-	Onwaiting string
-
-	Onwheel string
-
-	Open string
-
-	Optimum string
-
-	Pattern string
-
-	Placeholder string
-
-	Poster string
-
-	Preload string
-
-	Readonly string
-
-	Rel string
-
-	Required string
-
-	Reversed string
-
-	Role string
-
-	Rows string
-
-	Rowspan string
-
-	Sandbox string
-
-	Scope string
-
-	Selected string
-
-	Shape string
-
-	Size string
-
-	Sizes string
-
-	Span string
-
-	Spellcheck string
-
-	Src string
-
-	Srcdoc string
-
-	Srclang string
-
-	Srcset string
-
-	Start string
-
-	Step string
-
-	Style string
-
-	Tabindex string
-
-	Target string
-
-	Title string
-
-	Translate string
-
-	Type string
-
-	Usemap string
-
-	Value string
-
-	Width string
-
-	Wrap string
-
+type Attributes struct {
+	Slice []Attribute
 }
 
-func (a Attr) Bind(key string, value interface{}) Attr {
-	if a.templData == nil {
-		a.templData = make(map[string]interface{})
+type Attribute struct {
+	Name string
+	Data interface{}
+	Templ string
+}
+
+// TODO Dataset
+// TODO boolean attributes
+
+
+func (a Attributes) Accept(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
 	}
-	a.templData[key] = value
+	a.Slice = append(a.Slice, Attribute{
+		Name: "accept",
+		Data: value,
+		Templ: templ,
+	})
 	return a
 }
 
-func (a Attr) Bind_(value interface{}) Attr {
-	return a.Bind("", value)
+func (a Attributes) AcceptCharset(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "accept-charset",
+		Data: value,
+		Templ: templ,
+	})
+	return a
 }
 
-func (a *Attr) buildTemplateTo(templ *strings.Builder, vals Values) {
-	if len(a.templData) > 0 {
+func (a Attributes) Accesskey(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "accesskey",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Action(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "action",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Align(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "align",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Alt(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "alt",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) AriaExpanded(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "aria-expanded",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) AriaHidden(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "aria-hidden",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) AriaLabel(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "aria-label",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Async(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "async",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Autocomplete(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "autocomplete",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Autofocus(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "autofocus",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Autoplay(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "autoplay",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Bgcolor(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "bgcolor",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Border(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "border",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Charset(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "charset",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Checked(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "checked",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Cite(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "cite",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Class(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "class",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Color(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "color",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Cols(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "cols",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Colspan(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "colspan",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Content(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "content",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Contenteditable(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "contenteditable",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Controls(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "controls",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Coords(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "coords",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Data(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "data",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Datetime(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "datetime",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Default(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "default",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Defer(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "defer",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Dir(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "dir",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Dirname(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "dirname",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Disabled(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "disabled",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Download(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "download",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Draggable(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "draggable",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Dropzone(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "dropzone",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Enctype(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "enctype",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) For(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "for",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Form(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "form",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Formaction(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "formaction",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Headers(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "headers",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Height(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "height",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Hidden(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "hidden",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) High(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "high",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Href(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "href",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Hreflang(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "hreflang",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) HttpEquiv(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "http-equiv",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Id(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "id",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) InitialScale(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "initial-scale",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Ismap(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "ismap",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Kind(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "kind",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Label(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "label",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Lang(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "lang",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) List(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "list",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Loop(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "loop",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Low(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "low",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Max(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "max",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Maxlength(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "maxlength",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Media(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "media",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Method(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "method",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Min(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "min",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Multiple(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "multiple",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Muted(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "muted",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Name(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "name",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Novalidate(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "novalidate",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onabort(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onabort",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onafterprint(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onafterprint",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onbeforeprint(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onbeforeprint",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onbeforeunload(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onbeforeunload",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onblur(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onblur",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Oncanplay(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "oncanplay",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Oncanplaythrough(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "oncanplaythrough",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onchange(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onchange",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onclick(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onclick",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Oncontextmenu(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "oncontextmenu",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Oncopy(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "oncopy",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Oncuechange(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "oncuechange",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Oncut(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "oncut",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Ondblclick(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "ondblclick",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Ondrag(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "ondrag",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Ondragend(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "ondragend",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Ondragenter(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "ondragenter",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Ondragleave(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "ondragleave",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Ondragover(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "ondragover",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Ondragstart(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "ondragstart",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Ondrop(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "ondrop",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Ondurationchange(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "ondurationchange",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onemptied(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onemptied",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onended(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onended",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onerror(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onerror",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onfocus(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onfocus",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onhashchange(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onhashchange",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Oninput(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "oninput",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Oninvalid(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "oninvalid",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onkeydown(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onkeydown",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onkeypress(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onkeypress",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onkeyup(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onkeyup",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onload(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onload",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onloadeddata(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onloadeddata",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onloadedmetadata(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onloadedmetadata",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onloadstart(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onloadstart",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onmousedown(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onmousedown",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onmousemove(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onmousemove",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onmouseout(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onmouseout",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onmouseover(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onmouseover",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onmouseup(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onmouseup",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onmousewheel(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onmousewheel",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onoffline(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onoffline",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Ononline(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "ononline",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onpagehide(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onpagehide",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onpageshow(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onpageshow",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onpaste(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onpaste",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onpause(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onpause",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onplay(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onplay",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onplaying(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onplaying",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onpopstate(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onpopstate",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onprogress(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onprogress",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onratechange(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onratechange",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onreset(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onreset",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onresize(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onresize",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onscroll(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onscroll",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onsearch(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onsearch",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onseeked(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onseeked",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onseeking(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onseeking",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onselect(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onselect",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onstalled(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onstalled",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onstorage(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onstorage",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onsubmit(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onsubmit",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onsuspend(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onsuspend",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Ontimeupdate(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "ontimeupdate",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Ontoggle(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "ontoggle",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onunload(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onunload",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onvolumechange(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onvolumechange",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onwaiting(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onwaiting",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onwheel(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onwheel",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Open(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "open",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Optimum(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "optimum",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Pattern(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "pattern",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Placeholder(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "placeholder",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Poster(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "poster",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Preload(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "preload",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Readonly(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "readonly",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Rel(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "rel",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Required(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "required",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Reversed(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "reversed",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Role(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "role",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Rows(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "rows",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Rowspan(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "rowspan",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Sandbox(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "sandbox",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Scope(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "scope",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Selected(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "selected",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Shape(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "shape",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Size(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "size",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Sizes(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "sizes",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Span(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "span",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Spellcheck(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "spellcheck",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Src(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "src",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Srcdoc(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "srcdoc",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Srclang(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "srclang",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Srcset(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "srcset",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Start(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "start",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Step(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "step",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Style(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "style",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Tabindex(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "tabindex",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Target(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "target",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Title(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "title",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Translate(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "translate",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Type(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "type",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Usemap(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "usemap",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Value(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "value",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Width(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "width",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Wrap(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a.Slice = append(a.Slice, Attribute{
+		Name: "wrap",
+		Data: value,
+		Templ: templ,
+	})
+	return a
+}
+
+
+
+func (a Attributes) Accept_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "accept",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) AcceptCharset_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "accept-charset",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Accesskey_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "accesskey",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Action_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "action",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Align_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "align",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Alt_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "alt",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) AriaExpanded_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "aria-expanded",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) AriaHidden_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "aria-hidden",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) AriaLabel_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "aria-label",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Async_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "async",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Autocomplete_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "autocomplete",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Autofocus_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "autofocus",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Autoplay_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "autoplay",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Bgcolor_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "bgcolor",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Border_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "border",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Charset_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "charset",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Checked_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "checked",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Cite_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "cite",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Class_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "class",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Color_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "color",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Cols_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "cols",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Colspan_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "colspan",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Content_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "content",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Contenteditable_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "contenteditable",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Controls_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "controls",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Coords_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "coords",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Data_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "data",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Datetime_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "datetime",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Default_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "default",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Defer_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "defer",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Dir_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "dir",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Dirname_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "dirname",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Disabled_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "disabled",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Download_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "download",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Draggable_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "draggable",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Dropzone_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "dropzone",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Enctype_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "enctype",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) For_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "for",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Form_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "form",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Formaction_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "formaction",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Headers_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "headers",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Height_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "height",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Hidden_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "hidden",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) High_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "high",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Href_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "href",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Hreflang_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "hreflang",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) HttpEquiv_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "http-equiv",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Id_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "id",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) InitialScale_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "initial-scale",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Ismap_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "ismap",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Kind_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "kind",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Label_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "label",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Lang_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "lang",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) List_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "list",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Loop_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "loop",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Low_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "low",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Max_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "max",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Maxlength_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "maxlength",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Media_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "media",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Method_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "method",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Min_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "min",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Multiple_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "multiple",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Muted_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "muted",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Name_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "name",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Novalidate_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "novalidate",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onabort_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onabort",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onafterprint_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onafterprint",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onbeforeprint_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onbeforeprint",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onbeforeunload_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onbeforeunload",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onblur_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onblur",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Oncanplay_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "oncanplay",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Oncanplaythrough_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "oncanplaythrough",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onchange_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onchange",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onclick_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onclick",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Oncontextmenu_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "oncontextmenu",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Oncopy_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "oncopy",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Oncuechange_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "oncuechange",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Oncut_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "oncut",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Ondblclick_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "ondblclick",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Ondrag_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "ondrag",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Ondragend_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "ondragend",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Ondragenter_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "ondragenter",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Ondragleave_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "ondragleave",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Ondragover_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "ondragover",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Ondragstart_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "ondragstart",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Ondrop_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "ondrop",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Ondurationchange_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "ondurationchange",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onemptied_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onemptied",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onended_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onended",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onerror_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onerror",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onfocus_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onfocus",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onhashchange_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onhashchange",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Oninput_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "oninput",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Oninvalid_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "oninvalid",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onkeydown_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onkeydown",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onkeypress_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onkeypress",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onkeyup_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onkeyup",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onload_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onload",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onloadeddata_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onloadeddata",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onloadedmetadata_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onloadedmetadata",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onloadstart_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onloadstart",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onmousedown_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onmousedown",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onmousemove_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onmousemove",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onmouseout_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onmouseout",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onmouseover_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onmouseover",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onmouseup_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onmouseup",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onmousewheel_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onmousewheel",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onoffline_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onoffline",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Ononline_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "ononline",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onpagehide_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onpagehide",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onpageshow_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onpageshow",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onpaste_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onpaste",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onpause_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onpause",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onplay_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onplay",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onplaying_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onplaying",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onpopstate_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onpopstate",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onprogress_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onprogress",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onratechange_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onratechange",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onreset_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onreset",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onresize_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onresize",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onscroll_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onscroll",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onsearch_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onsearch",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onseeked_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onseeked",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onseeking_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onseeking",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onselect_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onselect",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onstalled_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onstalled",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onstorage_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onstorage",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onsubmit_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onsubmit",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onsuspend_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onsuspend",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Ontimeupdate_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "ontimeupdate",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Ontoggle_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "ontoggle",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onunload_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onunload",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onvolumechange_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onvolumechange",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onwaiting_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onwaiting",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Onwheel_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "onwheel",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Open_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "open",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Optimum_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "optimum",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Pattern_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "pattern",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Placeholder_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "placeholder",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Poster_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "poster",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Preload_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "preload",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Readonly_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "readonly",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Rel_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "rel",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Required_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "required",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Reversed_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "reversed",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Role_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "role",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Rows_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "rows",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Rowspan_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "rowspan",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Sandbox_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "sandbox",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Scope_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "scope",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Selected_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "selected",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Shape_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "shape",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Size_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "size",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Sizes_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "sizes",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Span_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "span",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Spellcheck_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "spellcheck",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Src_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "src",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Srcdoc_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "srcdoc",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Srclang_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "srclang",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Srcset_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "srcset",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Start_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "start",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Step_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "step",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Style_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "style",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Tabindex_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "tabindex",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Target_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "target",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Title_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "title",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Translate_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "translate",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Type_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "type",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Usemap_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "usemap",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Value_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "value",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Width_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "width",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+func (a Attributes) Wrap_(templ string) Attributes {
+	a.Slice = append(a.Slice, Attribute{
+		Name: "wrap",
+		Data: nil,
+		Templ: templ,
+	})
+	return a
+}
+
+
+
+
+func Accept(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "accept",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func AcceptCharset(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "accept-charset",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Accesskey(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "accesskey",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Action(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "action",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Align(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "align",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Alt(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "alt",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func AriaExpanded(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "aria-expanded",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func AriaHidden(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "aria-hidden",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func AriaLabel(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "aria-label",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Async(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "async",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Autocomplete(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "autocomplete",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Autofocus(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "autofocus",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Autoplay(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "autoplay",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Bgcolor(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "bgcolor",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Border(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "border",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Charset(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "charset",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Checked(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "checked",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+
+
+func Class(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "class",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Color(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "color",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Cols(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "cols",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Colspan(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "colspan",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Content(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "content",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Contenteditable(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "contenteditable",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Controls(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "controls",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Coords(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "coords",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Data(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "data",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Datetime(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "datetime",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Default(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "default",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Defer(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "defer",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+
+
+func Dirname(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "dirname",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Disabled(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "disabled",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Download(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "download",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Draggable(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "draggable",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Dropzone(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "dropzone",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Enctype(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "enctype",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func For(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "for",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+
+
+func Formaction(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "formaction",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Headers(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "headers",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Height(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "height",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Hidden(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "hidden",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func High(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "high",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Href(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "href",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Hreflang(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "hreflang",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func HttpEquiv(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "http-equiv",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Id(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "id",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func InitialScale(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "initial-scale",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Ismap(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "ismap",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Kind(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "kind",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+
+
+func Lang(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "lang",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func List(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "list",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Loop(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "loop",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Low(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "low",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Max(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "max",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Maxlength(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "maxlength",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Media(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "media",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Method(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "method",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Min(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "min",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Multiple(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "multiple",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Muted(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "muted",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Name(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "name",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Novalidate(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "novalidate",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onabort(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onabort",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onafterprint(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onafterprint",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onbeforeprint(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onbeforeprint",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onbeforeunload(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onbeforeunload",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onblur(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onblur",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Oncanplay(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "oncanplay",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Oncanplaythrough(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "oncanplaythrough",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onchange(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onchange",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onclick(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onclick",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Oncontextmenu(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "oncontextmenu",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Oncopy(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "oncopy",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Oncuechange(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "oncuechange",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Oncut(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "oncut",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Ondblclick(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "ondblclick",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Ondrag(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "ondrag",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Ondragend(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "ondragend",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Ondragenter(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "ondragenter",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Ondragleave(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "ondragleave",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Ondragover(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "ondragover",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Ondragstart(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "ondragstart",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Ondrop(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "ondrop",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Ondurationchange(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "ondurationchange",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onemptied(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onemptied",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onended(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onended",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onerror(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onerror",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onfocus(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onfocus",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onhashchange(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onhashchange",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Oninput(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "oninput",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Oninvalid(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "oninvalid",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onkeydown(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onkeydown",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onkeypress(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onkeypress",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onkeyup(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onkeyup",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onload(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onload",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onloadeddata(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onloadeddata",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onloadedmetadata(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onloadedmetadata",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onloadstart(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onloadstart",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onmousedown(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onmousedown",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onmousemove(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onmousemove",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onmouseout(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onmouseout",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onmouseover(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onmouseover",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onmouseup(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onmouseup",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onmousewheel(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onmousewheel",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onoffline(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onoffline",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Ononline(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "ononline",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onpagehide(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onpagehide",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onpageshow(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onpageshow",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onpaste(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onpaste",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onpause(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onpause",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onplay(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onplay",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onplaying(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onplaying",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onpopstate(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onpopstate",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onprogress(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onprogress",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onratechange(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onratechange",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onreset(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onreset",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onresize(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onresize",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onscroll(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onscroll",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onsearch(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onsearch",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onseeked(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onseeked",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onseeking(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onseeking",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onselect(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onselect",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onstalled(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onstalled",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onstorage(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onstorage",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onsubmit(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onsubmit",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onsuspend(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onsuspend",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Ontimeupdate(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "ontimeupdate",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Ontoggle(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "ontoggle",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onunload(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onunload",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onvolumechange(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onvolumechange",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onwaiting(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onwaiting",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onwheel(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onwheel",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Open(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "open",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Optimum(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "optimum",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Pattern(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "pattern",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Placeholder(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "placeholder",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Poster(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "poster",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Preload(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "preload",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Readonly(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "readonly",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Rel(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "rel",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Required(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "required",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Reversed(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "reversed",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Role(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "role",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Rows(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "rows",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Rowspan(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "rowspan",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Sandbox(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "sandbox",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Scope(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "scope",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Selected(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "selected",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Shape(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "shape",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Size(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "size",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Sizes(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "sizes",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+
+
+func Spellcheck(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "spellcheck",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Src(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "src",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Srcdoc(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "srcdoc",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Srclang(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "srclang",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Srcset(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "srcset",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Start(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "start",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Step(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "step",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+
+
+func Tabindex(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "tabindex",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Target(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "target",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+
+
+func Translate(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "translate",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Type(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "type",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Usemap(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "usemap",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Value(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "value",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Width(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "width",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Wrap(value interface{}, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "wrap",
+				Data: value,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+
+
+func Accept_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "accept",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func AcceptCharset_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "accept-charset",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Accesskey_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "accesskey",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Action_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "action",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Align_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "align",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Alt_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "alt",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func AriaExpanded_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "aria-expanded",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func AriaHidden_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "aria-hidden",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func AriaLabel_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "aria-label",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Async_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "async",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Autocomplete_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "autocomplete",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Autofocus_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "autofocus",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Autoplay_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "autoplay",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Bgcolor_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "bgcolor",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Border_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "border",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Charset_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "charset",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Checked_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "checked",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+
+
+func Class_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "class",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Color_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "color",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Cols_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "cols",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Colspan_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "colspan",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Content_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "content",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Contenteditable_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "contenteditable",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Controls_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "controls",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Coords_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "coords",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Data_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "data",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Datetime_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "datetime",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Default_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "default",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Defer_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "defer",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+
+
+func Dirname_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "dirname",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Disabled_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "disabled",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Download_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "download",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Draggable_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "draggable",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Dropzone_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "dropzone",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Enctype_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "enctype",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func For_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "for",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+
+
+func Formaction_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "formaction",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Headers_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "headers",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Height_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "height",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Hidden_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "hidden",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func High_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "high",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Href_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "href",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Hreflang_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "hreflang",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func HttpEquiv_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "http-equiv",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Id_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "id",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func InitialScale_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "initial-scale",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Ismap_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "ismap",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Kind_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "kind",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+
+
+func Lang_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "lang",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func List_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "list",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Loop_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "loop",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Low_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "low",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Max_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "max",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Maxlength_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "maxlength",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Media_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "media",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Method_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "method",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Min_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "min",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Multiple_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "multiple",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Muted_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "muted",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Name_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "name",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Novalidate_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "novalidate",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onabort_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onabort",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onafterprint_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onafterprint",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onbeforeprint_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onbeforeprint",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onbeforeunload_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onbeforeunload",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onblur_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onblur",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Oncanplay_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "oncanplay",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Oncanplaythrough_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "oncanplaythrough",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onchange_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onchange",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onclick_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onclick",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Oncontextmenu_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "oncontextmenu",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Oncopy_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "oncopy",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Oncuechange_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "oncuechange",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Oncut_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "oncut",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Ondblclick_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "ondblclick",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Ondrag_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "ondrag",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Ondragend_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "ondragend",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Ondragenter_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "ondragenter",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Ondragleave_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "ondragleave",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Ondragover_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "ondragover",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Ondragstart_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "ondragstart",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Ondrop_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "ondrop",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Ondurationchange_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "ondurationchange",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onemptied_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onemptied",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onended_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onended",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onerror_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onerror",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onfocus_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onfocus",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onhashchange_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onhashchange",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Oninput_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "oninput",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Oninvalid_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "oninvalid",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onkeydown_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onkeydown",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onkeypress_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onkeypress",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onkeyup_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onkeyup",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onload_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onload",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onloadeddata_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onloadeddata",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onloadedmetadata_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onloadedmetadata",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onloadstart_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onloadstart",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onmousedown_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onmousedown",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onmousemove_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onmousemove",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onmouseout_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onmouseout",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onmouseover_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onmouseover",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onmouseup_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onmouseup",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onmousewheel_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onmousewheel",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onoffline_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onoffline",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Ononline_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "ononline",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onpagehide_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onpagehide",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onpageshow_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onpageshow",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onpaste_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onpaste",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onpause_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onpause",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onplay_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onplay",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onplaying_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onplaying",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onpopstate_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onpopstate",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onprogress_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onprogress",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onratechange_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onratechange",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onreset_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onreset",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onresize_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onresize",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onscroll_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onscroll",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onsearch_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onsearch",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onseeked_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onseeked",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onseeking_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onseeking",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onselect_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onselect",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onstalled_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onstalled",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onstorage_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onstorage",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onsubmit_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onsubmit",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onsuspend_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onsuspend",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Ontimeupdate_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "ontimeupdate",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Ontoggle_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "ontoggle",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onunload_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onunload",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onvolumechange_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onvolumechange",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onwaiting_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onwaiting",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Onwheel_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "onwheel",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Open_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "open",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Optimum_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "optimum",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Pattern_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "pattern",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Placeholder_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "placeholder",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Poster_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "poster",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Preload_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "preload",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Readonly_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "readonly",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Rel_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "rel",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Required_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "required",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Reversed_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "reversed",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Role_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "role",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Rows_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "rows",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Rowspan_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "rowspan",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Sandbox_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "sandbox",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Scope_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "scope",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Selected_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "selected",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Shape_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "shape",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Size_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "size",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Sizes_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "sizes",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+
+
+func Spellcheck_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "spellcheck",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Src_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "src",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Srcdoc_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "srcdoc",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Srclang_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "srclang",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Srcset_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "srcset",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Start_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "start",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Step_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "step",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+
+
+func Tabindex_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "tabindex",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Target_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "target",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+
+
+func Translate_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "translate",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Type_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "type",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Usemap_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "usemap",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Value_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "value",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Width_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "width",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Wrap_(templ string) Attributes {
+	a := Attributes{
+		Slice: []Attribute{
+			Attribute{
+				Name: "wrap",
+				Data: nil,
+				Templ: templ,
+			},
+		},
+	}
+	return a
+}
+
+
+
+func Attr() Attributes {
+	return Attributes{
+		Slice: []Attribute{},
+	}
+}
+
+type OldAttr struct {
+	Dataset  Dataset
+	DisabledBoolean  bool
+	templData map[string]interface{}
+}
+
+func (a *Attributes) buildTemplateTo(templ *strings.Builder, vals Values) {
+	for _, attr := range a.Slice {
 		placeholder := "P" + strconv.Itoa(len(vals))
-
-		a.Accept = strings.Replace(a.Accept, "{{.", "{{."+placeholder, -1)
-
-		a.AcceptCharset = strings.Replace(a.AcceptCharset, "{{.", "{{."+placeholder, -1)
-
-		a.Accesskey = strings.Replace(a.Accesskey, "{{.", "{{."+placeholder, -1)
-
-		a.Action = strings.Replace(a.Action, "{{.", "{{."+placeholder, -1)
-
-		a.Align = strings.Replace(a.Align, "{{.", "{{."+placeholder, -1)
-
-		a.Alt = strings.Replace(a.Alt, "{{.", "{{."+placeholder, -1)
-
-		a.AriaExpanded = strings.Replace(a.AriaExpanded, "{{.", "{{."+placeholder, -1)
-
-		a.AriaHidden = strings.Replace(a.AriaHidden, "{{.", "{{."+placeholder, -1)
-
-		a.AriaLabel = strings.Replace(a.AriaLabel, "{{.", "{{."+placeholder, -1)
-
-		a.Async = strings.Replace(a.Async, "{{.", "{{."+placeholder, -1)
-
-		a.Autocomplete = strings.Replace(a.Autocomplete, "{{.", "{{."+placeholder, -1)
-
-		a.Autofocus = strings.Replace(a.Autofocus, "{{.", "{{."+placeholder, -1)
-
-		a.Autoplay = strings.Replace(a.Autoplay, "{{.", "{{."+placeholder, -1)
-
-		a.Bgcolor = strings.Replace(a.Bgcolor, "{{.", "{{."+placeholder, -1)
-
-		a.Border = strings.Replace(a.Border, "{{.", "{{."+placeholder, -1)
-
-		a.Charset = strings.Replace(a.Charset, "{{.", "{{."+placeholder, -1)
-
-		a.Checked = strings.Replace(a.Checked, "{{.", "{{."+placeholder, -1)
-
-		a.Cite = strings.Replace(a.Cite, "{{.", "{{."+placeholder, -1)
-
-		a.Class = strings.Replace(a.Class, "{{.", "{{."+placeholder, -1)
-
-		a.Color = strings.Replace(a.Color, "{{.", "{{."+placeholder, -1)
-
-		a.Cols = strings.Replace(a.Cols, "{{.", "{{."+placeholder, -1)
-
-		a.Colspan = strings.Replace(a.Colspan, "{{.", "{{."+placeholder, -1)
-
-		a.Content = strings.Replace(a.Content, "{{.", "{{."+placeholder, -1)
-
-		a.Contenteditable = strings.Replace(a.Contenteditable, "{{.", "{{."+placeholder, -1)
-
-		a.Controls = strings.Replace(a.Controls, "{{.", "{{."+placeholder, -1)
-
-		a.Coords = strings.Replace(a.Coords, "{{.", "{{."+placeholder, -1)
-
-		a.Data = strings.Replace(a.Data, "{{.", "{{."+placeholder, -1)
-
-		a.Datetime = strings.Replace(a.Datetime, "{{.", "{{."+placeholder, -1)
-
-		a.Default = strings.Replace(a.Default, "{{.", "{{."+placeholder, -1)
-
-		a.Defer = strings.Replace(a.Defer, "{{.", "{{."+placeholder, -1)
-
-		a.Dir = strings.Replace(a.Dir, "{{.", "{{."+placeholder, -1)
-
-		a.Dirname = strings.Replace(a.Dirname, "{{.", "{{."+placeholder, -1)
-
-		a.Disabled = strings.Replace(a.Disabled, "{{.", "{{."+placeholder, -1)
-
-		a.Download = strings.Replace(a.Download, "{{.", "{{."+placeholder, -1)
-
-		a.Draggable = strings.Replace(a.Draggable, "{{.", "{{."+placeholder, -1)
-
-		a.Dropzone = strings.Replace(a.Dropzone, "{{.", "{{."+placeholder, -1)
-
-		a.Enctype = strings.Replace(a.Enctype, "{{.", "{{."+placeholder, -1)
-
-		a.For = strings.Replace(a.For, "{{.", "{{."+placeholder, -1)
-
-		a.Form = strings.Replace(a.Form, "{{.", "{{."+placeholder, -1)
-
-		a.Formaction = strings.Replace(a.Formaction, "{{.", "{{."+placeholder, -1)
-
-		a.Headers = strings.Replace(a.Headers, "{{.", "{{."+placeholder, -1)
-
-		a.Height = strings.Replace(a.Height, "{{.", "{{."+placeholder, -1)
-
-		a.Hidden = strings.Replace(a.Hidden, "{{.", "{{."+placeholder, -1)
-
-		a.High = strings.Replace(a.High, "{{.", "{{."+placeholder, -1)
-
-		a.Href = strings.Replace(a.Href, "{{.", "{{."+placeholder, -1)
-
-		a.Hreflang = strings.Replace(a.Hreflang, "{{.", "{{."+placeholder, -1)
-
-		a.HttpEquiv = strings.Replace(a.HttpEquiv, "{{.", "{{."+placeholder, -1)
-
-		a.Id = strings.Replace(a.Id, "{{.", "{{."+placeholder, -1)
-
-		a.InitialScale = strings.Replace(a.InitialScale, "{{.", "{{."+placeholder, -1)
-
-		a.Ismap = strings.Replace(a.Ismap, "{{.", "{{."+placeholder, -1)
-
-		a.Kind = strings.Replace(a.Kind, "{{.", "{{."+placeholder, -1)
-
-		a.Label = strings.Replace(a.Label, "{{.", "{{."+placeholder, -1)
-
-		a.Lang = strings.Replace(a.Lang, "{{.", "{{."+placeholder, -1)
-
-		a.List = strings.Replace(a.List, "{{.", "{{."+placeholder, -1)
-
-		a.Loop = strings.Replace(a.Loop, "{{.", "{{."+placeholder, -1)
-
-		a.Low = strings.Replace(a.Low, "{{.", "{{."+placeholder, -1)
-
-		a.Max = strings.Replace(a.Max, "{{.", "{{."+placeholder, -1)
-
-		a.Maxlength = strings.Replace(a.Maxlength, "{{.", "{{."+placeholder, -1)
-
-		a.Media = strings.Replace(a.Media, "{{.", "{{."+placeholder, -1)
-
-		a.Method = strings.Replace(a.Method, "{{.", "{{."+placeholder, -1)
-
-		a.Min = strings.Replace(a.Min, "{{.", "{{."+placeholder, -1)
-
-		a.Multiple = strings.Replace(a.Multiple, "{{.", "{{."+placeholder, -1)
-
-		a.Muted = strings.Replace(a.Muted, "{{.", "{{."+placeholder, -1)
-
-		a.Name = strings.Replace(a.Name, "{{.", "{{."+placeholder, -1)
-
-		a.Novalidate = strings.Replace(a.Novalidate, "{{.", "{{."+placeholder, -1)
-
-		a.Onabort = strings.Replace(a.Onabort, "{{.", "{{."+placeholder, -1)
-
-		a.Onafterprint = strings.Replace(a.Onafterprint, "{{.", "{{."+placeholder, -1)
-
-		a.Onbeforeprint = strings.Replace(a.Onbeforeprint, "{{.", "{{."+placeholder, -1)
-
-		a.Onbeforeunload = strings.Replace(a.Onbeforeunload, "{{.", "{{."+placeholder, -1)
-
-		a.Onblur = strings.Replace(a.Onblur, "{{.", "{{."+placeholder, -1)
-
-		a.Oncanplay = strings.Replace(a.Oncanplay, "{{.", "{{."+placeholder, -1)
-
-		a.Oncanplaythrough = strings.Replace(a.Oncanplaythrough, "{{.", "{{."+placeholder, -1)
-
-		a.Onchange = strings.Replace(a.Onchange, "{{.", "{{."+placeholder, -1)
-
-		a.Onclick = strings.Replace(a.Onclick, "{{.", "{{."+placeholder, -1)
-
-		a.Oncontextmenu = strings.Replace(a.Oncontextmenu, "{{.", "{{."+placeholder, -1)
-
-		a.Oncopy = strings.Replace(a.Oncopy, "{{.", "{{."+placeholder, -1)
-
-		a.Oncuechange = strings.Replace(a.Oncuechange, "{{.", "{{."+placeholder, -1)
-
-		a.Oncut = strings.Replace(a.Oncut, "{{.", "{{."+placeholder, -1)
-
-		a.Ondblclick = strings.Replace(a.Ondblclick, "{{.", "{{."+placeholder, -1)
-
-		a.Ondrag = strings.Replace(a.Ondrag, "{{.", "{{."+placeholder, -1)
-
-		a.Ondragend = strings.Replace(a.Ondragend, "{{.", "{{."+placeholder, -1)
-
-		a.Ondragenter = strings.Replace(a.Ondragenter, "{{.", "{{."+placeholder, -1)
-
-		a.Ondragleave = strings.Replace(a.Ondragleave, "{{.", "{{."+placeholder, -1)
-
-		a.Ondragover = strings.Replace(a.Ondragover, "{{.", "{{."+placeholder, -1)
-
-		a.Ondragstart = strings.Replace(a.Ondragstart, "{{.", "{{."+placeholder, -1)
-
-		a.Ondrop = strings.Replace(a.Ondrop, "{{.", "{{."+placeholder, -1)
-
-		a.Ondurationchange = strings.Replace(a.Ondurationchange, "{{.", "{{."+placeholder, -1)
-
-		a.Onemptied = strings.Replace(a.Onemptied, "{{.", "{{."+placeholder, -1)
-
-		a.Onended = strings.Replace(a.Onended, "{{.", "{{."+placeholder, -1)
-
-		a.Onerror = strings.Replace(a.Onerror, "{{.", "{{."+placeholder, -1)
-
-		a.Onfocus = strings.Replace(a.Onfocus, "{{.", "{{."+placeholder, -1)
-
-		a.Onhashchange = strings.Replace(a.Onhashchange, "{{.", "{{."+placeholder, -1)
-
-		a.Oninput = strings.Replace(a.Oninput, "{{.", "{{."+placeholder, -1)
-
-		a.Oninvalid = strings.Replace(a.Oninvalid, "{{.", "{{."+placeholder, -1)
-
-		a.Onkeydown = strings.Replace(a.Onkeydown, "{{.", "{{."+placeholder, -1)
-
-		a.Onkeypress = strings.Replace(a.Onkeypress, "{{.", "{{."+placeholder, -1)
-
-		a.Onkeyup = strings.Replace(a.Onkeyup, "{{.", "{{."+placeholder, -1)
-
-		a.Onload = strings.Replace(a.Onload, "{{.", "{{."+placeholder, -1)
-
-		a.Onloadeddata = strings.Replace(a.Onloadeddata, "{{.", "{{."+placeholder, -1)
-
-		a.Onloadedmetadata = strings.Replace(a.Onloadedmetadata, "{{.", "{{."+placeholder, -1)
-
-		a.Onloadstart = strings.Replace(a.Onloadstart, "{{.", "{{."+placeholder, -1)
-
-		a.Onmousedown = strings.Replace(a.Onmousedown, "{{.", "{{."+placeholder, -1)
-
-		a.Onmousemove = strings.Replace(a.Onmousemove, "{{.", "{{."+placeholder, -1)
-
-		a.Onmouseout = strings.Replace(a.Onmouseout, "{{.", "{{."+placeholder, -1)
-
-		a.Onmouseover = strings.Replace(a.Onmouseover, "{{.", "{{."+placeholder, -1)
-
-		a.Onmouseup = strings.Replace(a.Onmouseup, "{{.", "{{."+placeholder, -1)
-
-		a.Onmousewheel = strings.Replace(a.Onmousewheel, "{{.", "{{."+placeholder, -1)
-
-		a.Onoffline = strings.Replace(a.Onoffline, "{{.", "{{."+placeholder, -1)
-
-		a.Ononline = strings.Replace(a.Ononline, "{{.", "{{."+placeholder, -1)
-
-		a.Onpagehide = strings.Replace(a.Onpagehide, "{{.", "{{."+placeholder, -1)
-
-		a.Onpageshow = strings.Replace(a.Onpageshow, "{{.", "{{."+placeholder, -1)
-
-		a.Onpaste = strings.Replace(a.Onpaste, "{{.", "{{."+placeholder, -1)
-
-		a.Onpause = strings.Replace(a.Onpause, "{{.", "{{."+placeholder, -1)
-
-		a.Onplay = strings.Replace(a.Onplay, "{{.", "{{."+placeholder, -1)
-
-		a.Onplaying = strings.Replace(a.Onplaying, "{{.", "{{."+placeholder, -1)
-
-		a.Onpopstate = strings.Replace(a.Onpopstate, "{{.", "{{."+placeholder, -1)
-
-		a.Onprogress = strings.Replace(a.Onprogress, "{{.", "{{."+placeholder, -1)
-
-		a.Onratechange = strings.Replace(a.Onratechange, "{{.", "{{."+placeholder, -1)
-
-		a.Onreset = strings.Replace(a.Onreset, "{{.", "{{."+placeholder, -1)
-
-		a.Onresize = strings.Replace(a.Onresize, "{{.", "{{."+placeholder, -1)
-
-		a.Onscroll = strings.Replace(a.Onscroll, "{{.", "{{."+placeholder, -1)
-
-		a.Onsearch = strings.Replace(a.Onsearch, "{{.", "{{."+placeholder, -1)
-
-		a.Onseeked = strings.Replace(a.Onseeked, "{{.", "{{."+placeholder, -1)
-
-		a.Onseeking = strings.Replace(a.Onseeking, "{{.", "{{."+placeholder, -1)
-
-		a.Onselect = strings.Replace(a.Onselect, "{{.", "{{."+placeholder, -1)
-
-		a.Onstalled = strings.Replace(a.Onstalled, "{{.", "{{."+placeholder, -1)
-
-		a.Onstorage = strings.Replace(a.Onstorage, "{{.", "{{."+placeholder, -1)
-
-		a.Onsubmit = strings.Replace(a.Onsubmit, "{{.", "{{."+placeholder, -1)
-
-		a.Onsuspend = strings.Replace(a.Onsuspend, "{{.", "{{."+placeholder, -1)
-
-		a.Ontimeupdate = strings.Replace(a.Ontimeupdate, "{{.", "{{."+placeholder, -1)
-
-		a.Ontoggle = strings.Replace(a.Ontoggle, "{{.", "{{."+placeholder, -1)
-
-		a.Onunload = strings.Replace(a.Onunload, "{{.", "{{."+placeholder, -1)
-
-		a.Onvolumechange = strings.Replace(a.Onvolumechange, "{{.", "{{."+placeholder, -1)
-
-		a.Onwaiting = strings.Replace(a.Onwaiting, "{{.", "{{."+placeholder, -1)
-
-		a.Onwheel = strings.Replace(a.Onwheel, "{{.", "{{."+placeholder, -1)
-
-		a.Open = strings.Replace(a.Open, "{{.", "{{."+placeholder, -1)
-
-		a.Optimum = strings.Replace(a.Optimum, "{{.", "{{."+placeholder, -1)
-
-		a.Pattern = strings.Replace(a.Pattern, "{{.", "{{."+placeholder, -1)
-
-		a.Placeholder = strings.Replace(a.Placeholder, "{{.", "{{."+placeholder, -1)
-
-		a.Poster = strings.Replace(a.Poster, "{{.", "{{."+placeholder, -1)
-
-		a.Preload = strings.Replace(a.Preload, "{{.", "{{."+placeholder, -1)
-
-		a.Readonly = strings.Replace(a.Readonly, "{{.", "{{."+placeholder, -1)
-
-		a.Rel = strings.Replace(a.Rel, "{{.", "{{."+placeholder, -1)
-
-		a.Required = strings.Replace(a.Required, "{{.", "{{."+placeholder, -1)
-
-		a.Reversed = strings.Replace(a.Reversed, "{{.", "{{."+placeholder, -1)
-
-		a.Role = strings.Replace(a.Role, "{{.", "{{."+placeholder, -1)
-
-		a.Rows = strings.Replace(a.Rows, "{{.", "{{."+placeholder, -1)
-
-		a.Rowspan = strings.Replace(a.Rowspan, "{{.", "{{."+placeholder, -1)
-
-		a.Sandbox = strings.Replace(a.Sandbox, "{{.", "{{."+placeholder, -1)
-
-		a.Scope = strings.Replace(a.Scope, "{{.", "{{."+placeholder, -1)
-
-		a.Selected = strings.Replace(a.Selected, "{{.", "{{."+placeholder, -1)
-
-		a.Shape = strings.Replace(a.Shape, "{{.", "{{."+placeholder, -1)
-
-		a.Size = strings.Replace(a.Size, "{{.", "{{."+placeholder, -1)
-
-		a.Sizes = strings.Replace(a.Sizes, "{{.", "{{."+placeholder, -1)
-
-		a.Span = strings.Replace(a.Span, "{{.", "{{."+placeholder, -1)
-
-		a.Spellcheck = strings.Replace(a.Spellcheck, "{{.", "{{."+placeholder, -1)
-
-		a.Src = strings.Replace(a.Src, "{{.", "{{."+placeholder, -1)
-
-		a.Srcdoc = strings.Replace(a.Srcdoc, "{{.", "{{."+placeholder, -1)
-
-		a.Srclang = strings.Replace(a.Srclang, "{{.", "{{."+placeholder, -1)
-
-		a.Srcset = strings.Replace(a.Srcset, "{{.", "{{."+placeholder, -1)
-
-		a.Start = strings.Replace(a.Start, "{{.", "{{."+placeholder, -1)
-
-		a.Step = strings.Replace(a.Step, "{{.", "{{."+placeholder, -1)
-
-		a.Style = strings.Replace(a.Style, "{{.", "{{."+placeholder, -1)
-
-		a.Tabindex = strings.Replace(a.Tabindex, "{{.", "{{."+placeholder, -1)
-
-		a.Target = strings.Replace(a.Target, "{{.", "{{."+placeholder, -1)
-
-		a.Title = strings.Replace(a.Title, "{{.", "{{."+placeholder, -1)
-
-		a.Translate = strings.Replace(a.Translate, "{{.", "{{."+placeholder, -1)
-
-		a.Type = strings.Replace(a.Type, "{{.", "{{."+placeholder, -1)
-
-		a.Usemap = strings.Replace(a.Usemap, "{{.", "{{."+placeholder, -1)
-
-		a.Value = strings.Replace(a.Value, "{{.", "{{."+placeholder, -1)
-
-		a.Width = strings.Replace(a.Width, "{{.", "{{."+placeholder, -1)
-
-		a.Wrap = strings.Replace(a.Wrap, "{{.", "{{."+placeholder, -1)
-
-
-		for k, v := range a.templData {
-			vals[placeholder+k] = v
-		}
+		templ.WriteString(" " + attr.Name + `="` + strings.Replace(attr.Templ, "{{.", "{{."+placeholder, -1) + `"`)
+		vals[placeholder] = attr.Data
 	}
-
-
-  if a.Accept != "" {
-		templ.WriteString(` accept="` + a.Accept + `"`)
-	}
-
-  if a.AcceptCharset != "" {
-		templ.WriteString(` accept-charset="` + a.AcceptCharset + `"`)
-	}
-
-  if a.Accesskey != "" {
-		templ.WriteString(` accesskey="` + a.Accesskey + `"`)
-	}
-
-  if a.Action != "" {
-		templ.WriteString(` action="` + a.Action + `"`)
-	}
-
-  if a.Align != "" {
-		templ.WriteString(` align="` + a.Align + `"`)
-	}
-
-  if a.Alt != "" {
-		templ.WriteString(` alt="` + a.Alt + `"`)
-	}
-
-  if a.AriaExpanded != "" {
-		templ.WriteString(` aria-expanded="` + a.AriaExpanded + `"`)
-	}
-
-  if a.AriaHidden != "" {
-		templ.WriteString(` aria-hidden="` + a.AriaHidden + `"`)
-	}
-
-  if a.AriaLabel != "" {
-		templ.WriteString(` aria-label="` + a.AriaLabel + `"`)
-	}
-
-  if a.Async != "" {
-		templ.WriteString(` async="` + a.Async + `"`)
-	}
-
-  if a.Autocomplete != "" {
-		templ.WriteString(` autocomplete="` + a.Autocomplete + `"`)
-	}
-
-  if a.Autofocus != "" {
-		templ.WriteString(` autofocus="` + a.Autofocus + `"`)
-	}
-
-  if a.Autoplay != "" {
-		templ.WriteString(` autoplay="` + a.Autoplay + `"`)
-	}
-
-  if a.Bgcolor != "" {
-		templ.WriteString(` bgcolor="` + a.Bgcolor + `"`)
-	}
-
-  if a.Border != "" {
-		templ.WriteString(` border="` + a.Border + `"`)
-	}
-
-  if a.Charset != "" {
-		templ.WriteString(` charset="` + a.Charset + `"`)
-	}
-
-  if a.Checked != "" {
-		templ.WriteString(` checked="` + a.Checked + `"`)
-	}
-
-  if a.Cite != "" {
-		templ.WriteString(` cite="` + a.Cite + `"`)
-	}
-
-  if a.Class != "" {
-		templ.WriteString(` class="` + a.Class + `"`)
-	}
-
-  if a.Color != "" {
-		templ.WriteString(` color="` + a.Color + `"`)
-	}
-
-  if a.Cols != "" {
-		templ.WriteString(` cols="` + a.Cols + `"`)
-	}
-
-  if a.Colspan != "" {
-		templ.WriteString(` colspan="` + a.Colspan + `"`)
-	}
-
-  if a.Content != "" {
-		templ.WriteString(` content="` + a.Content + `"`)
-	}
-
-  if a.Contenteditable != "" {
-		templ.WriteString(` contenteditable="` + a.Contenteditable + `"`)
-	}
-
-  if a.Controls != "" {
-		templ.WriteString(` controls="` + a.Controls + `"`)
-	}
-
-  if a.Coords != "" {
-		templ.WriteString(` coords="` + a.Coords + `"`)
-	}
-
-  if a.Data != "" {
-		templ.WriteString(` data="` + a.Data + `"`)
-	}
-
-  if a.Datetime != "" {
-		templ.WriteString(` datetime="` + a.Datetime + `"`)
-	}
-
-  if a.Default != "" {
-		templ.WriteString(` default="` + a.Default + `"`)
-	}
-
-  if a.Defer != "" {
-		templ.WriteString(` defer="` + a.Defer + `"`)
-	}
-
-  if a.Dir != "" {
-		templ.WriteString(` dir="` + a.Dir + `"`)
-	}
-
-  if a.Dirname != "" {
-		templ.WriteString(` dirname="` + a.Dirname + `"`)
-	}
-
-  if a.Disabled != "" {
-		templ.WriteString(` disabled="` + a.Disabled + `"`)
-	}
-
-  if a.Download != "" {
-		templ.WriteString(` download="` + a.Download + `"`)
-	}
-
-  if a.Draggable != "" {
-		templ.WriteString(` draggable="` + a.Draggable + `"`)
-	}
-
-  if a.Dropzone != "" {
-		templ.WriteString(` dropzone="` + a.Dropzone + `"`)
-	}
-
-  if a.Enctype != "" {
-		templ.WriteString(` enctype="` + a.Enctype + `"`)
-	}
-
-  if a.For != "" {
-		templ.WriteString(` for="` + a.For + `"`)
-	}
-
-  if a.Form != "" {
-		templ.WriteString(` form="` + a.Form + `"`)
-	}
-
-  if a.Formaction != "" {
-		templ.WriteString(` formaction="` + a.Formaction + `"`)
-	}
-
-  if a.Headers != "" {
-		templ.WriteString(` headers="` + a.Headers + `"`)
-	}
-
-  if a.Height != "" {
-		templ.WriteString(` height="` + a.Height + `"`)
-	}
-
-  if a.Hidden != "" {
-		templ.WriteString(` hidden="` + a.Hidden + `"`)
-	}
-
-  if a.High != "" {
-		templ.WriteString(` high="` + a.High + `"`)
-	}
-
-  if a.Href != "" {
-		templ.WriteString(` href="` + a.Href + `"`)
-	}
-
-  if a.Hreflang != "" {
-		templ.WriteString(` hreflang="` + a.Hreflang + `"`)
-	}
-
-  if a.HttpEquiv != "" {
-		templ.WriteString(` http-equiv="` + a.HttpEquiv + `"`)
-	}
-
-  if a.Id != "" {
-		templ.WriteString(` id="` + a.Id + `"`)
-	}
-
-  if a.InitialScale != "" {
-		templ.WriteString(` initial-scale="` + a.InitialScale + `"`)
-	}
-
-  if a.Ismap != "" {
-		templ.WriteString(` ismap="` + a.Ismap + `"`)
-	}
-
-  if a.Kind != "" {
-		templ.WriteString(` kind="` + a.Kind + `"`)
-	}
-
-  if a.Label != "" {
-		templ.WriteString(` label="` + a.Label + `"`)
-	}
-
-  if a.Lang != "" {
-		templ.WriteString(` lang="` + a.Lang + `"`)
-	}
-
-  if a.List != "" {
-		templ.WriteString(` list="` + a.List + `"`)
-	}
-
-  if a.Loop != "" {
-		templ.WriteString(` loop="` + a.Loop + `"`)
-	}
-
-  if a.Low != "" {
-		templ.WriteString(` low="` + a.Low + `"`)
-	}
-
-  if a.Max != "" {
-		templ.WriteString(` max="` + a.Max + `"`)
-	}
-
-  if a.Maxlength != "" {
-		templ.WriteString(` maxlength="` + a.Maxlength + `"`)
-	}
-
-  if a.Media != "" {
-		templ.WriteString(` media="` + a.Media + `"`)
-	}
-
-  if a.Method != "" {
-		templ.WriteString(` method="` + a.Method + `"`)
-	}
-
-  if a.Min != "" {
-		templ.WriteString(` min="` + a.Min + `"`)
-	}
-
-  if a.Multiple != "" {
-		templ.WriteString(` multiple="` + a.Multiple + `"`)
-	}
-
-  if a.Muted != "" {
-		templ.WriteString(` muted="` + a.Muted + `"`)
-	}
-
-  if a.Name != "" {
-		templ.WriteString(` name="` + a.Name + `"`)
-	}
-
-  if a.Novalidate != "" {
-		templ.WriteString(` novalidate="` + a.Novalidate + `"`)
-	}
-
-  if a.Onabort != "" {
-		templ.WriteString(` onabort="` + a.Onabort + `"`)
-	}
-
-  if a.Onafterprint != "" {
-		templ.WriteString(` onafterprint="` + a.Onafterprint + `"`)
-	}
-
-  if a.Onbeforeprint != "" {
-		templ.WriteString(` onbeforeprint="` + a.Onbeforeprint + `"`)
-	}
-
-  if a.Onbeforeunload != "" {
-		templ.WriteString(` onbeforeunload="` + a.Onbeforeunload + `"`)
-	}
-
-  if a.Onblur != "" {
-		templ.WriteString(` onblur="` + a.Onblur + `"`)
-	}
-
-  if a.Oncanplay != "" {
-		templ.WriteString(` oncanplay="` + a.Oncanplay + `"`)
-	}
-
-  if a.Oncanplaythrough != "" {
-		templ.WriteString(` oncanplaythrough="` + a.Oncanplaythrough + `"`)
-	}
-
-  if a.Onchange != "" {
-		templ.WriteString(` onchange="` + a.Onchange + `"`)
-	}
-
-  if a.Onclick != "" {
-		templ.WriteString(` onclick="` + a.Onclick + `"`)
-	}
-
-  if a.Oncontextmenu != "" {
-		templ.WriteString(` oncontextmenu="` + a.Oncontextmenu + `"`)
-	}
-
-  if a.Oncopy != "" {
-		templ.WriteString(` oncopy="` + a.Oncopy + `"`)
-	}
-
-  if a.Oncuechange != "" {
-		templ.WriteString(` oncuechange="` + a.Oncuechange + `"`)
-	}
-
-  if a.Oncut != "" {
-		templ.WriteString(` oncut="` + a.Oncut + `"`)
-	}
-
-  if a.Ondblclick != "" {
-		templ.WriteString(` ondblclick="` + a.Ondblclick + `"`)
-	}
-
-  if a.Ondrag != "" {
-		templ.WriteString(` ondrag="` + a.Ondrag + `"`)
-	}
-
-  if a.Ondragend != "" {
-		templ.WriteString(` ondragend="` + a.Ondragend + `"`)
-	}
-
-  if a.Ondragenter != "" {
-		templ.WriteString(` ondragenter="` + a.Ondragenter + `"`)
-	}
-
-  if a.Ondragleave != "" {
-		templ.WriteString(` ondragleave="` + a.Ondragleave + `"`)
-	}
-
-  if a.Ondragover != "" {
-		templ.WriteString(` ondragover="` + a.Ondragover + `"`)
-	}
-
-  if a.Ondragstart != "" {
-		templ.WriteString(` ondragstart="` + a.Ondragstart + `"`)
-	}
-
-  if a.Ondrop != "" {
-		templ.WriteString(` ondrop="` + a.Ondrop + `"`)
-	}
-
-  if a.Ondurationchange != "" {
-		templ.WriteString(` ondurationchange="` + a.Ondurationchange + `"`)
-	}
-
-  if a.Onemptied != "" {
-		templ.WriteString(` onemptied="` + a.Onemptied + `"`)
-	}
-
-  if a.Onended != "" {
-		templ.WriteString(` onended="` + a.Onended + `"`)
-	}
-
-  if a.Onerror != "" {
-		templ.WriteString(` onerror="` + a.Onerror + `"`)
-	}
-
-  if a.Onfocus != "" {
-		templ.WriteString(` onfocus="` + a.Onfocus + `"`)
-	}
-
-  if a.Onhashchange != "" {
-		templ.WriteString(` onhashchange="` + a.Onhashchange + `"`)
-	}
-
-  if a.Oninput != "" {
-		templ.WriteString(` oninput="` + a.Oninput + `"`)
-	}
-
-  if a.Oninvalid != "" {
-		templ.WriteString(` oninvalid="` + a.Oninvalid + `"`)
-	}
-
-  if a.Onkeydown != "" {
-		templ.WriteString(` onkeydown="` + a.Onkeydown + `"`)
-	}
-
-  if a.Onkeypress != "" {
-		templ.WriteString(` onkeypress="` + a.Onkeypress + `"`)
-	}
-
-  if a.Onkeyup != "" {
-		templ.WriteString(` onkeyup="` + a.Onkeyup + `"`)
-	}
-
-  if a.Onload != "" {
-		templ.WriteString(` onload="` + a.Onload + `"`)
-	}
-
-  if a.Onloadeddata != "" {
-		templ.WriteString(` onloadeddata="` + a.Onloadeddata + `"`)
-	}
-
-  if a.Onloadedmetadata != "" {
-		templ.WriteString(` onloadedmetadata="` + a.Onloadedmetadata + `"`)
-	}
-
-  if a.Onloadstart != "" {
-		templ.WriteString(` onloadstart="` + a.Onloadstart + `"`)
-	}
-
-  if a.Onmousedown != "" {
-		templ.WriteString(` onmousedown="` + a.Onmousedown + `"`)
-	}
-
-  if a.Onmousemove != "" {
-		templ.WriteString(` onmousemove="` + a.Onmousemove + `"`)
-	}
-
-  if a.Onmouseout != "" {
-		templ.WriteString(` onmouseout="` + a.Onmouseout + `"`)
-	}
-
-  if a.Onmouseover != "" {
-		templ.WriteString(` onmouseover="` + a.Onmouseover + `"`)
-	}
-
-  if a.Onmouseup != "" {
-		templ.WriteString(` onmouseup="` + a.Onmouseup + `"`)
-	}
-
-  if a.Onmousewheel != "" {
-		templ.WriteString(` onmousewheel="` + a.Onmousewheel + `"`)
-	}
-
-  if a.Onoffline != "" {
-		templ.WriteString(` onoffline="` + a.Onoffline + `"`)
-	}
-
-  if a.Ononline != "" {
-		templ.WriteString(` ononline="` + a.Ononline + `"`)
-	}
-
-  if a.Onpagehide != "" {
-		templ.WriteString(` onpagehide="` + a.Onpagehide + `"`)
-	}
-
-  if a.Onpageshow != "" {
-		templ.WriteString(` onpageshow="` + a.Onpageshow + `"`)
-	}
-
-  if a.Onpaste != "" {
-		templ.WriteString(` onpaste="` + a.Onpaste + `"`)
-	}
-
-  if a.Onpause != "" {
-		templ.WriteString(` onpause="` + a.Onpause + `"`)
-	}
-
-  if a.Onplay != "" {
-		templ.WriteString(` onplay="` + a.Onplay + `"`)
-	}
-
-  if a.Onplaying != "" {
-		templ.WriteString(` onplaying="` + a.Onplaying + `"`)
-	}
-
-  if a.Onpopstate != "" {
-		templ.WriteString(` onpopstate="` + a.Onpopstate + `"`)
-	}
-
-  if a.Onprogress != "" {
-		templ.WriteString(` onprogress="` + a.Onprogress + `"`)
-	}
-
-  if a.Onratechange != "" {
-		templ.WriteString(` onratechange="` + a.Onratechange + `"`)
-	}
-
-  if a.Onreset != "" {
-		templ.WriteString(` onreset="` + a.Onreset + `"`)
-	}
-
-  if a.Onresize != "" {
-		templ.WriteString(` onresize="` + a.Onresize + `"`)
-	}
-
-  if a.Onscroll != "" {
-		templ.WriteString(` onscroll="` + a.Onscroll + `"`)
-	}
-
-  if a.Onsearch != "" {
-		templ.WriteString(` onsearch="` + a.Onsearch + `"`)
-	}
-
-  if a.Onseeked != "" {
-		templ.WriteString(` onseeked="` + a.Onseeked + `"`)
-	}
-
-  if a.Onseeking != "" {
-		templ.WriteString(` onseeking="` + a.Onseeking + `"`)
-	}
-
-  if a.Onselect != "" {
-		templ.WriteString(` onselect="` + a.Onselect + `"`)
-	}
-
-  if a.Onstalled != "" {
-		templ.WriteString(` onstalled="` + a.Onstalled + `"`)
-	}
-
-  if a.Onstorage != "" {
-		templ.WriteString(` onstorage="` + a.Onstorage + `"`)
-	}
-
-  if a.Onsubmit != "" {
-		templ.WriteString(` onsubmit="` + a.Onsubmit + `"`)
-	}
-
-  if a.Onsuspend != "" {
-		templ.WriteString(` onsuspend="` + a.Onsuspend + `"`)
-	}
-
-  if a.Ontimeupdate != "" {
-		templ.WriteString(` ontimeupdate="` + a.Ontimeupdate + `"`)
-	}
-
-  if a.Ontoggle != "" {
-		templ.WriteString(` ontoggle="` + a.Ontoggle + `"`)
-	}
-
-  if a.Onunload != "" {
-		templ.WriteString(` onunload="` + a.Onunload + `"`)
-	}
-
-  if a.Onvolumechange != "" {
-		templ.WriteString(` onvolumechange="` + a.Onvolumechange + `"`)
-	}
-
-  if a.Onwaiting != "" {
-		templ.WriteString(` onwaiting="` + a.Onwaiting + `"`)
-	}
-
-  if a.Onwheel != "" {
-		templ.WriteString(` onwheel="` + a.Onwheel + `"`)
-	}
-
-  if a.Open != "" {
-		templ.WriteString(` open="` + a.Open + `"`)
-	}
-
-  if a.Optimum != "" {
-		templ.WriteString(` optimum="` + a.Optimum + `"`)
-	}
-
-  if a.Pattern != "" {
-		templ.WriteString(` pattern="` + a.Pattern + `"`)
-	}
-
-  if a.Placeholder != "" {
-		templ.WriteString(` placeholder="` + a.Placeholder + `"`)
-	}
-
-  if a.Poster != "" {
-		templ.WriteString(` poster="` + a.Poster + `"`)
-	}
-
-  if a.Preload != "" {
-		templ.WriteString(` preload="` + a.Preload + `"`)
-	}
-
-  if a.Readonly != "" {
-		templ.WriteString(` readonly="` + a.Readonly + `"`)
-	}
-
-  if a.Rel != "" {
-		templ.WriteString(` rel="` + a.Rel + `"`)
-	}
-
-  if a.Required != "" {
-		templ.WriteString(` required="` + a.Required + `"`)
-	}
-
-  if a.Reversed != "" {
-		templ.WriteString(` reversed="` + a.Reversed + `"`)
-	}
-
-  if a.Role != "" {
-		templ.WriteString(` role="` + a.Role + `"`)
-	}
-
-  if a.Rows != "" {
-		templ.WriteString(` rows="` + a.Rows + `"`)
-	}
-
-  if a.Rowspan != "" {
-		templ.WriteString(` rowspan="` + a.Rowspan + `"`)
-	}
-
-  if a.Sandbox != "" {
-		templ.WriteString(` sandbox="` + a.Sandbox + `"`)
-	}
-
-  if a.Scope != "" {
-		templ.WriteString(` scope="` + a.Scope + `"`)
-	}
-
-  if a.Selected != "" {
-		templ.WriteString(` selected="` + a.Selected + `"`)
-	}
-
-  if a.Shape != "" {
-		templ.WriteString(` shape="` + a.Shape + `"`)
-	}
-
-  if a.Size != "" {
-		templ.WriteString(` size="` + a.Size + `"`)
-	}
-
-  if a.Sizes != "" {
-		templ.WriteString(` sizes="` + a.Sizes + `"`)
-	}
-
-  if a.Span != "" {
-		templ.WriteString(` span="` + a.Span + `"`)
-	}
-
-  if a.Spellcheck != "" {
-		templ.WriteString(` spellcheck="` + a.Spellcheck + `"`)
-	}
-
-  if a.Src != "" {
-		templ.WriteString(` src="` + a.Src + `"`)
-	}
-
-  if a.Srcdoc != "" {
-		templ.WriteString(` srcdoc="` + a.Srcdoc + `"`)
-	}
-
-  if a.Srclang != "" {
-		templ.WriteString(` srclang="` + a.Srclang + `"`)
-	}
-
-  if a.Srcset != "" {
-		templ.WriteString(` srcset="` + a.Srcset + `"`)
-	}
-
-  if a.Start != "" {
-		templ.WriteString(` start="` + a.Start + `"`)
-	}
-
-  if a.Step != "" {
-		templ.WriteString(` step="` + a.Step + `"`)
-	}
-
-  if a.Style != "" {
-		templ.WriteString(` style="` + a.Style + `"`)
-	}
-
-  if a.Tabindex != "" {
-		templ.WriteString(` tabindex="` + a.Tabindex + `"`)
-	}
-
-  if a.Target != "" {
-		templ.WriteString(` target="` + a.Target + `"`)
-	}
-
-  if a.Title != "" {
-		templ.WriteString(` title="` + a.Title + `"`)
-	}
-
-  if a.Translate != "" {
-		templ.WriteString(` translate="` + a.Translate + `"`)
-	}
-
-  if a.Type != "" {
-		templ.WriteString(` type="` + a.Type + `"`)
-	}
-
-  if a.Usemap != "" {
-		templ.WriteString(` usemap="` + a.Usemap + `"`)
-	}
-
-  if a.Value != "" {
-		templ.WriteString(` value="` + a.Value + `"`)
-	}
-
-  if a.Width != "" {
-		templ.WriteString(` width="` + a.Width + `"`)
-	}
-
-  if a.Wrap != "" {
-		templ.WriteString(` wrap="` + a.Wrap + `"`)
-	}
-
-	if a.DisabledBoolean {
-		templ.WriteString(" disabled")
-	}
-
-	for k, v := range a.Dataset {
-		templ.WriteString(" data-" + k + `="` + v + `"`)
-	}
-
 }
 
 // Begin of generated elements
 
 
 
-func A(attributes Attr, children ...Node) *HTMLNode {
+func A(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "a",
@@ -1632,13 +9679,13 @@ func A(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func A_(children ...Node) *HTMLNode {
-    return A(Attr{}, children...)
+    return A(Attr(), children...)
 }
 
 
 
 
-func Abbr(attributes Attr, children ...Node) *HTMLNode {
+func Abbr(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "abbr",
@@ -1647,13 +9694,13 @@ func Abbr(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Abbr_(children ...Node) *HTMLNode {
-    return Abbr(Attr{}, children...)
+    return Abbr(Attr(), children...)
 }
 
 
 
 
-func Acronym(attributes Attr, children ...Node) *HTMLNode {
+func Acronym(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "acronym",
@@ -1662,13 +9709,13 @@ func Acronym(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Acronym_(children ...Node) *HTMLNode {
-    return Acronym(Attr{}, children...)
+    return Acronym(Attr(), children...)
 }
 
 
 
 
-func Address(attributes Attr, children ...Node) *HTMLNode {
+func Address(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "address",
@@ -1677,13 +9724,13 @@ func Address(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Address_(children ...Node) *HTMLNode {
-    return Address(Attr{}, children...)
+    return Address(Attr(), children...)
 }
 
 
 
 
-func Applet(attributes Attr, children ...Node) *HTMLNode {
+func Applet(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "applet",
@@ -1692,13 +9739,13 @@ func Applet(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Applet_(children ...Node) *HTMLNode {
-    return Applet(Attr{}, children...)
+    return Applet(Attr(), children...)
 }
 
 
 
 
-func Area(attributes Attr) *VoidHTMLNode {
+func Area(attributes Attributes) *VoidHTMLNode {
 	return &VoidHTMLNode{
 		Attributes: attributes,
 		Tag:        "area",
@@ -1706,13 +9753,13 @@ func Area(attributes Attr) *VoidHTMLNode {
 }
 
 func Area_() *VoidHTMLNode {
-    return Area(Attr{})
+    return Area(Attr())
 }
 
 
 
 
-func Article(attributes Attr, children ...Node) *HTMLNode {
+func Article(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "article",
@@ -1721,13 +9768,13 @@ func Article(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Article_(children ...Node) *HTMLNode {
-    return Article(Attr{}, children...)
+    return Article(Attr(), children...)
 }
 
 
 
 
-func Aside(attributes Attr, children ...Node) *HTMLNode {
+func Aside(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "aside",
@@ -1736,13 +9783,13 @@ func Aside(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Aside_(children ...Node) *HTMLNode {
-    return Aside(Attr{}, children...)
+    return Aside(Attr(), children...)
 }
 
 
 
 
-func Audio(attributes Attr, children ...Node) *HTMLNode {
+func Audio(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "audio",
@@ -1751,13 +9798,13 @@ func Audio(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Audio_(children ...Node) *HTMLNode {
-    return Audio(Attr{}, children...)
+    return Audio(Attr(), children...)
 }
 
 
 
 
-func B(attributes Attr, children ...Node) *HTMLNode {
+func B(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "b",
@@ -1766,13 +9813,13 @@ func B(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func B_(children ...Node) *HTMLNode {
-    return B(Attr{}, children...)
+    return B(Attr(), children...)
 }
 
 
 
 
-func Base(attributes Attr) *VoidHTMLNode {
+func Base(attributes Attributes) *VoidHTMLNode {
 	return &VoidHTMLNode{
 		Attributes: attributes,
 		Tag:        "base",
@@ -1780,13 +9827,13 @@ func Base(attributes Attr) *VoidHTMLNode {
 }
 
 func Base_() *VoidHTMLNode {
-    return Base(Attr{})
+    return Base(Attr())
 }
 
 
 
 
-func Basefont(attributes Attr, children ...Node) *HTMLNode {
+func Basefont(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "basefont",
@@ -1795,13 +9842,13 @@ func Basefont(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Basefont_(children ...Node) *HTMLNode {
-    return Basefont(Attr{}, children...)
+    return Basefont(Attr(), children...)
 }
 
 
 
 
-func Bdi(attributes Attr, children ...Node) *HTMLNode {
+func Bdi(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "bdi",
@@ -1810,13 +9857,13 @@ func Bdi(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Bdi_(children ...Node) *HTMLNode {
-    return Bdi(Attr{}, children...)
+    return Bdi(Attr(), children...)
 }
 
 
 
 
-func Bdo(attributes Attr, children ...Node) *HTMLNode {
+func Bdo(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "bdo",
@@ -1825,13 +9872,13 @@ func Bdo(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Bdo_(children ...Node) *HTMLNode {
-    return Bdo(Attr{}, children...)
+    return Bdo(Attr(), children...)
 }
 
 
 
 
-func Bgsound(attributes Attr, children ...Node) *HTMLNode {
+func Bgsound(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "bgsound",
@@ -1840,13 +9887,13 @@ func Bgsound(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Bgsound_(children ...Node) *HTMLNode {
-    return Bgsound(Attr{}, children...)
+    return Bgsound(Attr(), children...)
 }
 
 
 
 
-func Big(attributes Attr, children ...Node) *HTMLNode {
+func Big(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "big",
@@ -1855,13 +9902,13 @@ func Big(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Big_(children ...Node) *HTMLNode {
-    return Big(Attr{}, children...)
+    return Big(Attr(), children...)
 }
 
 
 
 
-func Blink(attributes Attr, children ...Node) *HTMLNode {
+func Blink(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "blink",
@@ -1870,13 +9917,13 @@ func Blink(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Blink_(children ...Node) *HTMLNode {
-    return Blink(Attr{}, children...)
+    return Blink(Attr(), children...)
 }
 
 
 
 
-func Blockquote(attributes Attr, children ...Node) *HTMLNode {
+func Blockquote(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "blockquote",
@@ -1885,13 +9932,13 @@ func Blockquote(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Blockquote_(children ...Node) *HTMLNode {
-    return Blockquote(Attr{}, children...)
+    return Blockquote(Attr(), children...)
 }
 
 
 
 
-func Body(attributes Attr, children ...Node) *HTMLNode {
+func Body(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "body",
@@ -1900,13 +9947,13 @@ func Body(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Body_(children ...Node) *HTMLNode {
-    return Body(Attr{}, children...)
+    return Body(Attr(), children...)
 }
 
 
 
 
-func Br(attributes Attr) *VoidHTMLNode {
+func Br(attributes Attributes) *VoidHTMLNode {
 	return &VoidHTMLNode{
 		Attributes: attributes,
 		Tag:        "br",
@@ -1914,13 +9961,13 @@ func Br(attributes Attr) *VoidHTMLNode {
 }
 
 func Br_() *VoidHTMLNode {
-    return Br(Attr{})
+    return Br(Attr())
 }
 
 
 
 
-func Button(attributes Attr, children ...Node) *HTMLNode {
+func Button(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "button",
@@ -1929,13 +9976,13 @@ func Button(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Button_(children ...Node) *HTMLNode {
-    return Button(Attr{}, children...)
+    return Button(Attr(), children...)
 }
 
 
 
 
-func Canvas(attributes Attr, children ...Node) *HTMLNode {
+func Canvas(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "canvas",
@@ -1944,13 +9991,13 @@ func Canvas(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Canvas_(children ...Node) *HTMLNode {
-    return Canvas(Attr{}, children...)
+    return Canvas(Attr(), children...)
 }
 
 
 
 
-func Caption(attributes Attr, children ...Node) *HTMLNode {
+func Caption(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "caption",
@@ -1959,13 +10006,13 @@ func Caption(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Caption_(children ...Node) *HTMLNode {
-    return Caption(Attr{}, children...)
+    return Caption(Attr(), children...)
 }
 
 
 
 
-func Center(attributes Attr, children ...Node) *HTMLNode {
+func Center(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "center",
@@ -1974,13 +10021,13 @@ func Center(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Center_(children ...Node) *HTMLNode {
-    return Center(Attr{}, children...)
+    return Center(Attr(), children...)
 }
 
 
 
 
-func Cite(attributes Attr, children ...Node) *HTMLNode {
+func Cite(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "cite",
@@ -1989,13 +10036,13 @@ func Cite(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Cite_(children ...Node) *HTMLNode {
-    return Cite(Attr{}, children...)
+    return Cite(Attr(), children...)
 }
 
 
 
 
-func Code(attributes Attr, children ...Node) *HTMLNode {
+func Code(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "code",
@@ -2004,13 +10051,13 @@ func Code(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Code_(children ...Node) *HTMLNode {
-    return Code(Attr{}, children...)
+    return Code(Attr(), children...)
 }
 
 
 
 
-func Col(attributes Attr) *VoidHTMLNode {
+func Col(attributes Attributes) *VoidHTMLNode {
 	return &VoidHTMLNode{
 		Attributes: attributes,
 		Tag:        "col",
@@ -2018,13 +10065,13 @@ func Col(attributes Attr) *VoidHTMLNode {
 }
 
 func Col_() *VoidHTMLNode {
-    return Col(Attr{})
+    return Col(Attr())
 }
 
 
 
 
-func Colgroup(attributes Attr, children ...Node) *HTMLNode {
+func Colgroup(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "colgroup",
@@ -2033,13 +10080,13 @@ func Colgroup(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Colgroup_(children ...Node) *HTMLNode {
-    return Colgroup(Attr{}, children...)
+    return Colgroup(Attr(), children...)
 }
 
 
 
 
-func Datalist(attributes Attr, children ...Node) *HTMLNode {
+func Datalist(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "datalist",
@@ -2048,13 +10095,13 @@ func Datalist(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Datalist_(children ...Node) *HTMLNode {
-    return Datalist(Attr{}, children...)
+    return Datalist(Attr(), children...)
 }
 
 
 
 
-func Dd(attributes Attr, children ...Node) *HTMLNode {
+func Dd(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "dd",
@@ -2063,13 +10110,13 @@ func Dd(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Dd_(children ...Node) *HTMLNode {
-    return Dd(Attr{}, children...)
+    return Dd(Attr(), children...)
 }
 
 
 
 
-func Del(attributes Attr, children ...Node) *HTMLNode {
+func Del(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "del",
@@ -2078,13 +10125,13 @@ func Del(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Del_(children ...Node) *HTMLNode {
-    return Del(Attr{}, children...)
+    return Del(Attr(), children...)
 }
 
 
 
 
-func Details(attributes Attr, children ...Node) *HTMLNode {
+func Details(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "details",
@@ -2093,13 +10140,13 @@ func Details(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Details_(children ...Node) *HTMLNode {
-    return Details(Attr{}, children...)
+    return Details(Attr(), children...)
 }
 
 
 
 
-func Dfn(attributes Attr, children ...Node) *HTMLNode {
+func Dfn(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "dfn",
@@ -2108,13 +10155,13 @@ func Dfn(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Dfn_(children ...Node) *HTMLNode {
-    return Dfn(Attr{}, children...)
+    return Dfn(Attr(), children...)
 }
 
 
 
 
-func Dir(attributes Attr, children ...Node) *HTMLNode {
+func Dir(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "dir",
@@ -2123,13 +10170,13 @@ func Dir(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Dir_(children ...Node) *HTMLNode {
-    return Dir(Attr{}, children...)
+    return Dir(Attr(), children...)
 }
 
 
 
 
-func Div(attributes Attr, children ...Node) *HTMLNode {
+func Div(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "div",
@@ -2138,13 +10185,13 @@ func Div(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Div_(children ...Node) *HTMLNode {
-    return Div(Attr{}, children...)
+    return Div(Attr(), children...)
 }
 
 
 
 
-func Dl(attributes Attr, children ...Node) *HTMLNode {
+func Dl(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "dl",
@@ -2153,13 +10200,13 @@ func Dl(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Dl_(children ...Node) *HTMLNode {
-    return Dl(Attr{}, children...)
+    return Dl(Attr(), children...)
 }
 
 
 
 
-func Dt(attributes Attr, children ...Node) *HTMLNode {
+func Dt(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "dt",
@@ -2168,13 +10215,13 @@ func Dt(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Dt_(children ...Node) *HTMLNode {
-    return Dt(Attr{}, children...)
+    return Dt(Attr(), children...)
 }
 
 
 
 
-func Em(attributes Attr, children ...Node) *HTMLNode {
+func Em(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "em",
@@ -2183,13 +10230,13 @@ func Em(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Em_(children ...Node) *HTMLNode {
-    return Em(Attr{}, children...)
+    return Em(Attr(), children...)
 }
 
 
 
 
-func Embed(attributes Attr) *VoidHTMLNode {
+func Embed(attributes Attributes) *VoidHTMLNode {
 	return &VoidHTMLNode{
 		Attributes: attributes,
 		Tag:        "embed",
@@ -2197,13 +10244,13 @@ func Embed(attributes Attr) *VoidHTMLNode {
 }
 
 func Embed_() *VoidHTMLNode {
-    return Embed(Attr{})
+    return Embed(Attr())
 }
 
 
 
 
-func Fieldset(attributes Attr, children ...Node) *HTMLNode {
+func Fieldset(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "fieldset",
@@ -2212,13 +10259,13 @@ func Fieldset(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Fieldset_(children ...Node) *HTMLNode {
-    return Fieldset(Attr{}, children...)
+    return Fieldset(Attr(), children...)
 }
 
 
 
 
-func Figcaption(attributes Attr, children ...Node) *HTMLNode {
+func Figcaption(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "figcaption",
@@ -2227,13 +10274,13 @@ func Figcaption(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Figcaption_(children ...Node) *HTMLNode {
-    return Figcaption(Attr{}, children...)
+    return Figcaption(Attr(), children...)
 }
 
 
 
 
-func Figure(attributes Attr, children ...Node) *HTMLNode {
+func Figure(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "figure",
@@ -2242,13 +10289,13 @@ func Figure(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Figure_(children ...Node) *HTMLNode {
-    return Figure(Attr{}, children...)
+    return Figure(Attr(), children...)
 }
 
 
 
 
-func Font(attributes Attr, children ...Node) *HTMLNode {
+func Font(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "font",
@@ -2257,13 +10304,13 @@ func Font(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Font_(children ...Node) *HTMLNode {
-    return Font(Attr{}, children...)
+    return Font(Attr(), children...)
 }
 
 
 
 
-func Footer(attributes Attr, children ...Node) *HTMLNode {
+func Footer(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "footer",
@@ -2272,13 +10319,13 @@ func Footer(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Footer_(children ...Node) *HTMLNode {
-    return Footer(Attr{}, children...)
+    return Footer(Attr(), children...)
 }
 
 
 
 
-func Form(attributes Attr, children ...Node) *HTMLNode {
+func Form(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "form",
@@ -2287,13 +10334,13 @@ func Form(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Form_(children ...Node) *HTMLNode {
-    return Form(Attr{}, children...)
+    return Form(Attr(), children...)
 }
 
 
 
 
-func Frame(attributes Attr, children ...Node) *HTMLNode {
+func Frame(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "frame",
@@ -2302,13 +10349,13 @@ func Frame(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Frame_(children ...Node) *HTMLNode {
-    return Frame(Attr{}, children...)
+    return Frame(Attr(), children...)
 }
 
 
 
 
-func Frameset(attributes Attr, children ...Node) *HTMLNode {
+func Frameset(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "frameset",
@@ -2317,13 +10364,13 @@ func Frameset(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Frameset_(children ...Node) *HTMLNode {
-    return Frameset(Attr{}, children...)
+    return Frameset(Attr(), children...)
 }
 
 
 
 
-func H1(attributes Attr, children ...Node) *HTMLNode {
+func H1(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "h1",
@@ -2332,13 +10379,13 @@ func H1(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func H1_(children ...Node) *HTMLNode {
-    return H1(Attr{}, children...)
+    return H1(Attr(), children...)
 }
 
 
 
 
-func H2(attributes Attr, children ...Node) *HTMLNode {
+func H2(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "h2",
@@ -2347,13 +10394,13 @@ func H2(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func H2_(children ...Node) *HTMLNode {
-    return H2(Attr{}, children...)
+    return H2(Attr(), children...)
 }
 
 
 
 
-func H3(attributes Attr, children ...Node) *HTMLNode {
+func H3(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "h3",
@@ -2362,13 +10409,13 @@ func H3(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func H3_(children ...Node) *HTMLNode {
-    return H3(Attr{}, children...)
+    return H3(Attr(), children...)
 }
 
 
 
 
-func H4(attributes Attr, children ...Node) *HTMLNode {
+func H4(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "h4",
@@ -2377,13 +10424,13 @@ func H4(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func H4_(children ...Node) *HTMLNode {
-    return H4(Attr{}, children...)
+    return H4(Attr(), children...)
 }
 
 
 
 
-func H5(attributes Attr, children ...Node) *HTMLNode {
+func H5(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "h5",
@@ -2392,13 +10439,13 @@ func H5(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func H5_(children ...Node) *HTMLNode {
-    return H5(Attr{}, children...)
+    return H5(Attr(), children...)
 }
 
 
 
 
-func H6(attributes Attr, children ...Node) *HTMLNode {
+func H6(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "h6",
@@ -2407,13 +10454,13 @@ func H6(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func H6_(children ...Node) *HTMLNode {
-    return H6(Attr{}, children...)
+    return H6(Attr(), children...)
 }
 
 
 
 
-func Head(attributes Attr, children ...Node) *HTMLNode {
+func Head(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "head",
@@ -2422,13 +10469,13 @@ func Head(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Head_(children ...Node) *HTMLNode {
-    return Head(Attr{}, children...)
+    return Head(Attr(), children...)
 }
 
 
 
 
-func Header(attributes Attr, children ...Node) *HTMLNode {
+func Header(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "header",
@@ -2437,13 +10484,13 @@ func Header(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Header_(children ...Node) *HTMLNode {
-    return Header(Attr{}, children...)
+    return Header(Attr(), children...)
 }
 
 
 
 
-func Hgroup(attributes Attr, children ...Node) *HTMLNode {
+func Hgroup(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "hgroup",
@@ -2452,13 +10499,13 @@ func Hgroup(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Hgroup_(children ...Node) *HTMLNode {
-    return Hgroup(Attr{}, children...)
+    return Hgroup(Attr(), children...)
 }
 
 
 
 
-func Hr(attributes Attr) *VoidHTMLNode {
+func Hr(attributes Attributes) *VoidHTMLNode {
 	return &VoidHTMLNode{
 		Attributes: attributes,
 		Tag:        "hr",
@@ -2466,13 +10513,13 @@ func Hr(attributes Attr) *VoidHTMLNode {
 }
 
 func Hr_() *VoidHTMLNode {
-    return Hr(Attr{})
+    return Hr(Attr())
 }
 
 
 
 
-func Html(attributes Attr, children ...Node) *HTMLNode {
+func Html(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "html",
@@ -2481,13 +10528,13 @@ func Html(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Html_(children ...Node) *HTMLNode {
-    return Html(Attr{}, children...)
+    return Html(Attr(), children...)
 }
 
 
 
 
-func I(attributes Attr, children ...Node) *HTMLNode {
+func I(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "i",
@@ -2496,13 +10543,13 @@ func I(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func I_(children ...Node) *HTMLNode {
-    return I(Attr{}, children...)
+    return I(Attr(), children...)
 }
 
 
 
 
-func Iframe(attributes Attr, children ...Node) *HTMLNode {
+func Iframe(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "iframe",
@@ -2511,13 +10558,13 @@ func Iframe(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Iframe_(children ...Node) *HTMLNode {
-    return Iframe(Attr{}, children...)
+    return Iframe(Attr(), children...)
 }
 
 
 
 
-func Img(attributes Attr) *VoidHTMLNode {
+func Img(attributes Attributes) *VoidHTMLNode {
 	return &VoidHTMLNode{
 		Attributes: attributes,
 		Tag:        "img",
@@ -2525,13 +10572,13 @@ func Img(attributes Attr) *VoidHTMLNode {
 }
 
 func Img_() *VoidHTMLNode {
-    return Img(Attr{})
+    return Img(Attr())
 }
 
 
 
 
-func Input(attributes Attr) *VoidHTMLNode {
+func Input(attributes Attributes) *VoidHTMLNode {
 	return &VoidHTMLNode{
 		Attributes: attributes,
 		Tag:        "input",
@@ -2539,13 +10586,13 @@ func Input(attributes Attr) *VoidHTMLNode {
 }
 
 func Input_() *VoidHTMLNode {
-    return Input(Attr{})
+    return Input(Attr())
 }
 
 
 
 
-func Ins(attributes Attr, children ...Node) *HTMLNode {
+func Ins(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "ins",
@@ -2554,13 +10601,13 @@ func Ins(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Ins_(children ...Node) *HTMLNode {
-    return Ins(Attr{}, children...)
+    return Ins(Attr(), children...)
 }
 
 
 
 
-func Isindex(attributes Attr, children ...Node) *HTMLNode {
+func Isindex(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "isindex",
@@ -2569,13 +10616,13 @@ func Isindex(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Isindex_(children ...Node) *HTMLNode {
-    return Isindex(Attr{}, children...)
+    return Isindex(Attr(), children...)
 }
 
 
 
 
-func Kbd(attributes Attr, children ...Node) *HTMLNode {
+func Kbd(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "kbd",
@@ -2584,13 +10631,13 @@ func Kbd(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Kbd_(children ...Node) *HTMLNode {
-    return Kbd(Attr{}, children...)
+    return Kbd(Attr(), children...)
 }
 
 
 
 
-func Keygen(attributes Attr, children ...Node) *HTMLNode {
+func Keygen(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "keygen",
@@ -2599,13 +10646,13 @@ func Keygen(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Keygen_(children ...Node) *HTMLNode {
-    return Keygen(Attr{}, children...)
+    return Keygen(Attr(), children...)
 }
 
 
 
 
-func Label(attributes Attr, children ...Node) *HTMLNode {
+func Label(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "label",
@@ -2614,13 +10661,13 @@ func Label(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Label_(children ...Node) *HTMLNode {
-    return Label(Attr{}, children...)
+    return Label(Attr(), children...)
 }
 
 
 
 
-func Legend(attributes Attr, children ...Node) *HTMLNode {
+func Legend(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "legend",
@@ -2629,13 +10676,13 @@ func Legend(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Legend_(children ...Node) *HTMLNode {
-    return Legend(Attr{}, children...)
+    return Legend(Attr(), children...)
 }
 
 
 
 
-func Li(attributes Attr, children ...Node) *HTMLNode {
+func Li(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "li",
@@ -2644,13 +10691,13 @@ func Li(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Li_(children ...Node) *HTMLNode {
-    return Li(Attr{}, children...)
+    return Li(Attr(), children...)
 }
 
 
 
 
-func Link(attributes Attr) *VoidHTMLNode {
+func Link(attributes Attributes) *VoidHTMLNode {
 	return &VoidHTMLNode{
 		Attributes: attributes,
 		Tag:        "link",
@@ -2658,13 +10705,13 @@ func Link(attributes Attr) *VoidHTMLNode {
 }
 
 func Link_() *VoidHTMLNode {
-    return Link(Attr{})
+    return Link(Attr())
 }
 
 
 
 
-func Listing(attributes Attr, children ...Node) *HTMLNode {
+func Listing(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "listing",
@@ -2673,13 +10720,13 @@ func Listing(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Listing_(children ...Node) *HTMLNode {
-    return Listing(Attr{}, children...)
+    return Listing(Attr(), children...)
 }
 
 
 
 
-func Main(attributes Attr, children ...Node) *HTMLNode {
+func Main(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "main",
@@ -2688,13 +10735,13 @@ func Main(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Main_(children ...Node) *HTMLNode {
-    return Main(Attr{}, children...)
+    return Main(Attr(), children...)
 }
 
 
 
 
-func Map(attributes Attr, children ...Node) *HTMLNode {
+func Map(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "map",
@@ -2703,13 +10750,13 @@ func Map(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Map_(children ...Node) *HTMLNode {
-    return Map(Attr{}, children...)
+    return Map(Attr(), children...)
 }
 
 
 
 
-func Mark(attributes Attr, children ...Node) *HTMLNode {
+func Mark(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "mark",
@@ -2718,13 +10765,13 @@ func Mark(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Mark_(children ...Node) *HTMLNode {
-    return Mark(Attr{}, children...)
+    return Mark(Attr(), children...)
 }
 
 
 
 
-func Marquee(attributes Attr, children ...Node) *HTMLNode {
+func Marquee(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "marquee",
@@ -2733,13 +10780,13 @@ func Marquee(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Marquee_(children ...Node) *HTMLNode {
-    return Marquee(Attr{}, children...)
+    return Marquee(Attr(), children...)
 }
 
 
 
 
-func Menu(attributes Attr, children ...Node) *HTMLNode {
+func Menu(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "menu",
@@ -2748,13 +10795,13 @@ func Menu(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Menu_(children ...Node) *HTMLNode {
-    return Menu(Attr{}, children...)
+    return Menu(Attr(), children...)
 }
 
 
 
 
-func Meta(attributes Attr) *VoidHTMLNode {
+func Meta(attributes Attributes) *VoidHTMLNode {
 	return &VoidHTMLNode{
 		Attributes: attributes,
 		Tag:        "meta",
@@ -2762,13 +10809,13 @@ func Meta(attributes Attr) *VoidHTMLNode {
 }
 
 func Meta_() *VoidHTMLNode {
-    return Meta(Attr{})
+    return Meta(Attr())
 }
 
 
 
 
-func Meter(attributes Attr, children ...Node) *HTMLNode {
+func Meter(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "meter",
@@ -2777,13 +10824,13 @@ func Meter(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Meter_(children ...Node) *HTMLNode {
-    return Meter(Attr{}, children...)
+    return Meter(Attr(), children...)
 }
 
 
 
 
-func Nav(attributes Attr, children ...Node) *HTMLNode {
+func Nav(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "nav",
@@ -2792,13 +10839,13 @@ func Nav(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Nav_(children ...Node) *HTMLNode {
-    return Nav(Attr{}, children...)
+    return Nav(Attr(), children...)
 }
 
 
 
 
-func Nobr(attributes Attr, children ...Node) *HTMLNode {
+func Nobr(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "nobr",
@@ -2807,13 +10854,13 @@ func Nobr(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Nobr_(children ...Node) *HTMLNode {
-    return Nobr(Attr{}, children...)
+    return Nobr(Attr(), children...)
 }
 
 
 
 
-func Noframes(attributes Attr, children ...Node) *HTMLNode {
+func Noframes(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "noframes",
@@ -2822,13 +10869,13 @@ func Noframes(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Noframes_(children ...Node) *HTMLNode {
-    return Noframes(Attr{}, children...)
+    return Noframes(Attr(), children...)
 }
 
 
 
 
-func Noscript(attributes Attr, children ...Node) *HTMLNode {
+func Noscript(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "noscript",
@@ -2837,13 +10884,13 @@ func Noscript(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Noscript_(children ...Node) *HTMLNode {
-    return Noscript(Attr{}, children...)
+    return Noscript(Attr(), children...)
 }
 
 
 
 
-func Object(attributes Attr, children ...Node) *HTMLNode {
+func Object(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "object",
@@ -2852,13 +10899,13 @@ func Object(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Object_(children ...Node) *HTMLNode {
-    return Object(Attr{}, children...)
+    return Object(Attr(), children...)
 }
 
 
 
 
-func Ol(attributes Attr, children ...Node) *HTMLNode {
+func Ol(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "ol",
@@ -2867,13 +10914,13 @@ func Ol(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Ol_(children ...Node) *HTMLNode {
-    return Ol(Attr{}, children...)
+    return Ol(Attr(), children...)
 }
 
 
 
 
-func Optgroup(attributes Attr, children ...Node) *HTMLNode {
+func Optgroup(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "optgroup",
@@ -2882,13 +10929,13 @@ func Optgroup(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Optgroup_(children ...Node) *HTMLNode {
-    return Optgroup(Attr{}, children...)
+    return Optgroup(Attr(), children...)
 }
 
 
 
 
-func Option(attributes Attr, children ...Node) *HTMLNode {
+func Option(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "option",
@@ -2897,13 +10944,13 @@ func Option(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Option_(children ...Node) *HTMLNode {
-    return Option(Attr{}, children...)
+    return Option(Attr(), children...)
 }
 
 
 
 
-func Output(attributes Attr, children ...Node) *HTMLNode {
+func Output(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "output",
@@ -2912,13 +10959,13 @@ func Output(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Output_(children ...Node) *HTMLNode {
-    return Output(Attr{}, children...)
+    return Output(Attr(), children...)
 }
 
 
 
 
-func P(attributes Attr, children ...Node) *HTMLNode {
+func P(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "p",
@@ -2927,13 +10974,13 @@ func P(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func P_(children ...Node) *HTMLNode {
-    return P(Attr{}, children...)
+    return P(Attr(), children...)
 }
 
 
 
 
-func Param(attributes Attr) *VoidHTMLNode {
+func Param(attributes Attributes) *VoidHTMLNode {
 	return &VoidHTMLNode{
 		Attributes: attributes,
 		Tag:        "param",
@@ -2941,13 +10988,13 @@ func Param(attributes Attr) *VoidHTMLNode {
 }
 
 func Param_() *VoidHTMLNode {
-    return Param(Attr{})
+    return Param(Attr())
 }
 
 
 
 
-func Plaintext(attributes Attr, children ...Node) *HTMLNode {
+func Plaintext(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "plaintext",
@@ -2956,13 +11003,13 @@ func Plaintext(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Plaintext_(children ...Node) *HTMLNode {
-    return Plaintext(Attr{}, children...)
+    return Plaintext(Attr(), children...)
 }
 
 
 
 
-func Pre(attributes Attr, children ...Node) *HTMLNode {
+func Pre(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "pre",
@@ -2971,13 +11018,13 @@ func Pre(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Pre_(children ...Node) *HTMLNode {
-    return Pre(Attr{}, children...)
+    return Pre(Attr(), children...)
 }
 
 
 
 
-func Progress(attributes Attr, children ...Node) *HTMLNode {
+func Progress(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "progress",
@@ -2986,13 +11033,13 @@ func Progress(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Progress_(children ...Node) *HTMLNode {
-    return Progress(Attr{}, children...)
+    return Progress(Attr(), children...)
 }
 
 
 
 
-func Q(attributes Attr, children ...Node) *HTMLNode {
+func Q(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "q",
@@ -3001,13 +11048,13 @@ func Q(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Q_(children ...Node) *HTMLNode {
-    return Q(Attr{}, children...)
+    return Q(Attr(), children...)
 }
 
 
 
 
-func Rp(attributes Attr, children ...Node) *HTMLNode {
+func Rp(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "rp",
@@ -3016,13 +11063,13 @@ func Rp(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Rp_(children ...Node) *HTMLNode {
-    return Rp(Attr{}, children...)
+    return Rp(Attr(), children...)
 }
 
 
 
 
-func Rt(attributes Attr, children ...Node) *HTMLNode {
+func Rt(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "rt",
@@ -3031,13 +11078,13 @@ func Rt(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Rt_(children ...Node) *HTMLNode {
-    return Rt(Attr{}, children...)
+    return Rt(Attr(), children...)
 }
 
 
 
 
-func Ruby(attributes Attr, children ...Node) *HTMLNode {
+func Ruby(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "ruby",
@@ -3046,13 +11093,13 @@ func Ruby(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Ruby_(children ...Node) *HTMLNode {
-    return Ruby(Attr{}, children...)
+    return Ruby(Attr(), children...)
 }
 
 
 
 
-func S(attributes Attr, children ...Node) *HTMLNode {
+func S(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "s",
@@ -3061,13 +11108,13 @@ func S(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func S_(children ...Node) *HTMLNode {
-    return S(Attr{}, children...)
+    return S(Attr(), children...)
 }
 
 
 
 
-func Samp(attributes Attr, children ...Node) *HTMLNode {
+func Samp(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "samp",
@@ -3076,13 +11123,13 @@ func Samp(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Samp_(children ...Node) *HTMLNode {
-    return Samp(Attr{}, children...)
+    return Samp(Attr(), children...)
 }
 
 
 
 
-func Script(attributes Attr, children ...Node) *HTMLNode {
+func Script(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "script",
@@ -3091,13 +11138,13 @@ func Script(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Script_(children ...Node) *HTMLNode {
-    return Script(Attr{}, children...)
+    return Script(Attr(), children...)
 }
 
 
 
 
-func Section(attributes Attr, children ...Node) *HTMLNode {
+func Section(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "section",
@@ -3106,13 +11153,13 @@ func Section(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Section_(children ...Node) *HTMLNode {
-    return Section(Attr{}, children...)
+    return Section(Attr(), children...)
 }
 
 
 
 
-func Select(attributes Attr, children ...Node) *HTMLNode {
+func Select(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "select",
@@ -3121,13 +11168,13 @@ func Select(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Select_(children ...Node) *HTMLNode {
-    return Select(Attr{}, children...)
+    return Select(Attr(), children...)
 }
 
 
 
 
-func Small(attributes Attr, children ...Node) *HTMLNode {
+func Small(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "small",
@@ -3136,13 +11183,13 @@ func Small(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Small_(children ...Node) *HTMLNode {
-    return Small(Attr{}, children...)
+    return Small(Attr(), children...)
 }
 
 
 
 
-func Source(attributes Attr) *VoidHTMLNode {
+func Source(attributes Attributes) *VoidHTMLNode {
 	return &VoidHTMLNode{
 		Attributes: attributes,
 		Tag:        "source",
@@ -3150,13 +11197,13 @@ func Source(attributes Attr) *VoidHTMLNode {
 }
 
 func Source_() *VoidHTMLNode {
-    return Source(Attr{})
+    return Source(Attr())
 }
 
 
 
 
-func Spacer(attributes Attr, children ...Node) *HTMLNode {
+func Spacer(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "spacer",
@@ -3165,13 +11212,13 @@ func Spacer(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Spacer_(children ...Node) *HTMLNode {
-    return Spacer(Attr{}, children...)
+    return Spacer(Attr(), children...)
 }
 
 
 
 
-func Span(attributes Attr, children ...Node) *HTMLNode {
+func Span(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "span",
@@ -3180,13 +11227,13 @@ func Span(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Span_(children ...Node) *HTMLNode {
-    return Span(Attr{}, children...)
+    return Span(Attr(), children...)
 }
 
 
 
 
-func Strike(attributes Attr, children ...Node) *HTMLNode {
+func Strike(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "strike",
@@ -3195,13 +11242,13 @@ func Strike(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Strike_(children ...Node) *HTMLNode {
-    return Strike(Attr{}, children...)
+    return Strike(Attr(), children...)
 }
 
 
 
 
-func Strong(attributes Attr, children ...Node) *HTMLNode {
+func Strong(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "strong",
@@ -3210,13 +11257,13 @@ func Strong(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Strong_(children ...Node) *HTMLNode {
-    return Strong(Attr{}, children...)
+    return Strong(Attr(), children...)
 }
 
 
 
 
-func Style(attributes Attr, children ...Node) *HTMLNode {
+func Style(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "style",
@@ -3225,13 +11272,13 @@ func Style(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Style_(children ...Node) *HTMLNode {
-    return Style(Attr{}, children...)
+    return Style(Attr(), children...)
 }
 
 
 
 
-func Sub(attributes Attr, children ...Node) *HTMLNode {
+func Sub(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "sub",
@@ -3240,13 +11287,13 @@ func Sub(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Sub_(children ...Node) *HTMLNode {
-    return Sub(Attr{}, children...)
+    return Sub(Attr(), children...)
 }
 
 
 
 
-func Summary(attributes Attr, children ...Node) *HTMLNode {
+func Summary(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "summary",
@@ -3255,13 +11302,13 @@ func Summary(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Summary_(children ...Node) *HTMLNode {
-    return Summary(Attr{}, children...)
+    return Summary(Attr(), children...)
 }
 
 
 
 
-func Sup(attributes Attr, children ...Node) *HTMLNode {
+func Sup(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "sup",
@@ -3270,13 +11317,13 @@ func Sup(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Sup_(children ...Node) *HTMLNode {
-    return Sup(Attr{}, children...)
+    return Sup(Attr(), children...)
 }
 
 
 
 
-func Table(attributes Attr, children ...Node) *HTMLNode {
+func Table(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "table",
@@ -3285,13 +11332,13 @@ func Table(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Table_(children ...Node) *HTMLNode {
-    return Table(Attr{}, children...)
+    return Table(Attr(), children...)
 }
 
 
 
 
-func Tbody(attributes Attr, children ...Node) *HTMLNode {
+func Tbody(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "tbody",
@@ -3300,13 +11347,13 @@ func Tbody(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Tbody_(children ...Node) *HTMLNode {
-    return Tbody(Attr{}, children...)
+    return Tbody(Attr(), children...)
 }
 
 
 
 
-func Td(attributes Attr, children ...Node) *HTMLNode {
+func Td(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "td",
@@ -3315,13 +11362,13 @@ func Td(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Td_(children ...Node) *HTMLNode {
-    return Td(Attr{}, children...)
+    return Td(Attr(), children...)
 }
 
 
 
 
-func Textarea(attributes Attr, children ...Node) *HTMLNode {
+func Textarea(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "textarea",
@@ -3330,13 +11377,13 @@ func Textarea(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Textarea_(children ...Node) *HTMLNode {
-    return Textarea(Attr{}, children...)
+    return Textarea(Attr(), children...)
 }
 
 
 
 
-func Tfoot(attributes Attr, children ...Node) *HTMLNode {
+func Tfoot(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "tfoot",
@@ -3345,13 +11392,13 @@ func Tfoot(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Tfoot_(children ...Node) *HTMLNode {
-    return Tfoot(Attr{}, children...)
+    return Tfoot(Attr(), children...)
 }
 
 
 
 
-func Th(attributes Attr, children ...Node) *HTMLNode {
+func Th(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "th",
@@ -3360,13 +11407,13 @@ func Th(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Th_(children ...Node) *HTMLNode {
-    return Th(Attr{}, children...)
+    return Th(Attr(), children...)
 }
 
 
 
 
-func Thead(attributes Attr, children ...Node) *HTMLNode {
+func Thead(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "thead",
@@ -3375,13 +11422,13 @@ func Thead(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Thead_(children ...Node) *HTMLNode {
-    return Thead(Attr{}, children...)
+    return Thead(Attr(), children...)
 }
 
 
 
 
-func Time(attributes Attr, children ...Node) *HTMLNode {
+func Time(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "time",
@@ -3390,13 +11437,13 @@ func Time(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Time_(children ...Node) *HTMLNode {
-    return Time(Attr{}, children...)
+    return Time(Attr(), children...)
 }
 
 
 
 
-func Title(attributes Attr, children ...Node) *HTMLNode {
+func Title(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "title",
@@ -3405,13 +11452,13 @@ func Title(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Title_(children ...Node) *HTMLNode {
-    return Title(Attr{}, children...)
+    return Title(Attr(), children...)
 }
 
 
 
 
-func Tr(attributes Attr, children ...Node) *HTMLNode {
+func Tr(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "tr",
@@ -3420,13 +11467,13 @@ func Tr(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Tr_(children ...Node) *HTMLNode {
-    return Tr(Attr{}, children...)
+    return Tr(Attr(), children...)
 }
 
 
 
 
-func Track(attributes Attr) *VoidHTMLNode {
+func Track(attributes Attributes) *VoidHTMLNode {
 	return &VoidHTMLNode{
 		Attributes: attributes,
 		Tag:        "track",
@@ -3434,13 +11481,13 @@ func Track(attributes Attr) *VoidHTMLNode {
 }
 
 func Track_() *VoidHTMLNode {
-    return Track(Attr{})
+    return Track(Attr())
 }
 
 
 
 
-func Tt(attributes Attr, children ...Node) *HTMLNode {
+func Tt(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "tt",
@@ -3449,13 +11496,13 @@ func Tt(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Tt_(children ...Node) *HTMLNode {
-    return Tt(Attr{}, children...)
+    return Tt(Attr(), children...)
 }
 
 
 
 
-func U(attributes Attr, children ...Node) *HTMLNode {
+func U(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "u",
@@ -3464,13 +11511,13 @@ func U(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func U_(children ...Node) *HTMLNode {
-    return U(Attr{}, children...)
+    return U(Attr(), children...)
 }
 
 
 
 
-func Ul(attributes Attr, children ...Node) *HTMLNode {
+func Ul(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "ul",
@@ -3479,13 +11526,13 @@ func Ul(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Ul_(children ...Node) *HTMLNode {
-    return Ul(Attr{}, children...)
+    return Ul(Attr(), children...)
 }
 
 
 
 
-func Var(attributes Attr, children ...Node) *HTMLNode {
+func Var(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "var",
@@ -3494,13 +11541,13 @@ func Var(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Var_(children ...Node) *HTMLNode {
-    return Var(Attr{}, children...)
+    return Var(Attr(), children...)
 }
 
 
 
 
-func Video(attributes Attr, children ...Node) *HTMLNode {
+func Video(attributes Attributes, children ...Node) *HTMLNode {
 	return &HTMLNode{
 		Attributes: attributes,
 		Tag:        "video",
@@ -3509,13 +11556,13 @@ func Video(attributes Attr, children ...Node) *HTMLNode {
 }
 
 func Video_(children ...Node) *HTMLNode {
-    return Video(Attr{}, children...)
+    return Video(Attr(), children...)
 }
 
 
 
 
-func Wbr(attributes Attr) *VoidHTMLNode {
+func Wbr(attributes Attributes) *VoidHTMLNode {
 	return &VoidHTMLNode{
 		Attributes: attributes,
 		Tag:        "wbr",
@@ -3523,7 +11570,7 @@ func Wbr(attributes Attr) *VoidHTMLNode {
 }
 
 func Wbr_() *VoidHTMLNode {
-    return Wbr(Attr{})
+    return Wbr(Attr())
 }
 
 
