@@ -14,7 +14,6 @@ type Node interface {
 
 type Values map[string]interface{}
 type Template string
-type Dataset map[string]string
 
 func HTML(html string) template.HTML {
 	return template.HTML(html)
@@ -213,7 +212,20 @@ type Attribute struct {
 	Templ string
 }
 
-// TODO Dataset
+func (a Attributes) Dataset(key, value string, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+        a.Slice = append(a.Slice, Attribute{
+		Name: "data-" + key,
+		Data: value,
+		Templ: templ,
+        })
+        return a
+}
+
+// TODO Dataset_
 // TODO boolean attributes
 
 
@@ -4003,6 +4015,23 @@ func (a Attributes) Wrap_(templ string) Attributes {
 	return a
 }
 
+
+func Dataset(key, value string, templates ...string) Attributes {
+	templ := "{{.}}"
+	if len(templates) > 0 {
+		templ = templates[0]
+	}
+	a := Attributes{
+		Slice: []Attribute{
+                        Attribute{
+                                Name: "data-" + key,
+                                Data: value,
+                                Templ: templ,
+                        },
+                },
+	}
+	return a
+}
 
 
 
