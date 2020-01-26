@@ -9652,12 +9652,6 @@ func Attr() Attributes {
 	}
 }
 
-type OldAttr struct {
-	Dataset  Dataset
-	DisabledBoolean  bool
-	templData map[string]interface{}
-}
-
 func (a *Attributes) buildTemplateTo(templ *strings.Builder, vals Values) {
 	for _, attr := range a.Slice {
 		placeholder := "P" + strconv.Itoa(len(vals))
